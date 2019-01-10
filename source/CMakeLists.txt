@@ -44,7 +44,8 @@ endif()
 add_executable(agent_temp agent_temp.cpp)
 target_link_libraries(agent_temp ${COSMOS_LIBS})
 
-
+add_executable(agent_boxtalk agent_boxtalk.cpp)
+target_link_libraries(agent_boxtalk ${COSMOS_LIBS}
 
 # -----------------------------------------------
 # to deploy on a remote device

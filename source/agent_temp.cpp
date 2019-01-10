@@ -30,10 +30,11 @@ int main(int argc, char** argv)
 
     while(agent->running())
     {
-        cout << "I am an agent"<< endl;
-        // clear the response for next time
-//        response.clear();
+        string message {"helloBB"};
 
+        cout << "I am an agent"<< endl;
+
+        agent->post((Agent::AgentMessage)0xBB, message);
 
         // read temp data from sensor
         // option 1. arduino on serial port
