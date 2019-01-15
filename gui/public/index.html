@@ -4,118 +4,55 @@
   <title>Box Farm</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
 </head>
 
 <body>
-<div class="jumbotron text-center" style="background-color:#d9ffb3">
-  <h1>Box Farm</h1>
-  <p>Let's grow shit.</p>
+
+<div class="header">
+  <h1> Box Farm </h1>
 </div>
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-6">
-	     <div id="graph1"></div>
+    <div class="col">
+      <div class="card">
+      <p class="card-header a"> Tasks </p>
+        <div class="card box">
+          <div class="card-body text-center">
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="col-sm-6">
-      <div id="graph2"></div>
+    <div class="col-sm-5">
+      <div class="card">
+        <div class="card box">
+          <div class="card-body text-center">
+            <div class="demo">
+              <svg width="150" height="150" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
+                  <circle cx="60" cy="60" r="54" fill="none" stroke="#3bc631" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="135.717" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="col-sm-6">
-      <div id="graph3"></div>
+    <div class="col">
+      <div class="card">
+        <p class="card-header a"> Nutrient Tank </p>
+        <div class="card box">
+          <div class="card-body text-center">
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="col-sm-6">
-      <div id="graph4"></div>
-    </div>
-
-
   </div>
+
 </div>
-
-<!-- This is where I put the Plotly.js scripts because they didn't work in an external file. -->
-
-<script>
-var graph = document.getElementById("graph1");
-
-var trace = {
-	  x: [1, 2, 3, 4, 5, 6, 7, 8],
-	  y: [6, 6.3, 6.2, 6, 6.5, null, 6.2, 6.2],
-	  mode: 'lines',
-	  connectgaps: true
-	};
-
-var data = [trace];
-
-var layout = {
- title: 'pH',
- showlegend: false};
-
-Plotly.newPlot(graph, data, layout, {respnsive: true});
-</script>
-
-<script>
-var graph = document.getElementById("graph2");
-
-var trace = {
-	  x: [1, 2, 3, 4, 5, 6, 7, 8],
-	  y: [750, 760, 758, 757, 756, null, 757, 757],
-	  mode: 'lines',
-	  connectgaps: true
-	};
-
-var data = [trace];
-
-var layout = {
- title: 'EC',
- showlegend: false};
-
-Plotly.newPlot(graph, data, layout, {respnsive: true});
-</script>
-
-<script>
-var graph = document.getElementById("graph3");
-
-var trace = {
-	  x: [1, 2, 3, 4, 5, 6, 7, 8],
-	  y: [75, 73, 72, 73, 75, null, 72, 73],
-	  mode: 'lines',
-	  connectgaps: true
-	};
-
-var data = [trace];
-
-var layout = {
- title: 'Nutrient Tank Temperature',
- showlegend: false};
-
-Plotly.newPlot(graph, data, layout, {respnsive: true});
-</script>
-
-<script>
-var graph = document.getElementById("graph4");
-
-var trace = {
-	  x: [1, 2, 3, 4, 5, 6, 7, 8],
-	  y: [75, 73, 72, 73, 75, null, 72, 73],
-	  mode: 'lines',
-	  connectgaps: true
-	};
-
-var data = [trace];
-
-var layout = {
- title: 'Nutrient Tank Temperature',
- showlegend: false};
-
-Plotly.newPlot(graph, data, layout, {respnsive: true});
-</script>
-
 
 </body>
 </html>

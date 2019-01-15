@@ -1,3 +1,31 @@
+p.a{
+  font-family: 'Space Mono', monospace;
+  text-align: center;
+  color: #000
+}
+
+h1{
+  font-family: 'Space Mono', monospace;
+  text-align: center;
+  color: #fff;
+}
+
 body{
-background-color: #3b332b;
+background: #4286f4;
+}
+
+.box{
+background-color: #494e4f;
+height: 20rem;
+}
+
+.header{
+padding: 25px;
+}
+
+.demo {
+    .u-absoluteCenter();
+    .u-flexCenter();
+    top: 50%;
+    transform: translate(0,50%)
 }
