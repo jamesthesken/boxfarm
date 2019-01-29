@@ -4,55 +4,125 @@
   <title>Box Farm</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+<<<<<<< Updated upstream
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
   <link rel="stylesheet" type="text/css" href="style.css">
+
+  <!--Fonts-->
   <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Semi+Expanded" rel="stylesheet">
 </head>
 
 <body>
 
-<div class="header">
-  <h1> Box Farm </h1>
-</div>
+<!-- Just adding a bit of space-->
+<div class="header"> </div>
 
 <div class="container">
   <div class="row">
     <div class="col">
-      <div class="card">
-      <p class="card-header a"> Tasks </p>
-        <div class="card box">
-          <div class="card-body text-center">
+      <div class="card box shadow-lg" style="border-radius: 40px 20px 20px 20px;">
+        <img src="../assets/box-farm-logo.png" class="card-img-top" alt="...">
+        <h1 class="left-card text-center" style="padding: 15px;"> Tasks </h1>
+        <div class="card-body text-center">
+          <div class="row">
+            <div class="col text-left content">
+              <h5 class="task">Clean filters:</h5>
+              <h5 class="task">Finish COSMOS</h5>
+            </div>
+            <div class="col text-right content">
+              <h5 class="data">6.5 days</h5>
+              <h5 class="data">650 yrs</h5>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div> <!-- left panel -->
+    <div class="col-sm-5">
+      <div class="card mb-3 shadow-lg" style="border-radius:20px;">
+        <h1 class="card-title card-titles"> SOL: 69 </h1> <!-- CHANGE THIS WHEN FUNCTIONAL -->
+      </div>
+      <div class="card mb-3 shadow-lg" style="border-radius:20px;">
+        <div class="card box"  style="border-radius:20px;">
+          <div class="card-body"  style="border-radius:20px;">
+            <h3 class="content text-left"> Next harvest:</h3>
+            <svg  class="content text-center" width="600px" height="210px">
+                <g id="">
+                  <circle class="progress" id="two" cx="300" cy="200" r="90px" />
+                  <text class="countdown text-center" id="percent-two" text-anchor="middle" x="200" y="112" style="font-size: 60px;"> 0 </text>
+                  <text text-anchor="top" x="220" y="140" class="countdown" > days </text>
+                </g>
+            </svg>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col-sm-5">
-      <div class="card">
-        <div class="card box">
-          <div class="card-body text-center">
-            <div class="demo">
-              <svg width="150" height="150" viewBox="0 0 120 120">
-                  <circle cx="60" cy="60" r="54" fill="none" stroke="#e6e6e6" stroke-width="12" />
-                  <circle cx="60" cy="60" r="54" fill="none" stroke="#3bc631" stroke-width="12" stroke-dasharray="339.292" stroke-dashoffset="135.717" />
-              </svg>
+    </div> <!-- center  panel -->
+    <div class="col">
+      <div class="card shadow-lg"  style="border-radius:20px;">
+        <div class="card box"  style="border-radius:20px;">
+          <h1 class="card-titles"> Analytics </h1>
+          <div class="card-body container-fluid">
+            <div class="row">
+              <div class="col text-left content">
+                <h5 class="content">pH</h5>
+                <h5 class="content">EC</h5>
+                <h5 class="content">Tank Temp.</h5>
+                <h5 class="content">Hab Temp.</h5>
+                <h5 class="content">Humidity</h5>
+                <h5 class="content">COSMOS</h5>
+              </div>
+              <div class="col text-right content">
+                <h5 class="data">6.5</h5>
+                <h5 class="data">650 ppm</h5>
+                <h5 class="data">22 C</h5>
+                <h5 class="data">24 C</h5>
+                <h5 class="data">85%</h5>
+                <h5 class="data">OK</h5>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="col">
-      <div class="card">
-        <p class="card-header a"> Nutrient Tank </p>
-        <div class="card box">
-          <div class="card-body text-center">
-          </div>
-        </div>
-      </div>
-    </div>
+    </div> <!-- right panel -->
   </div>
 
 </div>
+
+<script src="progress.js"></script>
+=======
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6 box">
+      
+    </div>
+
+    <div class="col-sm-6">
+
+    </div>
+
+    <div class="col-sm-6">
+
+    </div>
+
+    <div class="col-sm-6">
+
+    </div>
+
+  </div>
+</div>
+
+>>>>>>> Stashed changes
 
 </body>
 </html>

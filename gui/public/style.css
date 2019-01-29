@@ -1,26 +1,21 @@
+<<<<<<< Updated upstream
 p.a{
   font-family: 'Space Mono', monospace;
   text-align: center;
   color: #000
 }
 
-h1{
-  font-family: 'Space Mono', monospace;
-  text-align: center;
-  color: #fff;
-}
-
 body{
-background: #4286f4;
+  background: #fff;
 }
 
 .box{
-background-color: #494e4f;
+background-color: #fff;
 height: 20rem;
 }
 
 .header{
-padding: 25px;
+padding: 10px;
 }
 
 .demo {
@@ -28,4 +23,63 @@ padding: 25px;
     .u-flexCenter();
     top: 50%;
     transform: translate(0,50%)
+}
+
+.left-card{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  color: #999;
+}
+
+.card-titles{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  text-align: center;
+  padding: 5px;
+  color: #999;
+}
+
+.content{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  color: #999;
+}
+
+.data{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  color: #339933;
+}
+
+.countdown{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  font-size: 200%;
+  color: #339933;
+}
+
+.progress {
+  fill:none;
+  stroke: #339933;
+  stroke-width: 12;
+  stroke-linecap: round;
+  transform-origin: center;
+  transform: rotate(90deg);
+}
+
+.card-img-top{
+  height: auto;
+  width: 80%;
+
+=======
+@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400);
+
+html, body {
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+}
+
+
+.box{
+  background-color: #4e4f51;
+>>>>>>> Stashed changes
 }
