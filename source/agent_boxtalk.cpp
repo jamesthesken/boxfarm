@@ -36,23 +36,32 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
+  Agent *agent;
+  string nodename = "boxfarm";
+  string agentname = "talk";
 
-    Agent *agent;
+  agent = new Agent(nodename, agentname);
+  if (agent->last_error()<0)
+  {
+      cout<<"unable to start agent (" << agent->last_error() << ") " << cosmos_error_string(agent->last_error()) <<endl;
+      exit(1);
+  }
 
-    agent = new Agent("telem","send");
-    if (agent->cinfo != nullptr && agent->running())
-    {
-        while (agent->running())
-        {
-            string message {"helloBB"};
 
-            agent->post((Agent::AgentMessage)0xBB, message);
 
-            cout << "tx: " <<  message << endl;
+  if (agent->cinfo != nullptr && agent->running())
+  {
+      while (agent->running())
+      {
+          string message {"helloBB"};
 
-            COSMOS_SLEEP(1);
-        }
-    }
+          agent->post((Agent::AgentMessage)0xBB, message);
 
-    return 0;
+          cout << "tx: " <<  message << endl;
+
+          COSMOS_SLEEP(1);
+      }
+  }
+
+  return 0;
 }

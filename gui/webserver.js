@@ -1,16 +1,21 @@
-var http = require('http').createServer(handler); //require http server, and create server with function handler()
-var fs = require('fs'); //require filesystem module
+var url  = require('url'),
+    sys  = require('sys'),
+    express = require('express'),
+    http=require('http');
+    var path = require('path')
 
-http.listen(8080); //listen to port 8080
+var app = express();
+var server = http.createServer(app);
 
-function handler (req, res) { //create server
-  fs.readFile(__dirname + '/public/index.html', function(err, data) { //read file index.html in public folder
-    if (err) {
-      res.writeHead(404, {'Content-Type': 'text/html'}); //display 404 on error
-      return res.end("404 Not Found");
-    } 
-    res.writeHead(200, {'Content-Type': 'text/html'}); //write HTML
-    res.write(data); //write data from index.html
-    return res.end();
-  });
-}
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'assets')));
+app.set('views', __dirname + '/views');
+app.set('view engine', 'html');
+
+app.get('/', function(req, res){
+    res.render('home');
+});
+
+app.listen(4000);
+sys.puts('server running ' + 'now ' + Date.now());
+

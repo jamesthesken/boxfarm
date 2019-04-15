@@ -41,11 +41,15 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
     set(COSMOS_LIBS ${COSMOS_LIBS} ws2_32)
 endif()
 
+add_executable(agent_boxtalk agent_boxtalk.cpp)
+target_link_libraries(agent_boxtalk ${COSMOS_LIBS})
+
+add_executable(agent_boxlisten agent_boxlisten.cpp)
+target_link_libraries(agent_boxlisten ${COSMOS_LIBS})
+
 add_executable(agent_temp agent_temp.cpp)
 target_link_libraries(agent_temp ${COSMOS_LIBS})
 
-add_executable(agent_boxtalk agent_boxtalk.cpp)
-target_link_libraries(agent_boxtalk ${COSMOS_LIBS}
 
 # -----------------------------------------------
 # to deploy on a remote device

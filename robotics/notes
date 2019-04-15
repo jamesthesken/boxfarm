@@ -1,0 +1,25 @@
+'''
+def imaging():
+    for amount of plants in the x axis:
+        move 3 inches
+        wait for ok
+
+        send image capture command to the RPI
+        wait for OK that image was captured from RGB and NOIR cams.
+
+    send BP to X0
+
+
+rotate BOA 180 degrees 
+move robotic arm to image capture position (vertical link 1, horizontal link 2)
+
+wait for OK from RA arduino
+
+rotate BOA 180 to face the shelf
+imaging()
+
+rotate BOA 180 to face away from shelf
+
+move BP to the next shelf
+imaging()
+'''

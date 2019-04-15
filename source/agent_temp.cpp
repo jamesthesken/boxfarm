@@ -6,14 +6,15 @@
 
 #include <iostream>
 #include <string>
+# include <fstream>
+
 
 using namespace std;
 
-Agent *agent;
 
-
-int main(int argc, char** argv)
+int main()
 {
+    Agent *agent;
     string nodename = "boxfarm";
     string agentname = "temp";
 
@@ -25,8 +26,8 @@ int main(int argc, char** argv)
     }
 
 
-//    string agent_name_here_soh = "{\"data_name_here\"}";
-//    agent->set_sohstring(agent_name_here_soh.c_str());
+    string agent_name_here_soh = "{\"data_name_here\"}";
+    agent->set_sohstring(agent_name_here_soh.c_str());
 
     while(agent->running())
     {
@@ -36,12 +37,7 @@ int main(int argc, char** argv)
 
         agent->post((Agent::AgentMessage)0xBB, message);
 
-        // read temp data from sensor
-        // option 1. arduino on serial port
-        // - open serial port
-        // - read serial port
-        // - parse data
-        // - copy temp data to soh string
+
 
 
         // sleep for 1 sec
