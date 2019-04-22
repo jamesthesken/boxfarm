@@ -9,8 +9,9 @@ body{
 }
 
 .box{
-background-color: #fff;
-height: 35rem;
+  background-color: #fff;
+  height: 35rem;
+  border-radius: 20px; /* Moved from documents. */
 }
 
 .header{
@@ -18,8 +19,8 @@ padding: 10px;
 }
 
 .demo {
-    .u-absoluteCenter();
-    .u-flexCenter();
+    /* .u-absoluteCenter(); */
+    /* .u-flexCenter(); */
     top: 50%;
     transform: translate(0,50%)
 }
@@ -77,4 +78,13 @@ font-size: 20px;
 text-align: center;
 padding: 5px;
 color: #999;
+}
+
+.dropdown-horizontal {
+  display: inline-block;
+  margin-left: 3px;
+}
+
+.dropdown-vertical {
+  margin-bottom: 5px;
 }
