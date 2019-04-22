@@ -1,22 +1,77 @@
 /**
+ * Time
  * @constructor
- * To make time "readable" by UI.
- * 
- * @param {string} timeStr Time in hh:mm:ss or hh:mm
+ * @description For storing and presenting time as an object.
+ * Make sure the time values do not exceed +/-( 2^32/2 - 1 ).
+ * @param {string} timeStr Time in hh:mm:ss or hh:mm.
  */
 function Time( timeStr ) {
   var self = this;
   
-  // Parse time string.
-  var timeArr = timeStr.split(":");
+  var MAX_VALUE = Math.pow( 2, 32 )/2 - 1;
   
+  // Check input.
+  if( typeof timeStr !== "string" ) {
+    console.error( "Time Input Error: This is not a time string." );
+    
+    return;
+  }
+  
+  // Parse time string.
+  var timeArr = timeStr.split( ":" );
+  
+  // *The time information is stored here.*
   // 0: hour, 1: minute, 2: second.
   var hhmmss = [];
   
+  // Check if time value is good (true) or bad (false).
+  // Type: 0 - hour, 1 - minute, 2 - second.
+  function isValidTime( val, type ) {
+    // Check if val is a value that cannot be converted to number.
+    if( isNaN( val ) ) {
+      console.error( "Time Input Error: Value is not allowed." );
+      
+      // Use to cancel.
+      return false;
+    }
+    
+    // Check if val exceeds +/-( 2^32/2 - 1 ).
+    if( Math.abs( val ) > MAX_VALUE ) {
+      console.error( "Time Input Error: Value exceeds the allowed limit." );
+      
+      // Use to cancel.
+      return false;
+    }
+    
+    // Check the hour value.
+    if( type === 0 && ( val < 0 || val > 23 ) ) {
+      console.error( "Time Input Error: Value is not in between 0 and 23." );
+      
+      // Use to cancel.
+      return false;
+    // Check other values.
+    } else if( val < 0 || val > 59 ) {
+      console.error( "Time Input Error: Value is not in between 0 and 59." );
+      
+      // Use to cancel.
+      return false;
+    } else {
+      return true;
+    }
+  }
+  
   // Assume it is in the order of hours, minutes, and seconds.
-  for( var i = 0; i < timeArr.length; i++ ) {
+  for( var i = 0, val = 0; i < timeArr.length; i++ ) {
+    // The time digit.
+    val = timeArr[ i ];
+    
+    // Cancel if the time string is invalid.
+    if( !isValidTime( val, i ) ) {
+      return;
+    }
+    
     // Convert each hour, minute, and second from string to integer.
-    hhmmss.push( timeArr[ i ]|0 )
+    hhmmss.push( val|0 );
   }
   
   // Check if there are enough digits that represent time.
@@ -28,13 +83,31 @@ function Time( timeStr ) {
   } else {
     console.error( "Time Format Error: Time string is not parsed correctly." );
     
-    // End here.
+    // Cancel.
     return;
   }
   
-  // Check if hours, minutes, and seconds are valid values.
-  /* Add here. */
+  // Utility functions.
+  /**
+   * Add zero in front of time digits (if single digit). 
+   * @method doubleDigit
+   * @memberof Time
+   * @instance
+   * @param {number} timeVal The hour, minute, or second value.
+   * @return {string} The hour, minute, or second value.
+   */
+  this.doubleDigit = function( timeVal ) {
+    return timeVal < 10 ? "0" + timeVal : "" + timeVal;
+  }
   
+  // Obtain the stored time.
+  /**
+   * Get the stored time as an object.
+   * @method getTime
+   * @memberof Time
+   * @instance
+   * @return {object} Stored time in { hr: ..., min: ..., sec: ... }.
+   */
   this.getTime = function() {
     return {
        hr: hhmmss[ 0 ],
@@ -43,34 +116,114 @@ function Time( timeStr ) {
     };
   };
   
-  // In { hr: ..., min: ..., sec: ... }
-  this.setTime = function( hhmmssObj ) {
-    hhmmss[ 0 ] = hhmmssObj.hr;
-    hhmmss[ 1 ] = hhmmssObj.min;
+  /**
+   * Get the stored time as a formatted time string.
+   * @method getTimeStr
+   * @memberof Time
+   * @instance
+   * @param {boolean} withSec If true, include the seconds.
+   * @return {string} Stored time in "hh:mm" or "hh:mm:ss".
+   */
+  this.getTimeStr = function( withSec ) {
+    var fmtdHmhhss = [];
     
-    // Set the seconds to zero if unspecified.
-    if( typeof hhmmssObj.sec === "number" ) {
-      hhmmss[ 2 ] = hhmmssObj.sec;
+    for( var i = 0; i < hhmmss.length; i++ ) {
+      // Exclude the second value if requested.
+      if( !withSec && i >= 2 ) {
+        break;
+      }
+      
+      fmtdHmhhss.push( self.doubleDigit( hhmmss[ i ] ) );
+    }
+    
+    return fmtdHmhhss.join( ":" );
+  };
+  
+  // Modify the time.
+  /**
+   * Change the stored time via an object.
+   * @method setTime
+   * @memberof Time
+   * @instance
+   * @param {object} hhmmssObj Time in { hr: ..., min: ..., sec: ... }.
+   * @return {object} Stored time in { hr: ..., min: ..., sec: ... } or empty object.
+   */
+  this.setTime = function( hhmmssObj ) {
+    // Ensure that the digits are stored as integers.
+    var hh = hhmmssObj.hr;
+    var mm = hhmmssObj.min;
+    var ss = hhmmssObj.sec; // Sets to zero if undefined.
+    
+    // Check the input.
+    if( !isValidTime( hh, 0 ) ) {
+      // Cancel.
+      return {};
+    }
+    if( !isValidTime( mm, 1 ) ) {
+      // Cancel.
+      return {};
+    }
+    if( !isValidTime( ss, 2 ) ) {
+      // Cancel.
+      return {};
+    }
+    
+    // Fill it in.
+    hhmmss[ 0 ] = hh|0;
+    hhmmss[ 1 ] = mm|0;
+    hhmmss[ 2 ] = ss|0;
+    
+    return self.getTime();
+  };
+  
+  /**
+   * Change the hour value.
+   * @method setHr
+   * @memberof Time
+   * @instance
+   * @param {number} hr The hour value.
+   * @return {boolean} If true, the time is updated. Otherwise, it is false.
+   */
+  this.setHr = function( hr ) {
+    if( !isValidTime( hr, 0 ) ) {
+      return false;
     } else {
-          hhmmss[ 2 ] = 0;
+      hhmmss[ 0 ] = hr|0;
+      return true;
     }
   };
   
-  this.setHr = function( hr ) {
-    hhmmss[ 0 ] = hr;
-  };
-  
+  /**
+   * Change the minute value.
+   * @method setMin
+   * @memberof Time
+   * @instance
+   * @param {number} min The minute value.
+   * @return {boolean} If true, the time is updated. Otherwise, it is false.
+   */
   this.setMin = function( min ) {
-    hhmmss[ 1 ] = min;
+    if( !isValidTime( min, 1 ) ) {
+      return false;
+    } else {
+      hhmmss[ 1 ] = min|0;
+      return true;
+    }
   };
   
+  /**
+   * Change the second value.
+   * @method setSec
+   * @memberof Time
+   * @instance
+   * @param {number} hr The second value.
+   * @return {boolean} If true, the time is updated. Otherwise, it is false.
+   */
   this.setSec = function( sec ) {
-    hhmmss[ 2 ] = sec;
+    if( !isValidTime( sec, 2 ) ) {
+      return false;
+    } else {
+      hhmmss[ 2 ] = sec|0;
+      return true;
+    }
   };
-  
-  // Utility functions.
-  // Add zero in front of time digits. Always returns a string.
-  this.doubleDigit = function( timeVal ) {
-    return timeVal < 10 ? "0" + timeVal : timeVal;
-  }
 }
