@@ -1,3 +1,10 @@
+/* Bootstrap overrides. */
+.btn-primary {
+  background-color: #393;
+  border-color: #393;
+}
+
+/* Box Farm. */
 p.a{
   font-family: 'Space Mono', monospace;
   text-align: center;
@@ -42,6 +49,39 @@ padding: 10px;
   color: #999;
 }
 
+/* Default. */
+.content-spacing {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+@media screen and ( min-width: 768px ) {
+  .content-spacing {
+    
+    margin-left: 64px;
+    margin-right: 64px;
+    
+  }
+}
+
+@media screen and ( min-width: 992px ) {
+  .content-spacing {
+    
+    margin-left: 192px;
+    margin-right: 192px;
+    
+  }
+}
+
+@media screen and ( min-width: 1200px ) {
+  .content-spacing {
+    
+    margin-left: 256px;
+    margin-right: 256px;
+    
+  }
+}
+
 .data{
   font-family: 'Encode Sans Semi Expanded', sans-serif;
   color: #339933;
@@ -63,8 +103,13 @@ padding: 10px;
 }
 
 .card-img-top{
+  /* Compensate for the Bootstrap container margin. */
+  position: relative;
+  left: -15px;
+  
   height: auto;
   width: 20rem;
+  
 }
 
 .settings-button{
@@ -87,4 +132,12 @@ color: #999;
 
 .dropdown-vertical {
   margin-bottom: 5px;
+}
+
+.horizontal-bar {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  background-color: #EEE;
+  height: 2px;
+  border-radius: 1px;
 }

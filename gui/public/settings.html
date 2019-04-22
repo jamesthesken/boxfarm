@@ -4,9 +4,9 @@
   <title>Settings - Box Farm</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  
+
   <!-- Install dependencies as NodeJS modules instead. -->
-  
+
   <!-- Using jQuery 3. -->
   <script
   src="https://code.jquery.com/jquery-3.3.1.js"
@@ -21,10 +21,10 @@
   <!--Fonts-->
   <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Semi+Expanded" rel="stylesheet">
-  
-  <!-- Box Farm stylesheets. -->
+
+  <!-- Box Farm stylesheets. Define last. -->
   <link rel="stylesheet" type="text/css" href="style.css">
-  
+
   <!-- Box Farm scripts. -->
   <script src="data_types.js"></script>
   <script src="ui_logic.js"></script>
@@ -35,107 +35,118 @@
 	<!-- Just adding a bit of space-->
 	<div class="header"> </div>
 
-	<div class="container card box shadow-lg" style="border-radius: 40px 20px 20px 20px;">
+	<div class="container card box shadow-lg" style="border-radius: 56px 20px 20px 20px;">
 	  <!-- Card heading. -->
 	  <div class="row">
-		<div class="col">
-		  <!-- Moved border style definition to style.css and referenced to its top-level div. -->
-		  <!-- Need to move logo slightly to the left. -->  
-		  <a href="index.html"> <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm Home"></img> </a>
-		  <h1 class="left-card text-center" > Settings </h1>
-		</div>
+      <div class="col">
+        <!-- Moved border style definition to style.css and referenced to its top-level div. -->
+        <!-- Need to move logo slightly to the left. -->  
+        <a href="index.html"> <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm Home"></img> </a>
+        <h1 class="left-card text-center" > Settings </h1>
+      </div>
 	  </div>
 	  
-	  <!-- Pump controls. -->
-	  <div class="row">
-		<div class="col-4 text-left content">
-		  <h5>PUMPS</h5>
-		</div>
-		<div id="pump-time-input" class="col-8 text-right content">
-		  <div class="row">
-		    <div class="col-7">
-			</div>
-			<div class="col-3">
-			  <h5>HR</h5>
-			</div>
-			<div class="col-2">
-			  <h5>MIN</h5>
-			</div>
-		  </div>
-		  <div id="pump-time-start" class="row dropdown-vertical">
-		    <div class="col-7">
-			  <h5>ON</h5>
-			</div>
-		    <div class="col-5">
-		      <div class="dropdown dropdown-horizontal">
-			    <!-- Dropdown created by script. -->
-		      </div>
-		      <div class="dropdown dropdown-horizontal">
-			   <!-- Dropdown created by script. -->
-		      </div>
-			</div>
-		  </div>
-		  <div id="pump-time-end" class="row dropdown-vertical">
-		    <div class="col-7">
-			  <h5>OFF</h5>
-			</div>
-		    <div class="col-5">
-		      <div class="dropdown dropdown-horizontal">
-			    <!-- Dropdown created by script. -->
-		      </div>
-		      <div class="dropdown dropdown-horizontal">
-			    <!-- Dropdown created by script. -->
-		      </div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  
-	  <!-- Grow light controls. -->
-	  <div class="row">
-		<div class="col-4 text-left content">
-		  <h5>LIGHT</h5>
-		</div>
-		<div id="light-time-input" class="col-8 text-right content">
-		  <div class="row">
-		    <div class="col-7">
-			</div>
-			<div class="col-3">
-			  <h5>HR</h5>
-			</div>
-			<div class="col-2">
-			  <h5>MIN</h5>
-			</div>
-		  </div>
-		  <div id="light-time-start" class="row dropdown-vertical">
-		    <div class="col-7">
-			  <h5>ON</h5>
-			</div>
-		    <div class="col-5">
-		      <div class="dropdown dropdown-horizontal">
-			    <!-- Dropdown created by script. -->
-		      </div>
-		      <div class="dropdown dropdown-horizontal">
-			   <!-- Dropdown created by script. -->
-		      </div>
-			</div>
-		  </div>
-		  <div id="light-time-end" class="row dropdown-vertical">
-		    <div class="col-7">
-			  <h5>OFF</h5>
-			</div>
-		    <div class="col-5">
-		      <div class="dropdown dropdown-horizontal">
-			    <!-- Dropdown created by script. -->
-		      </div>
-		      <div class="dropdown dropdown-horizontal">
-			    <!-- Dropdown created by script. -->
-		      </div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-
+    <div class="content-spacing">
+      <!-- Pump controls. -->
+      <div class="row">
+        <div class="col-3 text-left content">
+          <h5>PUMPS</h5>
+        </div>
+        <div id="pump-time-input" class="col-9 text-right content">
+          <div class="row">
+            <div class="col-6">
+          </div>
+          <div class="col-3">
+            <h5>HR</h5>
+          </div>
+          <div class="col-3">
+            <h5>MIN</h5>
+          </div>
+         </div>
+        <div id="pump-time-start" class="row dropdown-vertical">
+          <div class="col-6">
+          <h5>ON</h5>
+        </div>
+          <div class="col-3">
+            <div class="dropdown dropdown-horizontal">
+              <!-- Dropdown created by script. -->
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="dropdown dropdown-horizontal">
+              <!-- Dropdown created by script. -->
+            </div>
+          </div>
+        </div>
+        <div id="pump-time-end" class="row dropdown-vertical">
+            <div class="col-6">
+              <h5>OFF</h5>
+            </div>
+            <div class="col-3">
+              <div class="dropdown dropdown-horizontal">
+                <!-- Dropdown created by script. -->
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="dropdown dropdown-horizontal">
+                <!-- Dropdown created by script. -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="horizontal-bar"></div>
+      
+      <!-- Grow light controls. -->
+      <div class="row">
+        <div class="col-3 text-left content">
+          <h5>LIGHT</h5>
+        </div>
+        <div id="light-time-input" class="col-9 text-right content">
+          <div class="row">
+            <div class="col-6">
+            </div>
+            <div class="col-3">
+              <h5>HR</h5>
+            </div>
+            <div class="col-3">
+              <h5>MIN</h5>
+            </div>
+          </div>
+          <div id="light-time-start" class="row dropdown-vertical">
+            <div class="col-6">
+              <h5>ON</h5>
+            </div>
+            <div class="col-3">
+              <div class="dropdown dropdown-horizontal">
+                <!-- Dropdown created by ui_logic. -->
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="dropdown dropdown-horizontal">
+                <!-- Dropdown created by ui_logic. -->
+              </div>
+            </div>
+          </div>
+          <div id="light-time-end" class="row dropdown-vertical">
+            <div class="col-6">
+              <h5>OFF</h5>
+            </div>
+            <div class="col-3">
+              <div class="dropdown dropdown-horizontal">
+                <!-- Dropdown created by ui_logic. -->
+              </div>
+            </div>
+            <div class="col-3">
+              <div class="dropdown dropdown-horizontal">
+                <!-- Dropdown created by ui_logic. -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 	</div>
     
 	<script>
@@ -170,6 +181,14 @@
 		// Public.
 		this.startTime = startTime;
 		this.endTime = endTime;
+		
+		// Show everything at the very end.
+		this.applyAndShow = function() {
+		  dropdns.startTime.hr.applyAndShow();
+		  dropdns.startTime.min.applyAndShow();
+		  dropdns.endTime.hr.applyAndShow();
+		  dropdns.endTime.min.applyAndShow();
+		};
 	  }
 	  
 	  /**
@@ -184,29 +203,42 @@
 		var dropdnContsStart = document.querySelectorAll( "#light-time-start .dropdown" );
 		var dropdnContsEnd = document.querySelectorAll( "#light-time-end .dropdown" );
 		
-		// Default time information.
+		// Default time information. Obtain from settings.
 		var startTime = new Time( "07:00" );
 		var endTime = new Time( "12:00" );
 		
 		// Create and display the dropdowns.
 		var dropdns = {
 		  startTime: {
-			hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
-			min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+        hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
+        min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
 		  },
 		  endTime: {
-			hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
-			min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+        hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
+        min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
 		  }
 		}
 		
 		// Public.
 		this.startTime = startTime;
 		this.endTime = endTime;
+		
+		// Show everything at the very end.
+		this.applyAndShow = function() {
+		  dropdns.startTime.hr.applyAndShow();
+		  dropdns.startTime.min.applyAndShow();
+		  dropdns.endTime.hr.applyAndShow();
+		  dropdns.endTime.min.applyAndShow();
+		};
 	  }
 	  
+    // Create the controls.
 	  var pumpControls = new PumpControls();
 	  var lightControls = new LightControls();
+	  
+	  // Show everything.
+	  pumpControls.applyAndShow();
+	  lightControls.applyAndShow();
 	</script>
 </body>
 
