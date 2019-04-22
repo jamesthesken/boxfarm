@@ -1,13 +1,25 @@
 /**
+ * @file Box Farm data types used by the GUI internally.
+ * It can also convert from non-Box Farm types.
+ * Has no external dependencies.
+ * @projectname Box Farm GUI
+ * @version 0.5
+ * @author Control Subsystem
+ * @copyright 2018-2019
+ */
+
+/**
  * Time
  * @constructor
- * @description For storing and presenting time as an object.
+ * @description Stores the time with hours, minutes, and seconds from 00:00:00 to 23:59:59.
+ * It is modifiable and can convert to select data formats.
  * Make sure the time values do not exceed +/-( 2^32/2 - 1 ).
  * @param {string} timeStr Time in hh:mm:ss or hh:mm.
  */
 function Time( timeStr ) {
   var self = this;
   
+  // Any bitwise operations on numbers are treated as 32-bit signed integers.
   var MAX_VALUE = Math.pow( 2, 32 )/2 - 1;
   
   // Check input.
@@ -139,6 +151,20 @@ function Time( timeStr ) {
     return fmtdHmhhss.join( ":" );
   };
   
+  /**
+   * Get the stored time and convert to amount of seconds since 00:00.
+   * Can be used to compare which time is earlier than the other.
+   * @method getSeconds
+   * @memberof Time
+   * @instance
+   * @return {number} Amount of seconds since 00:00.
+   */
+  this.getSeconds = function() {
+    // 1 hr = 3600 s.
+    // 1 min = 60 s.
+    return 3600*hhmmss[ 0 ] + 60*hhmmss[ 1 ] + hhmmss[ 2 ];
+  };
+  
   // Modify the time.
   /**
    * Change the stored time via an object.
@@ -146,7 +172,7 @@ function Time( timeStr ) {
    * @memberof Time
    * @instance
    * @param {object} hhmmssObj Time in { hr: ..., min: ..., sec: ... }.
-   * @return {object} Stored time in { hr: ..., min: ..., sec: ... } or empty object.
+   * @return {object} Stored time in { hr: ..., min: ..., sec: ... } or empty object if the time is invalid.
    */
   this.setTime = function( hhmmssObj ) {
     // Ensure that the digits are stored as integers.
@@ -182,7 +208,8 @@ function Time( timeStr ) {
    * @memberof Time
    * @instance
    * @param {number} hr The hour value.
-   * @return {boolean} If true, the time is updated. Otherwise, it is false.
+   * @return {boolean} If true, the time is updated. 
+   * If false, the value is invalid and the time would not be updated.
    */
   this.setHr = function( hr ) {
     if( !isValidTime( hr, 0 ) ) {
@@ -199,7 +226,8 @@ function Time( timeStr ) {
    * @memberof Time
    * @instance
    * @param {number} min The minute value.
-   * @return {boolean} If true, the time is updated. Otherwise, it is false.
+   * @return {boolean} If true, the time is updated. 
+   * If false, the value is invalid and the time would not be updated.
    */
   this.setMin = function( min ) {
     if( !isValidTime( min, 1 ) ) {
@@ -216,7 +244,8 @@ function Time( timeStr ) {
    * @memberof Time
    * @instance
    * @param {number} hr The second value.
-   * @return {boolean} If true, the time is updated. Otherwise, it is false.
+   * @return {boolean} If true, the time is updated. 
+   * If false, the value is invalid and the time would not be updated.
    */
   this.setSec = function( sec ) {
     if( !isValidTime( sec, 2 ) ) {

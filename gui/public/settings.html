@@ -151,6 +151,8 @@
     
 	<script>
 	  /**
+     * Displays time controls for the pumps.
+     * @constructor
 	   * @require module:data_types
 	   * @require module:ui_logic
 	   */
@@ -158,40 +160,49 @@
 	    // The column that contains the controls.
 	    var timeInputContainer = document.getElementById( "pump-time-input" );
 		
-		// The dropdown containers.
-		var dropdnContsStart = document.querySelectorAll( "#pump-time-start .dropdown" );
-		var dropdnContsEnd = document.querySelectorAll( "#pump-time-end .dropdown" );
-		
-		// Default time information.
-		var startTime = new Time( "07:00" );
-		var endTime = new Time( "12:00" );
-		
-		// Create and display the dropdowns.
-		var dropdns = {
-		  startTime: {
-			hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
-			min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
-		  },
-		  endTime: {
-			hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
-			min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
-		  }
-		}
-		
-		// Public.
-		this.startTime = startTime;
-		this.endTime = endTime;
-		
-		// Show everything at the very end.
-		this.applyAndShow = function() {
-		  dropdns.startTime.hr.applyAndShow();
-		  dropdns.startTime.min.applyAndShow();
-		  dropdns.endTime.hr.applyAndShow();
-		  dropdns.endTime.min.applyAndShow();
-		};
+      // The dropdown containers.
+      var dropdnContsStart = document.querySelectorAll( "#pump-time-start .dropdown" );
+      var dropdnContsEnd = document.querySelectorAll( "#pump-time-end .dropdown" );
+      
+      // Default time information.
+      var startTime = new Time( "07:00" );
+      var endTime = new Time( "12:00" );
+      
+      // Create and display the dropdowns.
+      var dropdns = {
+        startTime: {
+        hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
+        min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+        },
+        endTime: {
+        hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
+        min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+        }
+      }
+      
+      // Public.
+      this.startTime = startTime;
+      this.endTime = endTime;
+      
+      // Show everything at the very end.
+      this.applyAndShow = function() {
+        dropdns.startTime.hr.applyAndShow();
+        dropdns.startTime.min.applyAndShow();
+        dropdns.endTime.hr.applyAndShow();
+        dropdns.endTime.min.applyAndShow();
+      };
+      
+      this.updateVisuals = function() {
+        dropdns.startTime.hr.updateVisuals();
+        dropdns.startTime.min.updateVisuals();
+        dropdns.endTime.hr.updateVisuals();
+        dropdns.endTime.min.updateVisuals();
+      };
 	  }
 	  
 	  /**
+     * Displays time controls for the grow lights.
+     * @constructor
 	   * @require module:data_types
 	   * @require module:ui_logic
 	   */
@@ -199,37 +210,44 @@
 	    // The column that contains the controls.
 	    var timeInputContainer = document.getElementById( "light-time-input" );
 		
-		// The dropdown containers.
-		var dropdnContsStart = document.querySelectorAll( "#light-time-start .dropdown" );
-		var dropdnContsEnd = document.querySelectorAll( "#light-time-end .dropdown" );
-		
-		// Default time information. Obtain from settings.
-		var startTime = new Time( "07:00" );
-		var endTime = new Time( "12:00" );
-		
-		// Create and display the dropdowns.
-		var dropdns = {
-		  startTime: {
-        hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
-        min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
-		  },
-		  endTime: {
-        hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
-        min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
-		  }
-		}
-		
-		// Public.
-		this.startTime = startTime;
-		this.endTime = endTime;
-		
-		// Show everything at the very end.
-		this.applyAndShow = function() {
-		  dropdns.startTime.hr.applyAndShow();
-		  dropdns.startTime.min.applyAndShow();
-		  dropdns.endTime.hr.applyAndShow();
-		  dropdns.endTime.min.applyAndShow();
-		};
+      // The dropdown containers.
+      var dropdnContsStart = document.querySelectorAll( "#light-time-start .dropdown" );
+      var dropdnContsEnd = document.querySelectorAll( "#light-time-end .dropdown" );
+      
+      // Default time information. Obtain from settings.
+      var startTime = new Time( "07:00" );
+      var endTime = new Time( "12:00" );
+      
+      // Create and display the dropdowns.
+      var dropdns = {
+        startTime: {
+          hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
+          min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+        },
+        endTime: {
+          hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
+          min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+        }
+      }
+      
+      // Public.
+      this.startTime = startTime;
+      this.endTime = endTime;
+      
+      // Show everything at the very end.
+      this.applyAndShow = function() {
+        dropdns.startTime.hr.applyAndShow();
+        dropdns.startTime.min.applyAndShow();
+        dropdns.endTime.hr.applyAndShow();
+        dropdns.endTime.min.applyAndShow();
+      };
+      
+      this.updateVisuals = function() {
+        dropdns.startTime.hr.updateVisuals();
+        dropdns.startTime.min.updateVisuals();
+        dropdns.endTime.hr.updateVisuals();
+        dropdns.endTime.min.updateVisuals();
+      };
 	  }
 	  
     // Create the controls.
