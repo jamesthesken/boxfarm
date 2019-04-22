@@ -33,6 +33,7 @@ function Time( timeStr ) {
   }
   
   // Check if hours, minutes, and seconds are valid values.
+  /* Add here. */
   
   this.getTime = function() {
 	return {
@@ -66,4 +67,11 @@ function Time( timeStr ) {
   this.setSec = function( sec ) {
 	hhmmss[ 2 ] = sec;
   };
+  
+  // Utility functions.
+  
+  // Add zero in front of digit. Always returns a string.
+  this.doubleDigit = function( timeVal ) {
+	return timeVal < 10 ? "0" + timeVal : timeVal;
+  }
 }

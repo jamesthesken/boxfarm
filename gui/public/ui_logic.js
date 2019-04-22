@@ -47,7 +47,7 @@ function InputTimeDropdown( container, type, timeObj ) {
 	  }
 	  
 	  // Show the hour value.
-	  face.textContent = timeObj.getTime().hr;
+	  face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
 	  
 	  selectAction = function() {
 		var selectedValue = event.target.getAttribute( "data-number" );
@@ -61,7 +61,7 @@ function InputTimeDropdown( container, type, timeObj ) {
 		  timeObj.setHr( selectedValueNumber );
 		  
 		  // Show the hour value.
-		  face.textContent = timeObj.getTime().hr;
+		  face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
 		}
 	  }
 	  
@@ -75,7 +75,7 @@ function InputTimeDropdown( container, type, timeObj ) {
 	  }
 	  
 	  // Show the minute value.
-	  face.textContent = timeObj.getTime().min;
+	  face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
 	  
 	  selectAction = function() {
 		var selectedValue = event.target.getAttribute( "data-number" );
@@ -89,7 +89,7 @@ function InputTimeDropdown( container, type, timeObj ) {
 		  timeObj.setMin( selectedValueNumber );
 		  
 		  // Show the minute value.
-		  face.textContent = timeObj.getTime().min;
+		  face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
 		}
 	  }
 	  
@@ -103,7 +103,7 @@ function InputTimeDropdown( container, type, timeObj ) {
 	  }
 	  
 	  // Show the second value.
-	  face.textContent = timeObj.getTime().sec;
+	  face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
 	  
 	  selectAction = function() {
 		var selectedValue = event.target.getAttribute( "data-number" );
@@ -117,13 +117,13 @@ function InputTimeDropdown( container, type, timeObj ) {
 		  timeObj.setSec( selectedValueNumber );
 		  
 		  // Show the hour value.
-		  face.textContent = timeObj.getTime().sec;
+		  face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
 		}
 	  }
 	  
 	  break;
     default:
-	  console.error( "Time error: Type is not either in hours, minutes, or seconds." )
+	  console.error( "Time error: Type is not either in hours, minutes, or seconds." );
   }
 
   // Set the time based on which menu entry is clicked.

@@ -68,10 +68,10 @@
 			</div>
 		    <div class="col-5">
 		      <div class="dropdown dropdown-horizontal">
-			    <!-- Filled using script. -->
+			    <!-- Dropdown created by script. -->
 		      </div>
 		      <div class="dropdown dropdown-horizontal">
-			   <!-- Filled using script. -->
+			   <!-- Dropdown created by script. -->
 		      </div>
 			</div>
 		  </div>
@@ -81,10 +81,10 @@
 			</div>
 		    <div class="col-5">
 		      <div class="dropdown dropdown-horizontal">
-			    <!-- Filled using script. -->
+			    <!-- Dropdown created by script. -->
 		      </div>
 		      <div class="dropdown dropdown-horizontal">
-			   <!-- Filled using script. -->
+			    <!-- Dropdown created by script. -->
 		      </div>
 			</div>
 		  </div>
@@ -96,7 +96,43 @@
 		<div class="col-4 text-left content">
 		  <h5>LIGHT</h5>
 		</div>
-		<div class="col-8 text-right content">
+		<div id="light-time-input" class="col-8 text-right content">
+		  <div class="row">
+		    <div class="col-7">
+			</div>
+			<div class="col-3">
+			  <h5>HR</h5>
+			</div>
+			<div class="col-2">
+			  <h5>MIN</h5>
+			</div>
+		  </div>
+		  <div id="light-time-start" class="row dropdown-vertical">
+		    <div class="col-7">
+			  <h5>ON</h5>
+			</div>
+		    <div class="col-5">
+		      <div class="dropdown dropdown-horizontal">
+			    <!-- Dropdown created by script. -->
+		      </div>
+		      <div class="dropdown dropdown-horizontal">
+			   <!-- Dropdown created by script. -->
+		      </div>
+			</div>
+		  </div>
+		  <div id="light-time-end" class="row dropdown-vertical">
+		    <div class="col-7">
+			  <h5>OFF</h5>
+			</div>
+		    <div class="col-5">
+		      <div class="dropdown dropdown-horizontal">
+			    <!-- Dropdown created by script. -->
+		      </div>
+		      <div class="dropdown dropdown-horizontal">
+			    <!-- Dropdown created by script. -->
+		      </div>
+			</div>
+		  </div>
 		</div>
 	  </div>
 
@@ -115,10 +151,44 @@
 		var dropdnContsStart = document.querySelectorAll( "#pump-time-start .dropdown" );
 		var dropdnContsEnd = document.querySelectorAll( "#pump-time-end .dropdown" );
 		
-		// The time information.
+		// Default time information.
 		var startTime = new Time( "07:00" );
 		var endTime = new Time( "12:00" );
 		
+		// Create and display the dropdowns.
+		var dropdns = {
+		  startTime: {
+			hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
+			min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+		  },
+		  endTime: {
+			hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
+			min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+		  }
+		}
+		
+		// Public.
+		this.startTime = startTime;
+		this.endTime = endTime;
+	  }
+	  
+	  /**
+	   * @require module:data_types
+	   * @require module:ui_logic
+	   */
+	  function LightControls() {
+	    // The column that contains the controls.
+	    var timeInputContainer = document.getElementById( "light-time-input" );
+		
+		// The dropdown containers.
+		var dropdnContsStart = document.querySelectorAll( "#light-time-start .dropdown" );
+		var dropdnContsEnd = document.querySelectorAll( "#light-time-end .dropdown" );
+		
+		// Default time information.
+		var startTime = new Time( "07:00" );
+		var endTime = new Time( "12:00" );
+		
+		// Create and display the dropdowns.
 		var dropdns = {
 		  startTime: {
 			hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
@@ -136,6 +206,7 @@
 	  }
 	  
 	  var pumpControls = new PumpControls();
+	  var lightControls = new LightControls();
 	</script>
 </body>
 
