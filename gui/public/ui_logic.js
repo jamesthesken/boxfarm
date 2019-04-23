@@ -2,15 +2,32 @@
  * @file Place for interface controls and logic.
  * Can directly manipulate webpages.
  * @projectname Box Farm GUI
- * @version 0.5
+ * @version 0.5.4
  * @author Control Subsystem
  * @copyright 2018-2019
  */
+ 
+/**
+ * Enable button functionality.
+ * @constructor
+ * @param {DOMElement} button The DIV element object you want the dropdowns to be in. 
+ * It needs to have "dropdown" as the first parameter of the class attribute. Passed as reference.
+ * @param {function} action What the button will do when the button is released (after pressing down).
+ * The MouseEvent object would be passed to this function.
+ */
+function Button( button, action ) {
+  // Attach the button functionality.
+  button.addEventListener(
+    "mouseup",
+    action
+  );
+}
 
 /**
  * Generate graphics for the time selector.
  * Make sure its parent element is a block element.
  * @constructor
+ * @requires module:Bootstrap
  * @requires module:data_types
  * @param {DOMElement} container The DIV element object you want the dropdowns to be in. 
  * It needs to have "dropdown" as the first parameter of the class attribute. Passed as reference.
@@ -190,4 +207,72 @@ function InputTimeDropdown( container, type, timeObj ) {
    * @instance
    */
   this.updateVisuals = updateVisuals;
+}
+
+/**
+ * Creates and controls the confirmation modal with the messages stored in a stack.
+ * There can only be a single instance of this per page.
+ * @constructor
+ */
+function ConfirmModals() {
+  var self = this;
+  
+  var msgStack = [];
+  var okFnStack = [];
+  var cancelFnStack = [];
+  
+  /**
+   * Show the remaining amount of messages.
+   * @method msgCount
+   * @memberof ConfirmModals
+   * @instance
+   */
+  this.msgCount = function() {
+    return msgStack.length;
+  };
+  
+  /**
+   * Store a confirmation message and associated actions.
+   * @method add
+   * @memberof ConfirmModals
+   * @instance
+   * @param {object} msgData Contains {msg: ..., okAction: fn, cancelAction: fn}.
+   */
+  this.add = function( msgData ) {
+    msgStack.push( msgData.msg );
+    okFnStack.push( msgData.okAction );
+    cancelFnStack.push( msgData.cancelAction );
+  };
+  
+  /**
+   * Open the confirmation modal one-by-one. When the confirmation modal is closed, its record will be removed.
+   * @method open
+   * @memberof ConfirmModals
+   * @instance
+   * @return {object} Contains {msg: ..., okAction: fn, cancelAction: fn}.
+   */
+  this.open = function() {
+    // The confirmation message to show.
+    // Also removes it from stack when used.
+    var currentMsg = "";
+    var currentOkAction = "";
+    var currentCancelAction = "";
+    
+    if( msgStack.length !== 0 ) {
+      currentMsg = msgStack.pop();
+      currentOkAction = okFnStack.pop();
+      currentCancelAction = cancelFnStack.pop();
+      
+      // Show confirmation.
+      if( confirm( currentMsg ) ) {
+        currentOkAction();
+      } else {
+        currentCancelAction();
+      }
+    } else {
+      console.warn( "There are no confirmation messages to show." );
+    }
+    
+    return
+  };
 }

@@ -146,10 +146,22 @@
           </div>
         </div>
       </div>
+      
+      <div class="horizontal-bar"></div>
+      
+      <!-- Footer -->
+      <div class="row">
+        <div class="col-12 text-right">
+          <button type="button" id="settings-btn-cancel" class="btn btn-light button-text">Cancel</button>
+          <button type="button" id="settings-btn-save" class="btn btn-primary">Save</button>
+        </div>
+      </div>
     </div>
 	</div>
     
 	<script>
+    var confirmModals = new ConfirmModals();
+    
 	  /**
      * Displays time controls for the pumps.
      * @constructor
@@ -249,10 +261,37 @@
         dropdns.endTime.min.updateVisuals();
       };
 	  }
+    
+    function FooterButtons() {
+      var cancelBtn = document.getElementById( "settings-btn-cancel" );
+      var saveBtn = document.getElementById( "settings-btn-save" );
+      
+      var cancelBtnObj = new Button(
+        cancelBtn,
+        function( event ) {
+          confirmModals.add(
+            {
+              msg: "Are you sure you want to leave the settings page?\nChanges will be lost.",
+              okAction: function() {
+                // Go back to the main page.
+                location.href = ".";
+              },
+              cancelAction: function() {
+                // Do nothing.
+              }
+            }
+          );
+          
+          // Show it.
+          confirmModals.open();
+        }
+      );
+    }
 	  
     // Create the controls.
 	  var pumpControls = new PumpControls();
 	  var lightControls = new LightControls();
+    var footerButtons = new FooterButtons();
 	  
 	  // Show everything.
 	  pumpControls.applyAndShow();

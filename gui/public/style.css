@@ -1,7 +1,19 @@
 /* Bootstrap overrides. */
 .btn-primary {
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  font-size: 20px;
   background-color: #393;
-  border-color: #393;
+  border-color: #eee;
+}
+
+.btn-primary:hover {
+  background-color: #319131;
+  border-color: #fff;
+}
+
+.btn-primary:focus {
+  background-color: #2F8F2F;
+  border-color: #fff;
 }
 
 /* Box Farm. */
@@ -118,11 +130,11 @@ padding: 10px;
 }
 
 .button-text {
-font-family: 'Encode Sans Semi Expanded', sans-serif;
-font-size: 20px;
-text-align: center;
-padding: 5px;
-color: #999;
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  font-size: 20px;
+  text-align: center;
+  padding: 5px;
+  color: #888;
 }
 
 .dropdown-horizontal {
