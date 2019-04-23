@@ -33,6 +33,24 @@ body{
   border-radius: 20px; /* Moved from documents. */
 }
 
+/* For disabling parts of the page when needed. */
+.shade {
+  /* Position to the top-left of the card. */
+  position: absolute;
+  left: 0;
+  
+  width: 100%;
+  height: 100%;
+  border-radius: 56px 20px 20px 20px;
+  
+  background-color: #555;
+  opacity: 0.15;
+}
+
+.shade-disable {
+  display: none;
+}
+
 .header{
 padding: 10px;
 }

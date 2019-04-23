@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+
+<!-- Version 0.5.4 -->
+<!-- Author: Control Subsystem -->
+
 <html lang="en">
 <head>
   <title>Settings - Box Farm</title>
@@ -27,6 +31,7 @@
 
   <!-- Box Farm scripts. -->
   <script src="data_types.js"></script>
+  <script src="app_logic.js"></script>
   <script src="ui_logic.js"></script>
 </head>
 
@@ -101,7 +106,7 @@
       <!-- Grow light controls. -->
       <div class="row">
         <div class="col-3 text-left content">
-          <h5>LIGHT</h5>
+          <h5>LIGHTS</h5>
         </div>
         <div id="light-time-input" class="col-9 text-right content">
           <div class="row">
@@ -157,10 +162,17 @@
         </div>
       </div>
     </div>
+    
+    <div id="settings-shade" class="shade-disabled"></div>
 	</div>
     
 	<script>
     var confirmModals = new ConfirmModals();
+    
+    var settings = new Settings();
+    
+    // Load the current settings from the BoxBrain.
+    settings.load();
     
 	  /**
      * Displays time controls for the pumps.
@@ -176,19 +188,19 @@
       var dropdnContsStart = document.querySelectorAll( "#pump-time-start .dropdown" );
       var dropdnContsEnd = document.querySelectorAll( "#pump-time-end .dropdown" );
       
-      // Default time information.
-      var startTime = new Time( "07:00" );
-      var endTime = new Time( "12:00" );
+      // Cycle times from the settings.
+      var startTime = settings.getPumpCycle( 0 ).startTime;
+      var endTime = settings.getPumpCycle( 0 ).endTime;
       
       // Create and display the dropdowns.
       var dropdns = {
         startTime: {
-        hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
-        min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+          hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
+          min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
         },
         endTime: {
-        hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
-        min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+          hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
+          min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
         }
       }
       
@@ -226,9 +238,9 @@
       var dropdnContsStart = document.querySelectorAll( "#light-time-start .dropdown" );
       var dropdnContsEnd = document.querySelectorAll( "#light-time-end .dropdown" );
       
-      // Default time information. Obtain from settings.
-      var startTime = new Time( "07:00" );
-      var endTime = new Time( "12:00" );
+      // Cycle times from the settings.
+      var startTime = settings.getLightCycle( 0 ).startTime;
+      var endTime = settings.getLightCycle( 0 ).endTime;
       
       // Create and display the dropdowns.
       var dropdns = {
@@ -263,6 +275,7 @@
 	  }
     
     function FooterButtons() {
+      var shade = document.getElementById( "settings-shade" );
       var cancelBtn = document.getElementById( "settings-btn-cancel" );
       var saveBtn = document.getElementById( "settings-btn-save" );
       
@@ -286,16 +299,44 @@
           confirmModals.open();
         }
       );
+      
+      var saveBtnObj = new Button(
+        saveBtn,
+        function( event ) {
+          if( settings.save() ) {
+            // Save successful.
+            shade.classList.remove( "shade-disabled" );
+            // Make the shade appear.
+            shade.classList.add( "shade" );
+            
+            settings.send(
+              function() {
+                // Make the shade appear.
+                shade.classList.remove( "shade" );
+                shade.classList.add( "shade-disabled" );
+              },
+              function() {
+                // Make the shade appear.
+                shade.classList.remove( "shade" );
+                shade.classList.add( "shade-disabled" );
+              }
+            );
+          } else {
+            // Save failed.
+          }
+        }
+      );
     }
 	  
     // Create the controls.
-	  var pumpControls = new PumpControls();
-	  var lightControls = new LightControls();
+    var pumpControls = new PumpControls();
+    var lightControls = new LightControls();
     var footerButtons = new FooterButtons();
-	  
-	  // Show everything.
-	  pumpControls.applyAndShow();
-	  lightControls.applyAndShow();
+    
+    // Show everything.
+    pumpControls.applyAndShow();
+    lightControls.applyAndShow();
+      
 	</script>
 </body>
 
