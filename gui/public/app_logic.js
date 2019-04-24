@@ -181,15 +181,6 @@ function Settings() {
     clearLightCycles( main );
   };
   
-  /**
-   * Check if the settings are in the correct format before saving it.
-   * Ex. Find conflicting pump and light cycle times.
-   * @method check
-   * @memberof Settings
-   * @instance
-   * @return {object} Indices that point to the problem.
-   */
-   // Still need a way to check imported settings.
   function check( settings ) {
     //
     var problemPointer = {
@@ -238,6 +229,14 @@ function Settings() {
     return problemPointer;
   }
   
+  /**
+   * Check if the settings are in the correct format before saving it.
+   * Ex. Find conflicting pump and light cycle times.
+   * @method check
+   * @memberof Settings
+   * @instance
+   * @return {object} Indices that point to the problem.
+   */
   this.check = function() {
     return check( main );
   };
@@ -329,14 +328,7 @@ function Settings() {
     );
   };
   
-  /**
-   * Load the settings that was saved. It will not pull settings data from the BoxBrain.
-   * @method load
-   * @memberof Settings
-   * @instance
-   */
-  this.load = function() {
-    settingsJSON = localStorage.getItem( "settings" );
+  function load( settings, settingsJSON ) {
     
     try {
       // Fix for the case that a newly opened settings page does not load the
@@ -356,8 +348,8 @@ function Settings() {
       console.error( "Load Error: Settings data does not exist." );
       
       // Load default times instead;
-      self.addPumpCycle( new Time( "6:00" ), new Time( "12:00" ) );
-      self.addLightCycle( new Time( "0:00" ), new Time( "6:00" ) );
+      addPumpCycle( settings, new Time( "6:00" ), new Time( "12:00" ) );
+      addLightCycle( settings, new Time( "0:00" ), new Time( "6:00" ) );
       
       self.save();
       
@@ -367,12 +359,13 @@ function Settings() {
     }
     
     // Start fresh.
-    self.clearPumpCycles();
-    self.clearLightCycles();
+    clearPumpCycles( settings );
+    clearLightCycles( settings );
     
     // Load the pump cycles.
     for( var i = 0; i < settingsObj.pumpCycles.length; i++ ) {
-      self.addPumpCycle(
+      addPumpCycle(
+        settings,
         new Time( settingsObj.pumpCycles[ i ].startTime ),
         new Time( settingsObj.pumpCycles[ i ].endTime )
       );
@@ -380,7 +373,8 @@ function Settings() {
     
     // Load the light cycles.
     for( var i = 0; i < settingsObj.lightCycles.length; i++ ) {
-      self.addLightCycle(
+      addLightCycle(
+        settings,
         new Time( settingsObj.lightCycles[ i ].startTime ),
         new Time( settingsObj.lightCycles[ i ].endTime )
       );
@@ -389,7 +383,17 @@ function Settings() {
     console.log( "Settings are loaded successfully." );
     
     return true;
-  };
+  }
+  
+  /**
+   * Load the settings that was saved. It will not pull settings data from the BoxBrain.
+   * @method load
+   * @memberof Settings
+   * @instance
+   */
+  this.load = function() {
+    return load( main, localStorage.getItem( "settings" ) );
+  }
   
   /**
    * Gets the settins data from the BoxBrain and load it if valid.
@@ -407,31 +411,37 @@ function Settings() {
           console.log( "HTTP " + status );
           console.log( "Received the settings from BoxBrain successfully." );
           
-          // Load the local copy of settings JSON.
-          var oldSettingsJSON = localStorage.getItem( "settings" );
-          
           // Temporarily load the sent-in settins JSON and check it.
-          localStorage.setItem( "settings", msg );
-          self.load();
+          load( temp, msg );
           
-          if( self.check().pass ) {
-            // Keep it.
+          if( check( temp ).pass ) {
+            // Save this.
+            localStorage.setItem( "settings", msg );
+            
+            // Load the imported settings for real.
+            load( main, msg );
+            
+            // Clean up.
+            clearPumpCycles( temp );
+            clearLightCycles( temp );
           } else {
-            console.error( "Load Error: Bad imported settings configuration. Loaded the previous version." );
-            localStorage.setItem( "settings", oldSettingsJSON );
-            self.load();
+            console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
           }
           
-          //successAction();
+          if( typeof successAction === "function" ) {
+            successAction();
+          }
         },
         error: function( xhr, status, err ) {
           console.log( "HTTP " + status );
           console.error( "Comm Error: Bad connection to the BoxBrain." );
           
           // Load the last known settings..
-          self.load();
+          //self.load();
           
-          //errorAction();
+          if( typeof errorAction === "function" ) {
+            errorAction();
+          }
         },
         data: { sendMsg: "Settings received by client." }
       }
