@@ -1,3 +1,22 @@
+/* Bootstrap overrides. */
+.btn-primary {
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  font-size: 20px;
+  background-color: #393;
+  border-color: #eee;
+}
+
+.btn-primary:hover {
+  background-color: #319131;
+  border-color: #fff;
+}
+
+.btn-primary:focus {
+  background-color: #2F8F2F;
+  border-color: #fff;
+}
+
+/* Box Farm. */
 p.a{
   font-family: 'Space Mono', monospace;
   text-align: center;
@@ -9,8 +28,27 @@ body{
 }
 
 .box{
-background-color: #fff;
-height: 35rem;
+  background-color: #fff;
+  height: 35rem;
+  border-radius: 20px; /* Moved from documents. */
+}
+
+/* For disabling parts of the page when needed. */
+.shade {
+  /* Position to the top-left of the card. */
+  position: absolute;
+  left: 0;
+  
+  width: 100%;
+  height: 100%;
+  border-radius: 56px 20px 20px 20px;
+  
+  background-color: #555;
+  opacity: 0.15;
+}
+
+.shade-disable {
+  display: none;
 }
 
 .header{
@@ -18,8 +56,8 @@ padding: 10px;
 }
 
 .demo {
-    .u-absoluteCenter();
-    .u-flexCenter();
+    /* .u-absoluteCenter(); */
+    /* .u-flexCenter(); */
     top: 50%;
     transform: translate(0,50%)
 }
@@ -39,6 +77,39 @@ padding: 10px;
 .content{
   font-family: 'Encode Sans Semi Expanded', sans-serif;
   color: #999;
+}
+
+/* Default. */
+.content-spacing {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+@media screen and ( min-width: 768px ) {
+  .content-spacing {
+    
+    margin-left: 64px;
+    margin-right: 64px;
+    
+  }
+}
+
+@media screen and ( min-width: 992px ) {
+  .content-spacing {
+    
+    margin-left: 192px;
+    margin-right: 192px;
+    
+  }
+}
+
+@media screen and ( min-width: 1200px ) {
+  .content-spacing {
+    
+    margin-left: 256px;
+    margin-right: 256px;
+    
+  }
 }
 
 .data{
@@ -62,8 +133,13 @@ padding: 10px;
 }
 
 .card-img-top{
+  /* Compensate for the Bootstrap container margin. */
+  position: relative;
+  left: -15px;
+  
   height: auto;
   width: 20rem;
+  
 }
 
 .settings-button{
@@ -72,9 +148,26 @@ padding: 10px;
 }
 
 .button-text {
-font-family: 'Encode Sans Semi Expanded', sans-serif;
-font-size: 20px;
-text-align: center;
-padding: 5px;
-color: #999;
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  font-size: 20px;
+  text-align: center;
+  padding: 5px;
+  color: #888;
+}
+
+.dropdown-horizontal {
+  display: inline-block;
+  margin-left: 3px;
+}
+
+.dropdown-vertical {
+  margin-bottom: 5px;
+}
+
+.horizontal-bar {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  background-color: #EEE;
+  height: 2px;
+  border-radius: 1px;
 }
