@@ -17,12 +17,16 @@ function Settings() {
   var self = this;
   
   // Working storage. Contains Box Farm data.
-  var pumpCycles = [];
-  var lightCycles = [];
+  var main = {
+    pumpCycles: [],
+    lightCycles: []
+  };
   
   // Temporary storage. Contains Box Farm data.
-  var tempPumpCycles = [];
-  var tempPlightCycles = [];
+  var temp = {
+    pumpCycles: [],
+    lightCycles: []
+  };
   
   // Will be imported from or exported to JSON. Acts like a draft for the settings file.
   // Should only contain primitive data that is compatible with BoxBrain.
@@ -33,6 +37,15 @@ function Settings() {
   
   var settingsJSON = "";
   
+  function addPumpCycle( settings, startTime, endTime ) {
+    settings.pumpCycles.push(
+      {
+        startTime: startTime,
+        endTime: endTime
+      }
+    );
+  }
+  
   /**
    * Add a pump cycle as defined by its start and end times.
    * @method addPumpCycle
@@ -42,13 +55,18 @@ function Settings() {
    * @param {Time} endTime 
    */
   this.addPumpCycle = function( startTime, endTime ) {
-    pumpCycles.push(
-      {
-        startTime: startTime,
-        endTime: endTime
-      }
-    );
+    addPumpCycle( main, startTime, endTime );
   };
+  
+  function getPumpCycle( settings, i ) {
+    if( i < settings.pumpCycles.length ) {
+      return settings.pumpCycles[ i ];
+    } else {
+      console.warn( "Warning: There is no pump cycle at this index. Amount of cycles: " + pumpCycles.length + "." );
+      
+      return { empty: true };
+    }
+  }
   
   /**
    * Get the pump cycle.
@@ -59,14 +77,12 @@ function Settings() {
    * an end time (another Time instance) or an object that indicates if its empty.
    */
   this.getPumpCycle = function( i ) {
-    if( i < pumpCycles.length ) {
-      return pumpCycles[ i ];
-    } else {
-      console.warn( "Warning: There is no pump cycle at this index. Amount of cycles: " + pumpCycles.length + "." );
-      
-      return { empty: true };
-    }
-  };
+    return getPumpCycle( main, i );
+  }
+  
+  function numPumpCycles( settings ) {
+    return settings.pumpCycles.length;
+  }
   
   /**
    * Get the number of pump cycles.
@@ -76,8 +92,12 @@ function Settings() {
    * @return {number} The number of pump cycles.
    */
   this.numPumpCycles = function() {
-    return pumpCycles.length;
+    return numPumpCycles( main );
   };
+  
+  function clearPumpCycles( settings ) {
+    settings.pumpCycles = [];
+  }
   
   /**
    * Warning: Deletes all of the pump cycles. Used for refreshing the settings.
@@ -86,8 +106,17 @@ function Settings() {
    * @instance
    */
   this.clearPumpCycles = function() {
-    pumpCycles = [];
+    clearPumpCycles( main );
   };
+  
+  function addLightCycle( settings, startTime, endTime ) {
+    settings.lightCycles.push(
+      {
+        startTime: startTime,
+        endTime: endTime
+      }
+    );
+  }
   
   /**
    * Add a light cycle as defined by its start and end times.
@@ -98,13 +127,18 @@ function Settings() {
    * @param {Time} endTime 
    */
   this.addLightCycle = function( startTime, endTime ) {
-    lightCycles.push(
-      {
-        startTime: startTime,
-        endTime: endTime
-      }
-    );
+    addLightCycle( main, startTime, endTime );
   };
+  
+  function getLightCycle( settings, i ) {
+    if( i < settings.lightCycles.length ) {
+      return settings.lightCycles[ i ];
+    } else {
+      console.warn( "Warning: There is no light cycle at this index. Amount of cycles: " + lightCycles.length + "." );
+      
+      return { empty: true };
+    }
+  }
   
   /**
    * Get the light cycle.
@@ -115,13 +149,11 @@ function Settings() {
    * an end time (another Time instance) or an object that indicates if its empty.
    */
   this.getLightCycle = function( i ) {
-    if( i < lightCycles.length ) {
-      return lightCycles[ i ];
-    } else {
-      console.warn( "Warning: There is no light cycle at this index. Amount of cycles: " + lightCycles.length + "." );
-      
-      return { empty: true };
-    }
+    return getLightCycle( main, i );
+  };
+  
+  function numLightCycles( settings ) {
+    return settings.lightCycles.length;
   };
   
   /**
@@ -132,8 +164,12 @@ function Settings() {
    * @return {number} The number of light cycles.
    */
   this.numLightCycles = function() {
-    return lightCycles.length;
+    return numLightCycles( main );
   };
+  
+  function clearLightCycles( settings ) {
+    settings.lightCycles = [];
+  }
   
   /**
    * Warning: Deletes all of the light cycles. Used for refreshing the settings.
@@ -142,7 +178,7 @@ function Settings() {
    * @instance
    */
   this.clearLightCycles = function() {
-    lightCycles = [];
+    clearLightCycles( main );
   };
   
   /**
@@ -154,7 +190,7 @@ function Settings() {
    * @return {object} Indices that point to the problem.
    */
    // Still need a way to check imported settings.
-  this.check = function() {
+  function check( settings ) {
     //
     var problemPointer = {
       pass: true,
@@ -194,13 +230,17 @@ function Settings() {
     }
     
     // Check pump cycles.
-    orderCheck( pumpCycles, problemPointer.pumpCycleProbIndex );
+    orderCheck( settings.pumpCycles, problemPointer.pumpCycleProbIndex );
     
     // Check light cycles.
-    orderCheck( lightCycles, problemPointer.lightCycleProbIndex );
+    orderCheck( settings.lightCycles, problemPointer.lightCycleProbIndex );
     
     return problemPointer;
   }
+  
+  this.check = function() {
+    return check( main );
+  };
   
   /**
    * Make the settings permanent on the client. It will not send the settings to the BoxBrain.
@@ -219,12 +259,12 @@ function Settings() {
     // Write pump cycle times.
     // Index == -1 means no problems in the pump cycles found.
     if( errorCheck.pumpCycleProbIndex[ 0 ] === -1 ) {
-      for( var iPC = 0; iPC < pumpCycles.length; iPC++ ) {
+      for( var iPC = 0; iPC < main.pumpCycles.length; iPC++ ) {
         // Store times as formatted time strings.
         settingsObj.pumpCycles.push(
           {
-            startTime: pumpCycles[ iPC ].startTime.getTimeStr(),
-            endTime: pumpCycles[ iPC ].endTime.getTimeStr(),
+            startTime: main.pumpCycles[ iPC ].startTime.getTimeStr(),
+            endTime: main.pumpCycles[ iPC ].endTime.getTimeStr(),
           }
         );
       }
@@ -237,12 +277,12 @@ function Settings() {
     // Write light cycle times.
     // Index == 1 means no problems in the pump cycles found.
     if( errorCheck.lightCycleProbIndex[ 0 ] === -1 ) {
-      for( var iPC = 0; iPC < lightCycles.length; iPC++ ) {
+      for( var iPC = 0; iPC < main.lightCycles.length; iPC++ ) {
         // Store times as formatted time strings.
         settingsObj.lightCycles.push(
           {
-            startTime: lightCycles[ iPC ].startTime.getTimeStr(),
-            endTime: lightCycles[ iPC ].endTime.getTimeStr(),
+            startTime: main.lightCycles[ iPC ].startTime.getTimeStr(),
+            endTime: main.lightCycles[ iPC ].endTime.getTimeStr(),
           }
         );
       }
@@ -299,7 +339,18 @@ function Settings() {
     settingsJSON = localStorage.getItem( "settings" );
     
     try {
+      // Fix for the case that a newly opened settings page does not load the
+      // default time values.
+      if( settingsJSON === null ) {
+        throw new Error( "settingsJSON is null, causing the parser to not fail." );
+      }
+      
       settingsObj = JSON.parse( settingsJSON );
+      
+      // Error out if the settings values are not there.
+      if( settingsObj.pumpCycles.length <= 0 ) {
+        throw new Error( "No pump cycles found. There needs to be one or more." );
+      }
     } catch( ex ) {
       // Do this if the JSON parsing fails.
       console.error( "Load Error: Settings data does not exist." );
@@ -354,7 +405,7 @@ function Settings() {
         url: "/load",
         success: function( msg, status ) {
           console.log( "HTTP " + status );
-          console.log( msg );
+          console.log( "Received the settings from BoxBrain successfully." );
           
           // Load the local copy of settings JSON.
           var oldSettingsJSON = localStorage.getItem( "settings" );
