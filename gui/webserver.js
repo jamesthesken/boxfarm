@@ -44,6 +44,8 @@ app.post(
         res.send( data );
       }
     );
+    
+    console.log( Date.now() + ': Settings were sent to the client ' + req.ip + '.' );
   }
 );
 
@@ -51,7 +53,7 @@ app.post(
 app.post(
   '/save',
   ( req, res ) => {
-    console.log( 'Settings were received at ' + Date.now() + '.' );
+    console.log( Date.now() + ': Settings were received from the client ' + req.ip + '.' );
     
     // Write the JSON string that was sent over to the settings file.
     fs.writeFile(
@@ -65,13 +67,13 @@ app.post(
       }
     );
     
-    res.end( "Settings were received." );
+    res.end( "Settings were received by BoxBrain." );
   }
 );
 
 app.listen(
   4000,
   () => {
-    console.log( 'Box Farm GUI server is running now at ' + Date.now() + '.' );
+    console.log( Date.now() + ': Box Farm GUI server has started.' );
   }
 );

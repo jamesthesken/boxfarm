@@ -40,77 +40,27 @@
 	<!-- Just adding a bit of space-->
 	<div class="header"> </div>
 
-	<div class="container card box shadow-lg" style="border-radius: 56px 20px 20px 20px;">
-	  <!-- Card heading. -->
-	  <div class="row">
-      <div class="col">
-        <!-- Moved border style definition to style.css and referenced to its top-level div. -->
-        <!-- Need to move logo slightly to the left. -->  
-        <a href="index.html"> <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm Home"></img> </a>
-        <h1 class="left-card text-center" > Settings </h1>
-      </div>
-	  </div>
-	  
-    <div class="content-spacing">
-      <!-- Pump controls. -->
+	<div class="container">
+    <div class="card box shadow-lg" style="border-radius: 56px 20px 20px 20px;">
+      <!-- Card heading. -->
       <div class="row">
-        <div class="col-3 text-left content">
-          <h5>PUMPS</h5>
-        </div>
-        <div id="pump-time-input" class="col-9 text-right content">
-          <div class="row">
-            <div class="col-6">
-          </div>
-          <div class="col-3">
-            <h5>HR</h5>
-          </div>
-          <div class="col-3">
-            <h5>MIN</h5>
-          </div>
-         </div>
-        <div id="pump-time-start" class="row dropdown-vertical">
-          <div class="col-6">
-          <h5>ON</h5>
-        </div>
-          <div class="col-3">
-            <div class="dropdown dropdown-horizontal">
-              <!-- Dropdown created by script. -->
-            </div>
-          </div>
-          <div class="col-3">
-            <div class="dropdown dropdown-horizontal">
-              <!-- Dropdown created by script. -->
-            </div>
-          </div>
-        </div>
-        <div id="pump-time-end" class="row dropdown-vertical">
-            <div class="col-6">
-              <h5>OFF</h5>
-            </div>
-            <div class="col-3">
-              <div class="dropdown dropdown-horizontal">
-                <!-- Dropdown created by script. -->
-              </div>
-            </div>
-            <div class="col-3">
-              <div class="dropdown dropdown-horizontal">
-                <!-- Dropdown created by script. -->
-              </div>
-            </div>
-          </div>
+        <div class="col">
+          <!-- Moved border style definition to style.css and referenced to its top-level div. -->
+          <!-- Need to move logo slightly to the left. -->  
+          <a href="index.html"> <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm Home"></img> </a>
+          <h1 class="left-card text-center" > Settings </h1>
         </div>
       </div>
       
-      <div class="horizontal-bar"></div>
-      
-      <!-- Grow light controls. -->
-      <div class="row">
-        <div class="col-3 text-left content">
-          <h5>LIGHTS</h5>
-        </div>
-        <div id="light-time-input" class="col-9 text-right content">
-          <div class="row">
-            <div class="col-6">
+      <div class="card-body content-spacing">
+        <!-- Pump controls. -->
+        <div class="row">
+          <div class="col-3 text-left content">
+            <h5>PUMPS</h5>
+          </div>
+          <div id="pump-time-input" class="col-9 text-right content">
+            <div class="row">
+              <div class="col-6">
             </div>
             <div class="col-3">
               <h5>HR</h5>
@@ -118,58 +68,117 @@
             <div class="col-3">
               <h5>MIN</h5>
             </div>
-          </div>
-          <div id="light-time-start" class="row dropdown-vertical">
+           </div>
+          <div id="pump-time-start" class="row dropdown-vertical">
             <div class="col-6">
-              <h5>ON</h5>
-            </div>
+            <h5>ON</h5>
+          </div>
             <div class="col-3">
               <div class="dropdown dropdown-horizontal">
-                <!-- Dropdown created by ui_logic. -->
+                <!-- Dropdown created by script. -->
               </div>
             </div>
             <div class="col-3">
               <div class="dropdown dropdown-horizontal">
-                <!-- Dropdown created by ui_logic. -->
+                <!-- Dropdown created by script. -->
               </div>
             </div>
           </div>
-          <div id="light-time-end" class="row dropdown-vertical">
-            <div class="col-6">
-              <h5>OFF</h5>
-            </div>
-            <div class="col-3">
-              <div class="dropdown dropdown-horizontal">
-                <!-- Dropdown created by ui_logic. -->
+          <div id="pump-time-end" class="row dropdown-vertical">
+              <div class="col-6">
+                <h5>OFF</h5>
               </div>
-            </div>
-            <div class="col-3">
-              <div class="dropdown dropdown-horizontal">
-                <!-- Dropdown created by ui_logic. -->
+              <div class="col-3">
+                <div class="dropdown dropdown-horizontal">
+                  <!-- Dropdown created by script. -->
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="dropdown dropdown-horizontal">
+                  <!-- Dropdown created by script. -->
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div class="horizontal-bar"></div>
-      
-      <!-- Footer -->
-      <div class="row">
-        <div class="col-12 text-right">
-          <button type="button" id="settings-btn-cancel" class="btn btn-light button-text">Cancel</button>
-          <button type="button" id="settings-btn-save" class="btn btn-primary">Save</button>
+        
+        <div class="horizontal-bar"></div>
+        
+        <!-- Grow light controls. -->
+        <div class="row">
+          <div class="col-3 text-left content">
+            <h5>LIGHTS</h5>
+          </div>
+          <div id="light-time-input" class="col-9 text-right content">
+            <div class="row">
+              <div class="col-6">
+              </div>
+              <div class="col-3">
+                <h5>HR</h5>
+              </div>
+              <div class="col-3">
+                <h5>MIN</h5>
+              </div>
+            </div>
+            <div id="light-time-start" class="row dropdown-vertical">
+              <div class="col-6">
+                <h5>ON</h5>
+              </div>
+              <div class="col-3">
+                <div class="dropdown dropdown-horizontal">
+                  <!-- Dropdown created by ui_logic. -->
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="dropdown dropdown-horizontal">
+                  <!-- Dropdown created by ui_logic. -->
+                </div>
+              </div>
+            </div>
+            <div id="light-time-end" class="row dropdown-vertical">
+              <div class="col-6">
+                <h5>OFF</h5>
+              </div>
+              <div class="col-3">
+                <div class="dropdown dropdown-horizontal">
+                  <!-- Dropdown created by ui_logic. -->
+                </div>
+              </div>
+              <div class="col-3">
+                <div class="dropdown dropdown-horizontal">
+                  <!-- Dropdown created by ui_logic. -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="horizontal-bar"></div>
+        
+        <!-- Footer -->
+        <div class="row">
+          <div class="col-12 text-right">
+            <button type="button" id="settings-btn-cancel" class="btn btn-light button-text">Cancel</button>
+            <button type="button" id="settings-btn-save" class="btn btn-primary">Save</button>
+          </div>
         </div>
       </div>
+      
+      <div id="settings-shade" class="shade-disabled"></div>
     </div>
-    
-    <div id="settings-shade" class="shade-disabled"></div>
 	</div>
     
 	<script>
+    var alertModals = new AlertModals();
     var confirmModals = new ConfirmModals();
     
     var settings = new Settings();
+    
+    
+    // Show "leave site?" prompt if changes are not saved.
+    window.onbeforeunload = function() {
+      return true;
+    };
     
     // Load the current settings from the BoxBrain.
     settings.load();
@@ -192,21 +201,23 @@
       var startTime = settings.getPumpCycle( 0 ).startTime;
       var endTime = settings.getPumpCycle( 0 ).endTime;
       
+      // Public.
+      // WARNING: This would remove the time reference to the dropdowns, 
+      // Making it impossible to update.
+      this.startTime = startTime;
+      this.endTime = endTime;
+      
       // Create and display the dropdowns.
       var dropdns = {
         startTime: {
-          hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
-          min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+          hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", this.startTime ),
+          min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", this.startTime )
         },
         endTime: {
-          hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
-          min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+          hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", this.endTime ),
+          min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", this.endTime )
         }
       }
-      
-      // Public.
-      this.startTime = startTime;
-      this.endTime = endTime;
       
       // Show everything at the very end.
       this.applyAndShow = function() {
@@ -217,6 +228,7 @@
       };
       
       this.updateVisuals = function() {
+        // Show changes.
         dropdns.startTime.hr.updateVisuals();
         dropdns.startTime.min.updateVisuals();
         dropdns.endTime.hr.updateVisuals();
@@ -242,21 +254,23 @@
       var startTime = settings.getLightCycle( 0 ).startTime;
       var endTime = settings.getLightCycle( 0 ).endTime;
       
+      // Public.
+      // WARNING: This would remove the time reference to the dropdowns, 
+      // Making it impossible to update.
+      this.startTime = startTime;
+      this.endTime = endTime;
+      
       // Create and display the dropdowns.
       var dropdns = {
         startTime: {
-          hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", startTime ),
-          min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", startTime )
+          hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", this.startTime ),
+          min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", this.startTime )
         },
         endTime: {
-          hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", endTime ),
-          min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", endTime )
+          hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", this.endTime ),
+          min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", this.endTime )
         }
       }
-      
-      // Public.
-      this.startTime = startTime;
-      this.endTime = endTime;
       
       // Show everything at the very end.
       this.applyAndShow = function() {
@@ -267,6 +281,7 @@
       };
       
       this.updateVisuals = function() {
+        // Show the changes.
         dropdns.startTime.hr.updateVisuals();
         dropdns.startTime.min.updateVisuals();
         dropdns.endTime.hr.updateVisuals();
@@ -282,48 +297,56 @@
       var cancelBtnObj = new Button(
         cancelBtn,
         function( event ) {
-          confirmModals.add(
-            {
-              msg: "Are you sure you want to leave the settings page?\nChanges will be lost.",
-              okAction: function() {
-                // Go back to the main page.
-                location.href = ".";
-              },
-              cancelAction: function() {
-                // Do nothing.
-              }
-            }
-          );
-          
-          // Show it.
-          confirmModals.open();
+          // Go to the main page.
+          location.href = ".";
         }
       );
       
       var saveBtnObj = new Button(
         saveBtn,
         function( event ) {
-          if( settings.save() ) {
-            // Save successful.
-            shade.classList.remove( "shade-disabled" );
-            // Make the shade appear.
-            shade.classList.add( "shade" );
-            
-            settings.send(
-              function() {
-                // Make the shade appear.
-                shade.classList.remove( "shade" );
-                shade.classList.add( "shade-disabled" );
-              },
-              function() {
-                // Make the shade appear.
-                shade.classList.remove( "shade" );
-                shade.classList.add( "shade-disabled" );
-              }
-            );
-          } else {
-            // Save failed.
-          }
+          settings.save(
+            function( status ) {
+              // Successful save.
+              
+              shade.classList.remove( "shade-disabled" );
+              // Make the shade appear.
+              shade.classList.add( "shade" );
+              
+              settings.send(
+                function() {
+                  // Successful send.
+                  // Make the shade appear.
+                  shade.classList.remove( "shade" );
+                  shade.classList.add( "shade-disabled" );
+                  
+                  alertModals.add( "Success:\nSettings are saved and sent to the BoxBrain." );
+                  alertModals.open();
+                },
+                function() {
+                  // Failure to send.
+                  // Make the shade appear.
+                  shade.classList.remove( "shade" );
+                  shade.classList.add( "shade-disabled" );
+                  
+                  alertModals.add( "Error:\nSettings are saved, but cannot send to the BoxBrain." );
+                  alertModals.open();
+                }
+              );
+            },
+            function( status ) {
+              // Failure to save.
+              
+              // Process error information.
+              var errors = settings.showInputError( status );
+              
+              // Append each error line and separate by line breaks.
+              var errorsText = errors.join( "\n" );
+              
+              alertModals.add( "Error:\nSettings cannot be saved.\n\nLocation of the invalid values:\n" + errorsText );
+              alertModals.open();
+            }
+          );
         }
       );
     }
@@ -336,7 +359,29 @@
     // Show everything.
     pumpControls.applyAndShow();
     lightControls.applyAndShow();
-      
+    
+    // Load the settings stored in the BoxBrain.
+    /*
+    settings.receive(
+      function() {
+        // Apply the changes. WARNING: This would remove the time reference to the dropdowns, 
+        // Making it impossible to update.
+        pumpControls.startTime = settings.getPumpCycle( 0 ).startTime;
+        pumpControls.endTime = settings.getPumpCycle( 0 ).endTime;
+        lightControls.startTime = settings.getLightCycle( 0 ).startTime;
+        lightControls.endTime = settings.getLightCycle( 0 ).endTime;
+        
+        
+        // Show the changs.
+        pumpControls.updateVisuals();
+        lightControls.updateVisuals();
+      },
+      function() {
+        alertModals.add( "Communication Error:\nCannot connect to the BoxBrain." );
+        alertModals.open();
+      }
+    );
+    */
 	</script>
 </body>
 

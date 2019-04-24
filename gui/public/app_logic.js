@@ -181,7 +181,7 @@ function Settings() {
     clearLightCycles( main );
   };
   
-  function check( settings ) {
+  function check( settings, successAction, errorAction ) {
     //
     var problemPointer = {
       pass: true,
@@ -226,6 +226,18 @@ function Settings() {
     // Check light cycles.
     orderCheck( settings.lightCycles, problemPointer.lightCycleProbIndex );
     
+    if( typeof successAction === "function" ) {
+      if( problemPointer.pass ) {
+        successAction( problemPointer );
+      }
+    }
+    
+    if( typeof errorAction === "function" ) {
+      if( !problemPointer.pass ) {
+        errorAction( problemPointer );
+      }
+    }
+    
     return problemPointer;
   }
   
@@ -235,20 +247,86 @@ function Settings() {
    * @method check
    * @memberof Settings
    * @instance
-   * @return {object} Indices that point to the problem.
+   * @param {function} successAction Call if the check was successful with the status passed to it.
+   * @param {function} errorAction Call if the check fails with the status passed to it.
+   * @return {object} The status of the check. It also include indices that point to the problem.
    */
-  this.check = function() {
-    return check( main );
+  this.check = function( successAction, errorAction ) {
+    return check( main, successAction, errorAction );
+  };
+  
+  /**
+   * Show where the input error is in the settings form.
+   * It will interpret the error information passed from the check() method.
+   * @method showInputError
+   * @memberof Settings
+   * @instance
+   * @return An array of strings containing the information.
+   */
+  this.showInputError = function( problemPointer ) {
+    var infoArr = [];
+    var infoText = "";
+    
+    // Format pump cycle error.
+    // Note: Index 0 - pump cycle, index 1 - time.
+    if( problemPointer.pumpCycleProbIndex[ 0 ] !== -1 ) {
+      // Show which pump cycle in the future.
+      infoText = "Pump cycle";
+      
+      // Start of end cycle?
+      switch( problemPointer.pumpCycleProbIndex[ 1 ] ) {
+        case 0:
+          infoText += ", \"on\" time"
+          break;
+        case 1:
+          infoText += ", \"off\" time"
+          break;
+        default:
+          // Do not add to the infoText.
+      }
+      
+      infoText += ".";
+      
+      infoArr.push( infoText );
+      infoText = "";
+    }
+    
+    // Format light cycle error.
+    // Note: Index 0 - light cycle, index 1 - time.
+    if( problemPointer.lightCycleProbIndex[ 0 ] !== -1 ) {
+      // Show which light cycle in the future.
+      infoText = "Light cycle";
+      
+      // Start of end cycle?
+      switch( problemPointer.lightCycleProbIndex[ 1 ] ) {
+        case 0:
+          infoText += ", \"on\" time"
+          break;
+        case 1:
+          infoText += ", \"off\" time"
+          break;
+        default:
+          // Do not add to the infoText.
+      }
+      
+      infoText += ".";
+      
+      infoArr.push( infoText );
+      infoText = "";
+    }
+    
+    return infoArr;
   };
   
   /**
    * Make the settings permanent on the client. It will not send the settings to the BoxBrain.
-   * Call the send() method after saving.
    * @method save
    * @memberof Settings
    * @instance
+   * @param {function} successAction Call if the settings save was successful with the status passed to it.
+   * @param {function} errorAction Call if there is a problem during settings save with the status passed to it.
    */
-  this.save = function() {
+  this.save = function( successAction, errorAction ) {
     var errorCheck = self.check();
     
     // Start fresh.
@@ -270,6 +348,10 @@ function Settings() {
     } else {
       console.error( "Save Error: The pump cycle times have conflicts." );
       
+      if( typeof errorAction === "function" ) {
+        errorAction( errorCheck );
+      }
+      
       return false;
     }
     
@@ -288,6 +370,10 @@ function Settings() {
     } else {
       console.error( "Save Error: The light cycle times have conflicts." );
       
+      if( typeof errorAction === "function" ) {
+        errorAction( errorCheck );
+      }
+      
       return false;
     }
     
@@ -296,6 +382,12 @@ function Settings() {
     // Convert to JSON and save.
     settingsJSON = JSON.stringify( settingsObj );
     localStorage.setItem( "settings", settingsJSON );
+    
+    if( typeof successAction === "function" ) {
+      successAction( errorCheck );
+    }
+    
+    console.log( "Settings are saved." );
     
     return true;
   };
@@ -334,6 +426,7 @@ function Settings() {
       // Fix for the case that a newly opened settings page does not load the
       // default time values.
       if( settingsJSON === null ) {
+        // The craig fix.
         throw new Error( "settingsJSON is null, causing the parser to not fail." );
       }
       
@@ -380,8 +473,6 @@ function Settings() {
       );
     }
     
-    console.log( "Settings are loaded successfully." );
-    
     return true;
   }
   
@@ -392,6 +483,8 @@ function Settings() {
    * @instance
    */
   this.load = function() {
+    console.log( "Settings are loaded." );
+    
     return load( main, localStorage.getItem( "settings" ) );
   }
   
@@ -420,6 +513,8 @@ function Settings() {
             
             // Load the imported settings for real.
             load( main, msg );
+            
+            console.log( "Settings are loaded successfully." );
             
             // Clean up.
             clearPumpCycles( temp );
