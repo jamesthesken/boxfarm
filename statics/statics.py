@@ -1,4 +1,4 @@
-import serial
+#import serial
 import schedule
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -11,7 +11,7 @@ import socketio
 
 # standard Python
 sio = socketio.Client()
-sio.connect('http://localhost:4000')
+sio.connect('http://localhost:4004')
 
 settings = open('../gui/configuration.json') # read the configuration file
 
