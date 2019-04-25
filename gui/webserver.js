@@ -1,5 +1,5 @@
 /**
- * @file Serves the Box Farm GUI webpage and 
+ * @file Serves the Box Farm GUI webpage and
  * interacts with the BoxBrain system.
  * @projectname Box Farm GUI
  * @version 0.5.4
@@ -17,6 +17,8 @@ const url  = require('url'),
 
 const app = express();
 const server = http.createServer(app);
+
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets')));
@@ -40,7 +42,7 @@ app.post(
           // Warning: Stops the server.
           throw err;
         }
-        
+
         res.send( data );
       }
     );
@@ -52,7 +54,7 @@ app.post(
   '/save',
   ( req, res ) => {
     console.log( 'Settings were received at ' + Date.now() + '.' );
-    
+
     // Write the JSON string that was sent over to the settings file.
     fs.writeFile(
       'settings.json',
@@ -64,7 +66,7 @@ app.post(
         }
       }
     );
-    
+
     res.end( "Settings were received." );
   }
 );
