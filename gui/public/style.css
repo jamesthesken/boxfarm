@@ -33,6 +33,11 @@ body{
   border-radius: 20px; /* Moved from documents. */
 }
 
+/* Has logo in it. */
+.box-main {
+  border-radius: 56px 20px 20px 20px;
+}
+
 /* For disabling parts of the page when needed. */
 .shade {
   /* Position to the top-left of the card. */
@@ -142,9 +147,9 @@ body{
   
 }
 
+/* Could be used for any arrow icons, in general. */
 .settings-button{
-  height: 20%;
-  width: 20%;
+  height: 32px;
 }
 
 .button-text {
