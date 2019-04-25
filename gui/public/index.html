@@ -34,7 +34,7 @@
 <div class="container">
   <div class="row">
     <div class="col">
-      <div class="card box box-main shadow-lg">
+      <div class="card box box-main shadow-lg mb-3">
         <img src="box-farm-logo.png" class="card-img-top" alt="...">
         <h1 class="left-card text-center" style="padding: 15px;"> Tasks </h1>
         <div class="card-body text-center">
@@ -72,7 +72,7 @@
       </div>
     </div> <!-- center  panel -->
     <div class="col">
-      <div class="card shadow-lg"  style="border-radius:20px;">
+      <div class="card shadow-lg mb-3"  style="border-radius:20px;">
         <div class="card box"  style="border-radius:20px;">
           <h1 class="card-titles"> Analytics </h1>
           <div class="card-body container-fluid">
@@ -114,7 +114,12 @@
 
 <body>
 	<script>
+    // Also begins the animation.
     var harvestProgress = new ProgressAnimation();
+    
+    // Set the remaining harvest day to 30.
+    // Will be applied way before the animation shows its first frame.
+    harvestProgress.setCurrent( 45 );
   </script>
 </body>
 </html>

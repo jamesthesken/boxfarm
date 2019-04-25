@@ -31,6 +31,7 @@ body{
   background-color: #fff;
   /* height: 35rem; */ /* Handled by card layout. */
   border-radius: 20px; /* Moved from documents. */
+  /* padding-top: 16px; */
 }
 
 /* Has logo in it. */

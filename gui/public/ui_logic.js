@@ -386,6 +386,7 @@ function ConfirmModals() {
 }
 
 function ProgressAnimation() {
+  var self = this;
   /*
   var circle = document.getElementById('one');
   var text = document.getElementById('percent-one');
@@ -404,15 +405,16 @@ function ProgressAnimation() {
   */
 
   //---
-  var radius = 90; // px.
+  // Defaults.
+  var radius = 90; // px. Same as the size of the SVG circle.
   var realPercent = 0.5;
-  var targetValue = 60;
+  var targetValue = 120;
 
   var circle1 = document.getElementById('two');
   var text1 = document.getElementById('percent-two');
   
   var angle1 = 0; // Changes with time.
-  var percent1 = realPercent*2*Math.PI*radius; // End limit.
+  //var percent1 = realPercent*2*Math.PI*radius; // End limit.
   
   var sPerFrame = 1000/60;
   
@@ -422,7 +424,7 @@ function ProgressAnimation() {
     
     angle1 += 0.015*Math.PI;
     
-    if (angle1 >= 2*Math.PI*realPercent) {
+    if (angle1 > 2*Math.PI*realPercent) {
       window.clearInterval(timer1);
     }
   }
@@ -465,6 +467,12 @@ function ProgressAnimation() {
   this.setTarget = function( n ) {
     if( !isNaN( n ) ) {
       targetValue = n;
+    }
+  };
+  
+  this.setCurrent = function( n ) {
+    if( !isNaN( n ) ) {
+      self.setPercent( n/targetValue );
     }
   };
   
