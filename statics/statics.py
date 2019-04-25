@@ -9,102 +9,106 @@ import requests
 
 import socketio
 
+SETTINGS_PATH = '../gui/'
+SETTINGS_JSON_FILE = 'settings.json'
+
 # standard Python
 sio = socketio.Client()
 sio.connect('http://localhost:4004')
 
-settings = open('../gui/configuration.json') # read the configuration file
+settings = open(SETTINGS_PATH + SETTINGS_JSON_FILE) # read the configuration file
 
 # Watchdog to monitor changes made to configuration JSON file
 class MyHandler(FileSystemEventHandler):
    def on_modified(self, event):
-        settings = open('../gui/configuration.json') # read the configuration file
-        data = json.load(settings)        # load the settings as a dictionary
+     settings = open(SETTINGS_PATH + SETTINGS_JSON_FILE) # read the configuration file
+     data = json.load(settings)        # load the settings as a dictionary
 
-        # debug prints
-        print('New settings: {}'.format(data))
-        print('event type: {}  path : {}'.format(event.event_type, event.src_path))
+     # debug prints
+     #print('New settings: {}'.format(data))
+     #print('event type: {}  path : {}'.format(event.event_type, event.src_path))
 
-        # get amount of given by the user
-        lightCycles  = len(data['lightCycles'])
-        pumpCycles  = len(data['pumpCycles'])
+     # get amount of given by the user
+     lightCycles  = len(data['lightCycles'])
+     pumpCycles  = len(data['pumpCycles'])
 
-        # reset settings for pumps and lights
-        loadSettings(data)
+     # reset settings for pumps and lights
+     loadSettings(data)
 
-        sio.emit('Status', 'Settings successfully changed.')
+     print('Settings successfully changed.')
+     sio.emit('Status', 'Settings successfully changed.')
 
 
 def loadSettings(data):
-       # debug prints
-        print('New settings: {}'.format(data))
+   # debug prints
+   #print('New settings: {}'.format(data))
 
-        # get amount of given by the user
-        lightCycles  = len(data['lightCycles'])
-        pumpCycles  = len(data['pumpCycles'])
+   # get amount of given by the user
+   lightCycles  = len(data['lightCycles'])
+   pumpCycles  = len(data['pumpCycles'])
+   
+   if lightCycles  == 1:
+      schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
 
-        if lightCycles  == 1:
-            schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
+   elif lightCycles == 2:
+      schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
 
-        elif lightCycles == 2:
-            schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
+      schedule.every().day.at("{}".format(data['lightCycles'][1]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['lightCycles'][1]['endTime'])).do(lightsOff)
 
-            schedule.every().day.at("{}".format(data['lightCycles'][1]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['lightCycles'][1]['endTime'])).do(lightsOff)
+   elif lightCycles == 3:
+      schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
 
-        elif lightCycles == 3:
-            schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
+      schedule.every().day.at("{}".format(data['lightCycles'][1]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['lightCycles'][1]['endTime'])).do(lightsOff)
 
-            schedule.every().day.at("{}".format(data['lightCycles'][1]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['lightCycles'][1]['endTime'])).do(lightsOff)
+      schedule.every().day.at("{}".format(data['lightCycles'][2]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['lightCycles'][2]['endTime'])).do(lightsOff)
+   
+   
+   if pumpCycles  == 1:
+      schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
+      schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
 
-            schedule.every().day.at("{}".format(data['lightCycles'][2]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['lightCycles'][2]['endTime'])).do(lightsOff)
+   elif pumpCycles == 2:
+      schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
+      schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
 
+      schedule.every().day.at("{}".format(data['pumpCycles'][1]['startTime'])).do(pumpsOn)
+      schedule.every().day.at("{}".format(data['pumpCycles'][1]['endTime'])).do(pumpsOff)
 
-        if pumpCycles  == 1:
-             schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
-             schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
+   elif pumpCycles == 3:
+      schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
+      schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
 
-        elif pumpCycles == 2:
-            schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
-            schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
+      schedule.every().day.at("{}".format(data['pumpCycles'][1]['startTime'])).do(lightsOn)
+      schedule.every().day.at("{}".format(data['pumpCycles'][1]['endTime'])).do(pumpsOff)
 
-            schedule.every().day.at("{}".format(data['pumpCycles'][1]['startTime'])).do(pumpsOn)
-            schedule.every().day.at("{}".format(data['pumpCycles'][1]['endTime'])).do(pumpsOff)
-
-        elif pumpCycles == 3:
-            schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
-            schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
-
-            schedule.every().day.at("{}".format(data['pumpCycles'][1]['startTime'])).do(lightsOn)
-            schedule.every().day.at("{}".format(data['pumpCycles'][1]['endTime'])).do(pumpsOff)
-
-            schedule.every().day.at("{}".format(data['pumpCycles'][2]['startTime'])).do(pumpsOn)
-            schedule.every().day.at("{}".format(data['pumpCycles'][2]['endTime'])).do(pumpsOff)
-
+      schedule.every().day.at("{}".format(data['pumpCycles'][2]['startTime'])).do(pumpsOn)
+      schedule.every().day.at("{}".format(data['pumpCycles'][2]['endTime'])).do(pumpsOff)
+      
 def pumpsOn():
-    print('Pumps on')
-    time.sleep(1)
+   print('Pumps on at %s' % datetime.now())
+   time.sleep(1)
 
 def pumpsOff():
-    print('Pumps off')
-    time.sleep(1)
+   print('Pumps off at %s' % datetime.now())
+   time.sleep(1)
 
 def lightsOn():
-    print('Lights on')
-    time.sleep(1) # wait for command to upload
+   print('Lights on at %s' % datetime.now())
+   time.sleep(1) # wait for command to upload
 
 def lightsOff():
-    print('Lights off')
-    time.sleep(1) # wait for command to upload
+   print('Lights off at %s' % datetime.now())
+   time.sleep(1) # wait for command to upload
 
 # JSON string format:
 data = json.load(settings)
-print(type(data))
+#print(type(data))
 
 loadSettings(data)
 
@@ -112,16 +116,19 @@ loadSettings(data)
 #ser.write('10') # turn off pumps on start of script
 
 if __name__ == "__main__":
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path='data/', recursive=False)
-    observer.start()
+   event_handler = MyHandler()
+   observer = Observer()
+   observer.schedule(event_handler, path=SETTINGS_PATH, recursive=False)
+   observer.start()
 
-    try:
-        while True:
-            schedule.run_pending()
-            time.sleep(1)
+   print('Statics control subsystem scheduler has started.')
+   
+   try:
+      while True:
+         schedule.run_pending()
+         time.sleep(2)
 
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+   except KeyboardInterrupt:
+      observer.stop()
+
+   observer.join()

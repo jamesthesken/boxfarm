@@ -123,6 +123,16 @@ body{
   color: #339933;
 }
 
+.progress-container {
+  display: block;
+  
+  /* Center itself. */
+  margin-left: auto;
+  margin-right: auto;
+  
+  width: 67%;
+}
+
 .progress {
   fill:none;
   stroke: #339933;

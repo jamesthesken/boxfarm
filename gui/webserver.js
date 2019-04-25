@@ -26,13 +26,17 @@ const io = socketio( pyServer );
 
 io.on('connection', function(socket){
   console.log('Python client connected');
-});
-
-io.on('connection', function(socket){
+  
   socket.on('Status', function(msg){
     console.log('Status: ' + msg);
   });
 });
+
+/*
+io.on('connection', function(socket){
+  
+});
+*/
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets')));
