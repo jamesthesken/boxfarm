@@ -404,21 +404,33 @@ function ProgressAnimation() {
   */
 
   //---
+  var radius = 90; // px.
+  var realPercent = 0.5;
+  var targetValue = 60;
 
   var circle1 = document.getElementById('two');
   var text1 = document.getElementById('percent-two');
-  var angle1 = 0;
-  var percent1 = 60*4.7
-
-  window.timer1 = window.setInterval(function () {
-    circle1.setAttribute("stroke-dasharray", angle1 + ", 20000");
-    text1.innerHTML = parseInt(angle1/471*100);
-
-    if (angle1 >= percent1) {
-      window.clearInterval(window.timer1);
+  
+  var angle1 = 0; // Changes with time.
+  var percent1 = realPercent*2*Math.PI*radius; // End limit.
+  
+  var sPerFrame = 1000/60;
+  
+  function animate() {
+    circle1.setAttribute("stroke-dasharray", angle1*radius + ", 20000");
+    text1.innerHTML = Math.round(0.5*angle1*targetValue/Math.PI);
+    
+    angle1 += 0.015*Math.PI;
+    
+    if (angle1 >= 2*Math.PI*realPercent) {
+      window.clearInterval(timer1);
     }
-    angle1 += 7;
-  }.bind(this), 30);
+  }
+  
+  // Run every 33 ms.
+  var timer1 = window.setInterval( function() {
+    requestAnimationFrame( animate );
+  }, sPerFrame );
 
   //---
   /*
@@ -438,9 +450,28 @@ function ProgressAnimation() {
   }.bind(this), 30);
   */
   
-  this.setPercent1 = function( n ) {
+  this.setPercent = function( n ) {
     if( !isNaN( n ) ) {
-      percent1 = n*4.7;
+      if( n >= 0 && n <= 1 ) {
+        realPercent = n;
+      } else if( n > 1 ) {
+        realPercent = 1;
+      } else {
+        realPercent = 0;
+      }
     }
+  };
+  
+  this.setTarget = function( n ) {
+    if( !isNaN( n ) ) {
+      targetValue = n;
+    }
+  };
+  
+  this.restart = function() {
+    // Reset.
+    angle1 = 0;
+    
+    timer1 = window.setInterval( animate, sPerFrame );
   };
 }

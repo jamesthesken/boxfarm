@@ -25,7 +25,7 @@ const pyServer = http.createServer();
 const io = socketio( pyServer );
 
 io.on('connection', function(socket){
-  console.log('Python client connected');
+  console.log(Date.now() + ': Python client connected');
   
   socket.on('Status', function(msg){
     console.log('Status: ' + msg);
