@@ -15,7 +15,7 @@
  */
 function Settings() {
   var self = this;
-  
+
   // Working storage. Contains Box Farm data.
   var main = {
     pumpCycles: [],
@@ -34,9 +34,9 @@ function Settings() {
     pumpCycles: [],
     lightCycles: []
   };
-  
+
   var settingsJSON = "";
-  
+
   function addPumpCycle( settings, startTime, endTime ) {
     settings.pumpCycles.push(
       {
@@ -45,19 +45,19 @@ function Settings() {
       }
     );
   }
-  
+
   /**
    * Add a pump cycle as defined by its start and end times.
    * @method addPumpCycle
    * @memberof Settings
    * @instance
-   * @param {Time} startTime 
-   * @param {Time} endTime 
+   * @param {Time} startTime
+   * @param {Time} endTime
    */
   this.addPumpCycle = function( startTime, endTime ) {
     addPumpCycle( main, startTime, endTime );
   };
-  
+
   function getPumpCycle( settings, i ) {
     if( i < settings.pumpCycles.length ) {
       return settings.pumpCycles[ i ];
@@ -73,7 +73,7 @@ function Settings() {
    * @method getPumpCycle
    * @memberof Settings
    * @instance
-   * @return {object} The pump cycle consisting of a start time (Time instance) and 
+   * @return {object} The pump cycle consisting of a start time (Time instance) and
    * an end time (another Time instance) or an object that indicates if its empty.
    */
   this.getPumpCycle = function( i ) {
@@ -98,7 +98,7 @@ function Settings() {
   function clearPumpCycles( settings ) {
     settings.pumpCycles = [];
   }
-  
+
   /**
    * Warning: Deletes all of the pump cycles. Used for refreshing the settings.
    * @method clearPumpCycles
@@ -123,8 +123,8 @@ function Settings() {
    * @method addLightCycle
    * @memberof Settings
    * @instance
-   * @param {Time} startTime 
-   * @param {Time} endTime 
+   * @param {Time} startTime
+   * @param {Time} endTime
    */
   this.addLightCycle = function( startTime, endTime ) {
     addLightCycle( main, startTime, endTime );
@@ -145,7 +145,7 @@ function Settings() {
    * @method getLightCycle
    * @memberof Settings
    * @instance
-   * @return {object} The pump cycle consisting of a start time (Time instance) and 
+   * @return {object} The pump cycle consisting of a start time (Time instance) and
    * an end time (another Time instance) or an object that indicates if its empty.
    */
   this.getLightCycle = function( i ) {
@@ -155,7 +155,7 @@ function Settings() {
   function numLightCycles( settings ) {
     return settings.lightCycles.length;
   };
-  
+
   /**
    * Get the number of light cycles.
    * @method numLightCycles
@@ -180,7 +180,15 @@ function Settings() {
   this.clearLightCycles = function() {
     clearLightCycles( main );
   };
-  
+
+  /**
+   * Check if the settings are in the correct format before saving it.
+   * Ex. Find conflicting pump and light cycle times.
+   * @method check
+   * @memberof Settings
+   * @instance
+   * @return {object} Indices that point to the problem.
+   */
   function check( settings, successAction, errorAction ) {
     //
     var problemPointer = {
@@ -188,20 +196,20 @@ function Settings() {
       pumpCycleProbIndex: [ -1, 0 ],
       lightCycleProbIndex: [ -1, 0 ]
     };
-    
+
     // Check if the pump cycle times are in order, which
     // means that there are no reversed or overlapping time cycles.
     function orderCheck( cyclesArray, problemIndex ) {
       var cyclesData = {
         timeArrays: []
       };
-      
+
       for( var iPC = 0; iPC < cyclesArray.length; iPC++ ) {
         // Append all times (in seconds since 00:00) into a single list.
         cyclesData.timeArrays.push( cyclesArray[ iPC ].startTime.getSeconds() );
         cyclesData.timeArrays.push( cyclesArray[ iPC ].endTime.getSeconds() );
       }
-      
+
       for( iT = 0; iT < cyclesData.timeArrays.length - 1; iT++ ) {
         // Is the selected time later than the previous time?
         if( cyclesData.timeArrays[ iT + 1 ] > cyclesData.timeArrays[ iT ] ) {
@@ -211,15 +219,15 @@ function Settings() {
           problemIndex[ 0 ] = ( iT/2 )|0;
           // Record if it is the startTime (0) or the endTime (1).
           problemIndex[ 1 ] = iT%2;
-          
+
           // Mark as a fail.
           problemPointer.pass = false;
-          
+
           break;
         }
       }
     }
-    
+
     // Check pump cycles.
     orderCheck( settings.pumpCycles, problemPointer.pumpCycleProbIndex );
     
@@ -240,7 +248,7 @@ function Settings() {
     
     return problemPointer;
   }
-  
+
   /**
    * Check if the settings are in the correct format before saving it.
    * Ex. Find conflicting pump and light cycle times.
@@ -328,11 +336,11 @@ function Settings() {
    */
   this.save = function( successAction, errorAction ) {
     var errorCheck = self.check();
-    
+
     // Start fresh.
     settingsObj.pumpCycles = [];
     settingsObj.lightCycles = [];
-    
+
     // Write pump cycle times.
     // Index == -1 means no problems in the pump cycles found.
     if( errorCheck.pumpCycleProbIndex[ 0 ] === -1 ) {
@@ -351,10 +359,9 @@ function Settings() {
       if( typeof errorAction === "function" ) {
         errorAction( errorCheck );
       }
-      
       return false;
     }
-    
+
     // Write light cycle times.
     // Index == 1 means no problems in the pump cycles found.
     if( errorCheck.lightCycleProbIndex[ 0 ] === -1 ) {
@@ -373,12 +380,11 @@ function Settings() {
       if( typeof errorAction === "function" ) {
         errorAction( errorCheck );
       }
-      
       return false;
     }
-    
+
     // If you make it here, it's going great!
-    
+
     // Convert to JSON and save.
     settingsJSON = JSON.stringify( settingsObj );
     localStorage.setItem( "settings", settingsJSON );
@@ -391,7 +397,7 @@ function Settings() {
     
     return true;
   };
-  
+
   /**
    * Send the current settings to the BoxBrain.
    * @method send
@@ -406,13 +412,13 @@ function Settings() {
         success: function( msg, status ) {
           console.log( "HTTP " + status );
           console.log( msg );
-          
+
           successAction();
         },
         error: function( xhr, status, err ) {
           console.log( "HTTP " + status );
           console.error( "Comm Error: Bad connection to the BoxBrain." );
-          
+
           errorAction();
         },
         data: { settingsJSON: localStorage.getItem( "settings" ) }
@@ -434,23 +440,24 @@ function Settings() {
       
       // Error out if the settings values are not there.
       if( settingsObj.pumpCycles.length <= 0 ) {
+        // Another craig fix.
         throw new Error( "No pump cycles found. There needs to be one or more." );
       }
     } catch( ex ) {
       // Do this if the JSON parsing fails.
       console.error( "Load Error: Settings data does not exist." );
-      
+
       // Load default times instead;
       addPumpCycle( settings, new Time( "6:00" ), new Time( "12:00" ) );
       addLightCycle( settings, new Time( "0:00" ), new Time( "6:00" ) );
       
       self.save();
-      
+
       console.log( "Default values are set instead." );
-      
+
       return false;
     }
-    
+
     // Start fresh.
     clearPumpCycles( settings );
     clearLightCycles( settings );
@@ -463,7 +470,7 @@ function Settings() {
         new Time( settingsObj.pumpCycles[ i ].endTime )
       );
     }
-    
+
     // Load the light cycles.
     for( var i = 0; i < settingsObj.lightCycles.length; i++ ) {
       addLightCycle(
@@ -502,6 +509,7 @@ function Settings() {
         url: "/load",
         success: function( msg, status ) {
           console.log( "HTTP " + status );
+          
           console.log( "Received the settings from BoxBrain successfully." );
           
           // Temporarily load the sent-in settins JSON and check it.
@@ -530,8 +538,9 @@ function Settings() {
         error: function( xhr, status, err ) {
           console.log( "HTTP " + status );
           console.error( "Comm Error: Bad connection to the BoxBrain." );
-          
+
           // Load the last known settings..
+          
           //self.load();
           
           if( typeof errorAction === "function" ) {

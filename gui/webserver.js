@@ -1,5 +1,5 @@
 /**
- * @file Serves the Box Farm GUI webpage and 
+ * @file Serves the Box Farm GUI webpage and
  * interacts with the BoxBrain system.
  * @projectname Box Farm GUI
  * @version 0.5.4
@@ -13,10 +13,30 @@ const url  = require('url'),
       express = require('express'),
       bodyParser = require( 'body-parser' ), // For JSON parsing.
       http=require('http'),
-      path = require('path');
+      path = require('path'),
+      socketio = require( 'socket.io' );
 
 const app = express();
-const server = http.createServer(app);
+
+const guiServer = http.createServer(app);
+const pyServer = http.createServer();
+
+// Set up socket.io server.
+const io = socketio( pyServer );
+
+io.on('connection', function(socket){
+  console.log('Python client connected');
+  
+  socket.on('Status', function(msg){
+    console.log('Status: ' + msg);
+  });
+});
+
+/*
+io.on('connection', function(socket){
+  
+});
+*/
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets')));
@@ -40,7 +60,7 @@ app.post(
           // Warning: Stops the server.
           throw err;
         }
-        
+
         res.send( data );
       }
     );
@@ -71,9 +91,16 @@ app.post(
   }
 );
 
-app.listen(
+guiServer.listen(
   4000,
   () => {
     console.log( Date.now() + ': Box Farm GUI server has started.' );
+  }
+);
+
+pyServer.listen(
+  4004,
+  () => {
+    console.log( Date.now() + ': Box Farm backend server has started.' );
   }
 );
