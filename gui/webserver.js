@@ -13,12 +13,26 @@ const url  = require('url'),
       express = require('express'),
       bodyParser = require( 'body-parser' ), // For JSON parsing.
       http=require('http'),
-      path = require('path');
+      path = require('path'),
+      socketio = require( 'socket.io' );
 
 const app = express();
-const server = http.createServer(app);
 
+const guiServer = http.createServer(app);
+const pyServer = http.createServer();
 
+// Set up socket.io server.
+const io = socketio( pyServer );
+
+io.on('connection', function(socket){
+  console.log('Python client connected');
+});
+
+io.on('connection', function(socket){
+  socket.on('Status', function(msg){
+    console.log('Status: ' + msg);
+  });
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets')));
@@ -71,9 +85,16 @@ app.post(
   }
 );
 
-app.listen(
+guiServer.listen(
   4000,
   () => {
     console.log( 'Box Farm GUI server is running now at ' + Date.now() + '.' );
+  }
+);
+
+pyServer.listen(
+  4004,
+  () => {
+    console.log( 'Box Farm Backend server is running now at ' + Date.now() + '.' );
   }
 );
