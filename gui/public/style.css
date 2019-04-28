@@ -29,7 +29,7 @@ body{
 
 .box{
   background-color: #fff;
-  height: 35rem;
+  /* height: 35rem; */ /* Handled by card layout. */
   border-radius: 20px; /* Moved from documents. */
 }
 
@@ -52,7 +52,7 @@ body{
 }
 
 .header{
-padding: 10px;
+  padding: 10px;
 }
 
 .demo {
@@ -123,6 +123,16 @@ padding: 10px;
   color: #339933;
 }
 
+.progress-container {
+  display: block;
+  
+  /* Center itself. */
+  margin-left: auto;
+  margin-right: auto;
+  
+  width: 67%;
+}
+
 .progress {
   fill:none;
   stroke: #339933;
@@ -134,8 +144,8 @@ padding: 10px;
 
 .card-img-top{
   /* Compensate for the Bootstrap container margin. */
-  position: relative;
-  left: -15px;
+  /* position: relative; */
+  /* left: -15px; */
   
   height: auto;
   width: 20rem;

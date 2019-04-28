@@ -44,6 +44,7 @@ function InputTimeDropdown( container, type, timeObj ) {
   var STEP_SS = 5;
   
   // States.
+  var currentValue = 0;
   var hasChanged = false;
   
   // Check if the container is not for the dropdown. Make sure this is specified first.
@@ -83,8 +84,11 @@ function InputTimeDropdown( container, type, timeObj ) {
         entryList[ i ].textContent = timeObj.doubleDigit( STEP_HH*i );
       }
       
+      // Set the hour value.
+      currentValue = timeObj.getTime().hr;
+      
       // Show the hour value.
-      face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
+      face.textContent = timeObj.doubleDigit( currentValue );
       
       selectAction = function( event ) {
         var selectedValue = event.target.getAttribute( "data-number" );
@@ -97,14 +101,20 @@ function InputTimeDropdown( container, type, timeObj ) {
           // Modify the timeObj.
           timeObj.setHr( selectedValueNumber );
           
+          // Set current value;
+          currentValue = timeObj.getTime().hr;
+          
           // Show the hour value.
-          face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
+          face.textContent = timeObj.doubleDigit( currentValue );
         }
       };
       
       updateVisuals = function() {
+        // Set the hour value.
+        currentValue = timeObj.getTime().hr;
+        
         // Update the hour value.
-        face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
+        face.textContent = timeObj.doubleDigit( currentValue );
       };
       
       break;
@@ -117,8 +127,11 @@ function InputTimeDropdown( container, type, timeObj ) {
         entryList[ i ].textContent = timeObj.doubleDigit( STEP_MM*i );
       }
       
+      // Set the minute value.
+      currentValue = timeObj.getTime().min;
+      
       // Show the minute value.
-      face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
+      face.textContent = timeObj.doubleDigit( currentValue );
       
       selectAction = function( event ) {
         var selectedValue = event.target.getAttribute( "data-number" );
@@ -132,14 +145,20 @@ function InputTimeDropdown( container, type, timeObj ) {
           // Modify the timeObj.
           timeObj.setMin( selectedValueNumber );
           
+          // Set current value;
+          currentValue = timeObj.getTime().min;
+          
           // Show the minute value.
-          face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
+          face.textContent = timeObj.doubleDigit( currentValue );
         }
       };
       
       updateVisuals = function() {
+        // Set current value;
+        currentValue = timeObj.getTime().min;
+        
         // Update the minute value.
-        face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
+        face.textContent = timeObj.doubleDigit( currentValue );
       };
       
       break;
@@ -152,8 +171,11 @@ function InputTimeDropdown( container, type, timeObj ) {
         entryList[ i ].textContent = timeObj.doubleDigit( STEP_SS*i );
       }
       
+      // Set the second value.
+      currentValue = timeObj.getTime().sec;
+      
       // Show the second value.
-      face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
+      face.textContent = timeObj.doubleDigit( currentValue );
       
       selectAction = function( event ) {
         var selectedValue = event.target.getAttribute( "data-number" );
@@ -163,17 +185,23 @@ function InputTimeDropdown( container, type, timeObj ) {
           
         // Only do something when it selects an entry from the menu.
         if( typeof selectedValue !== "object" ) {
-            // Modify the timeObj.
-            timeObj.setSec( selectedValueNumber );
-            
-            // Show the hour value.
-            face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
+          // Modify the timeObj.
+          timeObj.setSec( selectedValueNumber );
+          
+          // Set current value;
+          currentValue = timeObj.getTime().sec;
+          
+          // Show the hour value.
+          face.textContent = timeObj.doubleDigit( currentValue );
         }
       };
       
       updateVisuals = function() {
+        // Set the second value.
+        currentValue = timeObj.getTime().sec;
+        
         // Update the second value.
-        face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
+        face.textContent = timeObj.doubleDigit( currentValue );
       };
       
       break;
@@ -210,6 +238,73 @@ function InputTimeDropdown( container, type, timeObj ) {
    * @instance
    */
   this.updateVisuals = updateVisuals;
+  
+  this.onmouseup = function( event ) {
+    
+  };
+}
+
+/**
+ * Creates and controls the alert modal with the messages stored in a stack.
+ * There can only be a single instance of this per page.
+ * @constructor
+ */
+function AlertModals() {
+  var self = this;
+  
+  var msgStack = [];
+  
+  /**
+   * Show the remaining amount of messages.
+   * @method msgCount
+   * @memberof AlertModals
+   * @instance
+   */
+  this.msgCount = function() {
+    return msgStack.length;
+  };
+  
+  /**
+   * Store an alert message and associated action.
+   * @method add
+   * @memberof AlertModals
+   * @instance
+   * @param {string} msgData The message.
+   */
+  this.add = function( msgData ) {
+    msgStack.push( msgData );
+  };
+  
+  /**
+   * Open the alert modals one-by-one. When the modal is closed, 
+   * its record will be removed.
+   * @method open
+   * @memberof AlertModals
+   * @instance
+   * @return {object} Contains {msg: ..., okAction: fn, cancelAction: fn}.
+   */
+  this.open = function() {
+    // The confirmation message to show.
+    // Also removes it from stack when used.
+    var currentMsg = "";
+    
+    if( msgStack.length !== 0 ) {
+      currentMsg = msgStack.pop();
+      
+      // Show alert.
+      alert( currentMsg );
+      
+      self.open();
+    } else {
+      console.warn( "There are no alert messages to show." );
+    }
+    
+    /*
+    return {
+      msg: currentMsg
+    };
+    */
+  };
 }
 
 /**
@@ -273,14 +368,79 @@ function ConfirmModals() {
       } else {
         currentCancelAction();
       }
+      
+      // Open the next one.
+      self.open();
     } else {
       console.warn( "There are no confirmation messages to show." );
     }
     
+    /*
     return {
       msg: currentMsg,
       okAction: currentOkAction,
       cancelAction: currentCancelAction
     };
+    */
+  };
+}
+
+function ProgressAnimation() {
+  /*
+  var circle = document.getElementById('one');
+  var text = document.getElementById('percent-one');
+  var angle = 0;
+  var percent = 70*4.7
+
+  window.timer = window.setInterval(function () {
+    circle.setAttribute("stroke-dasharray", angle + ", 20000");
+    text.innerHTML = parseInt(angle/471*100);
+
+    if (angle >= percent) {
+      window.clearInterval(window.timer);
+    }
+    angle += 6;
+  }.bind(this), 30);
+  */
+
+  //---
+
+  var circle1 = document.getElementById('two');
+  var text1 = document.getElementById('percent-two');
+  var angle1 = 0;
+  var percent1 = 60*4.7
+
+  window.timer1 = window.setInterval(function () {
+    circle1.setAttribute("stroke-dasharray", angle1 + ", 20000");
+    text1.innerHTML = parseInt(angle1/471*100);
+
+    if (angle1 >= percent1) {
+      window.clearInterval(window.timer1);
+    }
+    angle1 += 7;
+  }.bind(this), 30);
+
+  //---
+  /*
+  var circle2 = document.getElementById('three');
+  var text2 = document.getElementById('percent-three');
+  var angle2 = 0;
+  var percent2 = 40*4.7
+
+  window.timer2 = window.setInterval(function () {
+    circle2.setAttribute("stroke-dasharray", angle2 + ", 20000");
+    text2.innerHTML = parseInt(angle2/471*100);
+
+    if (angle2 >= percent2) {
+      window.clearInterval(window.timer2);
+    }
+    angle2 += 6;
+  }.bind(this), 30);
+  */
+  
+  this.setPercent1 = function( n ) {
+    if( !isNaN( n ) ) {
+      percent1 = n*4.7;
+    }
   };
 }
