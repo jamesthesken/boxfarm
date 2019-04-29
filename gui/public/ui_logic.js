@@ -385,7 +385,11 @@ function ConfirmModals() {
   };
 }
 
-function ProgressAnimation() {
+/**
+ * Converts an SVG circle and text into a circular progress bar. Starts upon creation.
+ * @constructor
+ */
+function CircularProgressAnimation() {
   var self = this;
   /*
   var circle = document.getElementById('one');
@@ -488,6 +492,14 @@ function ProgressAnimation() {
   }.bind(this), 30);
   */
   
+  /**
+   * Sets the progress percentage. Anything greater than 1 would set it 
+   * to 100%. Anything less than 0 would set it to 0%.
+   * @method setPercent
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} n The percentage between 0 and 1.
+   */
   this.setPercent = function( n ) {
     if( !isNaN( n ) ) {
       if( n >= 0 && n <= 1 ) {
@@ -504,18 +516,41 @@ function ProgressAnimation() {
     }
   };
   
+  /**
+   * Sets the target value.
+   * @method setTarget
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} n The value that would be considered 100%.
+   */
   this.setTarget = function( n ) {
     if( !isNaN( n ) ) {
       targetValue = n;
     }
   };
   
+  /**
+   * Sets the value out of the target value. Subjected to the same constraints as 
+   * setPercent() method.
+   * @method setCurrent
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} n Number value less than the target.
+   */
   this.setCurrent = function( n ) {
     if( !isNaN( n ) ) {
       self.setPercent( n/targetValue );
     }
   };
   
+  /**
+   * Changes the animation speed by specifying how long it would take to 
+   * reach half of the given percentage value (e.g. takes 0.2 sec to reach 40% if set at 80%).
+   * @method setHalfTime
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} t The time in seconds.
+   */
   this.setHalfTime = function( t ) {
     if( !isNaN( t ) ) {
       if( t > 0 ) {
@@ -524,6 +559,12 @@ function ProgressAnimation() {
     }
   };
   
+  /**
+   * Stops the previous progress animation and starts it again.
+   * @method restart
+   * @memberof CircularProgressAnimation
+   * @instance
+   */
   this.restart = function() {
     // Reset.
     angle1 = 0;
