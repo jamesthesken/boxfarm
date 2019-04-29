@@ -35,26 +35,27 @@
 
     <div class="container">
       <div class="row">
-        <div class="col">
+        <div class="col-md-7 col-xl-4">
           <div class="card box box-main shadow-lg mb-3">
             <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm" style="position: relative; left: -1px; top: -1px;">
             <h1 class="left-card text-center" style="padding: 15px;"> Tasks </h1>
-            <div class="card-body text-center">
-              <div class="row">
-                <div class="col text-left content">
-                  <h5 class="task">Clean filters:</h5>
-                  <h5 class="task">Finish COSMOS</h5>
-                </div>
-                <div class="col text-right content">
-                  <h5 class="data">6.5 days</h5>
-                  <h5 class="data">650 yrs</h5>
-                </div>
-              </div>
-
+            <div class="card-body">
+              <table id="box-tasks" class="table table-borderless table-sm">
+                <tbody>
+                  <tr>
+                    <td class="task">Clean filters:</td>
+                    <td class="data text-right">6.5 days</td>
+                  </tr>
+                  <tr>
+                    <td class="task">Finish COSMOS:</td>
+                    <td class="data text-right">650 yrs</td> <!-- lol -->
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div> <!-- left panel -->
-        <div class="col-sm-5">
+        <div class="col-md-5 col-xl-4">
           <div class="card mb-3 box shadow-lg">
             <h1 class="card-title card-titles"> SOL: 69 </h1> <!-- CHANGE THIS WHEN FUNCTIONAL -->
           </div>
@@ -71,30 +72,40 @@
             </div>
           </div>
         </div> <!-- center  panel -->
-        <div class="col">
+        <div class="col-xl-4">
           <div class="card box shadow-lg mb-3">
             <h1 class="card-titles"> Analytics </h1>
             <div class="card-body">
-              <div class="row">
-                <div class="col-6 text-left content">
-                  <h5 class="content">pH</h5>
-                  <h5 class="content">EC</h5>
-                  <h5 class="content">Tank Temp.</h5>
-                  <h5 class="content">Hab Temp.</h5>
-                  <h5 class="content">Humidity</h5>
-                  <h5 class="content">COSMOS</h5>
-                </div>
-                <div class="col-6 text-right content">
-                  <h5 class="data">6.5</h5>
-                  <h5 class="data">650 ppm</h5>
-                  <h5 class="data">22 &deg;C</h5>
-                  <h5 class="data">24 &deg;C</h5>
-                  <h5 class="data">85%</h5>
-                  <h5 class="data">OK</h5>
-                </div>
-              </div>
+              <table id="box-analytics" class="table table-borderless table-sm">
+                <tbody>
+                  <tr>
+                    <td class="content">pH</td>
+                    <td class="data text-right">6.5</td>
+                  </tr>
+                  <tr>
+                    <td class="content">EC</td>
+                    <td class="data text-right">650 ppm</td>
+                  </tr>
+                  <tr>
+                    <td class="content">Tank Temp.</td>
+                    <td class="data text-right">22 &deg;C</td>
+                  </tr>
+                  <tr>
+                    <td class="content">Hab Temp.</td>
+                    <td class="data text-right">24 &deg;C</td>
+                  </tr>
+                  <tr>
+                    <td class="content">Humidity</td>
+                    <td class="data text-right">85%</td>
+                  </tr>
+                  <tr>
+                    <td class="content">COSMOS</td>
+                    <td class="data text-right">OK</td>
+                  </tr>
+                </tbody>
+              </table>
 
-              <div class="card-body d-flex flex-column">
+              <div class="d-flex flex-column">
                 <a href="settings.html"  class="btn button-text" role="button">
                   Settings
                   <img src="arrow-icon.png" class="arrow-button">

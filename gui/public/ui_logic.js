@@ -423,10 +423,10 @@ function CircularProgressAnimation() {
   //var percent1 = realPercent*2*Math.PI*radius; // End limit.
   
   // How fast to slow down. AKA pseudo-coefficient-of-friction.
-  // Time it takes to reach half-way. 1/seconds.
+  // Time it takes to reach half-way in seconds.
   var timeConst = 0.2/Math.LN2;
   
-  var diffThresh = 0.001;
+  var diffThresh = 1/targetValue;
   
   /*
   var sPerFrame = 1000/60;
@@ -525,7 +525,15 @@ function CircularProgressAnimation() {
    */
   this.setTarget = function( n ) {
     if( !isNaN( n ) ) {
-      targetValue = n;
+      // Avoid a divide by zero situation.
+      if( n > 0 && n < Infinity ) {
+        targetValue = n;
+        
+        // Adjust threshold.
+        diffThresh = 1/targetValue;
+      } else {
+        console.error( "Value Error: Value has to be at least zero seconds and finite." );
+      }
     }
   };
   
@@ -549,13 +557,16 @@ function CircularProgressAnimation() {
    * @method setHalfTime
    * @memberof CircularProgressAnimation
    * @instance
-   * @param {number} t The time in seconds.
+   * @param {number} t The time in seconds. Has to be between 0 and 10 seconds.
    */
   this.setHalfTime = function( t ) {
     if( !isNaN( t ) ) {
-      if( t > 0 ) {
+      // Large values can make the animation run extremely long.
+      if( t > 0 && t < 10 ) {
         timeConst = t/Math.LN2;
-      }        
+      } else {
+        console.error( "Value Error: Time value has to be at least zero seconds and not absurdly long." );
+      }
     }
   };
   

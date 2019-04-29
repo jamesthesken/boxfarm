@@ -25,6 +25,7 @@ p.a{
 
 body{
   background: #fff;
+  font-size: 16pt;
 }
 
 .box{
@@ -81,6 +82,11 @@ body{
 }
 
 .content{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  color: #999;
+}
+
+.task{
   font-family: 'Encode Sans Semi Expanded', sans-serif;
   color: #999;
 }
