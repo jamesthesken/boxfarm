@@ -159,8 +159,8 @@ body{
 }
 
 /* Could be used for any arrow icons, in general. */
-.settings-button{
-  height: 32px;
+.arrow-button{
+  height: 48px;
 }
 
 .button-text {

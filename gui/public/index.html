@@ -35,7 +35,7 @@
   <div class="row">
     <div class="col">
       <div class="card box box-main shadow-lg mb-3">
-        <img src="box-farm-logo.png" class="card-img-top" alt="...">
+        <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm" style="position: relative; left: -1px; top: -1px;">
         <h1 class="left-card text-center" style="padding: 15px;"> Tasks </h1>
         <div class="card-body text-center">
           <div class="row">
@@ -53,56 +53,52 @@
       </div>
     </div> <!-- left panel -->
     <div class="col-sm-5">
-      <div class="card mb-3 shadow-lg" style="border-radius:20px;">
+      <div class="card mb-3 box shadow-lg">
         <h1 class="card-title card-titles"> SOL: 69 </h1> <!-- CHANGE THIS WHEN FUNCTIONAL -->
       </div>
-      <div class="card mb-3 shadow-lg" style="border-radius:20px;">
-        <div class="card box"  style="border-radius:20px;">
-          <div class="card-body"  style="border-radius:20px;">
-            <h3 class="content text-left"> Next harvest:</h3>
-            <svg  class="content progress-container" viewBox="0 0 200 200">
-                <g id="">
-                  <circle class="progress" id="two" cx="100" cy="100" r="90px" stroke-dasharray="0,20000" />
-                  <text class="countdown" id="percent-two" text-anchor="middle" x="100" y="112" style="font-size: 60px;"> 0 </text>
-                  <text text-anchor="top" x="100" y="140" class="countdown" > days </text>
-                </g>
-            </svg>
-          </div>
+      <div class="card mb-3 box shadow-lg">
+        <div class="card-body">
+          <h3 class="content text-left"> Next harvest:</h3>
+          <svg  class="content progress-container" viewBox="0 0 200 200">
+            <g id="">
+              <circle class="progress" id="two" cx="100" cy="100" r="90" stroke-dasharray="0,20000" />
+              <text class="countdown" id="percent-two" text-anchor="middle" x="100" y="112" style="font-size: 60px;"> 0 </text>
+              <text text-anchor="top" x="100" y="140" class="countdown" style="font-size: 25px;"> days </text>
+            </g>
+          </svg>
         </div>
       </div>
     </div> <!-- center  panel -->
     <div class="col">
-      <div class="card shadow-lg mb-3"  style="border-radius:20px;">
-        <div class="card box"  style="border-radius:20px;">
-          <h1 class="card-titles"> Analytics </h1>
-          <div class="card-body container-fluid">
-            <div class="row">
-              <div class="col text-left content">
-                <h5 class="content">pH</h5>
-                <h5 class="content">EC</h5>
-                <h5 class="content">Tank Temp.</h5>
-                <h5 class="content">Hab Temp.</h5>
-                <h5 class="content">Humidity</h5>
-                <h5 class="content">COSMOS</h5>
-              </div>
-              <div class="col text-right content">
-                <h5 class="data">6.5</h5>
-                <h5 class="data">650 ppm</h5>
-                <h5 class="data">22 &deg;C</h5>
-                <h5 class="data">24 &deg;C</h5>
-                <h5 class="data">85%</h5>
-                <h5 class="data">OK</h5>
-              </div>
+      <div class="card box shadow-lg mb-3">
+        <h1 class="card-titles"> Analytics </h1>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6 text-left content">
+              <h5 class="content">pH</h5>
+              <h5 class="content">EC</h5>
+              <h5 class="content">Tank Temp.</h5>
+              <h5 class="content">Hab Temp.</h5>
+              <h5 class="content">Humidity</h5>
+              <h5 class="content">COSMOS</h5>
             </div>
-
-            <div class="card-body d-flex flex-column">
-              <a href="settings.html"  class="btn button-text" role="button">
-                Settings
-                <img src="arrow-icon.png" class="settings-button">
-              </a>
+            <div class="col-6 text-right content">
+              <h5 class="data">6.5</h5>
+              <h5 class="data">650 ppm</h5>
+              <h5 class="data">22 &deg;C</h5>
+              <h5 class="data">24 &deg;C</h5>
+              <h5 class="data">85%</h5>
+              <h5 class="data">OK</h5>
             </div>
-
           </div>
+
+          <div class="card-body d-flex flex-column">
+            <a href="settings.html"  class="btn button-text" role="button">
+              Settings
+              <img src="arrow-icon.png" class="arrow-button">
+            </a>
+          </div>
+
         </div>
       </div>
     </div> <!-- right panel -->
@@ -119,7 +115,8 @@
     
     // Set the remaining harvest day to 30.
     // Will be applied way before the animation shows its first frame.
-    harvestProgress.setCurrent( 45 );
+    harvestProgress.setTarget( 120 );
+    harvestProgress.setCurrent( 85 );
   </script>
 </body>
 </html>

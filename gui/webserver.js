@@ -7,6 +7,9 @@
  * @copyright 2018-2019
  */
 
+const SETTINGS_PATH = __dirname + '/';
+const SETTINGS_FILE = 'settings.json';
+
 const url  = require('url'),
       sys  = require('util'), // From "sys".
       fs = require( 'fs' ),
@@ -54,7 +57,7 @@ app.post(
   '/load',
   ( req, res ) => {
     fs.readFile(
-      'settings.json',
+      SETTINGS_PATH + SETTINGS_FILE,
       ( err, data ) => {
         if( err ) {
           // Warning: Stops the server.
@@ -77,7 +80,7 @@ app.post(
     
     // Write the JSON string that was sent over to the settings file.
     fs.writeFile(
-      'settings.json',
+      SETTINGS_PATH + SETTINGS_FILE,
       req.body.settingsJSON,
       err => {
         if( err ) {

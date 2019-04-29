@@ -406,6 +406,8 @@ function ProgressAnimation() {
 
   //---
   // Defaults.
+  var initTime = performance.now();
+  
   var radius = 90; // px. Same as the size of the SVG circle.
   var realPercent = 0.5;
   var targetValue = 120;
@@ -416,13 +418,20 @@ function ProgressAnimation() {
   var angle1 = 0; // Changes with time.
   //var percent1 = realPercent*2*Math.PI*radius; // End limit.
   
+  // How fast to slow down. AKA pseudo-coefficient-of-friction.
+  // Time it takes to reach half-way. 1/seconds.
+  var timeConst = 0.2/Math.LN2;
+  
+  var diffThresh = 0.001;
+  
+  /*
   var sPerFrame = 1000/60;
   
   function animate() {
-    circle1.setAttribute("stroke-dasharray", angle1*radius + ", 20000");
-    text1.innerHTML = Math.round(0.5*angle1*targetValue/Math.PI);
-    
     angle1 += 0.015*Math.PI;
+    
+    circle1.setAttribute("stroke-dasharray", angle1*radius + ", 20000");
+    text1.innerHTML = parseInt(0.5*angle1*targetValue/Math.PI);
     
     if (angle1 > 2*Math.PI*realPercent) {
       window.clearInterval(timer1);
@@ -433,6 +442,33 @@ function ProgressAnimation() {
   var timer1 = window.setInterval( function() {
     requestAnimationFrame( animate );
   }, sPerFrame );
+  */
+  
+  function animate() {
+    // Prepare next frame.
+    timer1 = window.requestAnimationFrame( animate );
+    
+    // Time since start in seconds.
+    var t = ( performance.now() - initTime )/1000;
+    
+    // Define upon page load.
+    var maxLimit = 2*Math.PI*realPercent;
+    
+    // Will stop at the specified value based on the realPercent.
+    // WARNING: Some values are too small to make maxLimit reachable.
+    angle1 = maxLimit*( 1 - Math.exp( -t/timeConst ) );
+    
+    circle1.setAttribute( "stroke-dasharray", angle1*radius + ", 20000" );
+    text1.innerHTML = Math.round( 0.5*angle1*targetValue/Math.PI );
+    
+    // Only takes positive case into account.
+    if ( maxLimit - angle1 <= diffThresh ) {
+      window.cancelAnimationFrame( timer1 );
+    }
+  }
+  
+  // Start animation on load.
+  var timer1 = window.requestAnimationFrame( animate );
 
   //---
   /*
@@ -457,8 +493,12 @@ function ProgressAnimation() {
       if( n >= 0 && n <= 1 ) {
         realPercent = n;
       } else if( n > 1 ) {
+        console.warn( "Progress Warning: The value exceeds the maximum. Resetting to maximum." );
+        
         realPercent = 1;
       } else {
+        console.warn( "Progress Warning: The value is lower than zero. Resetting to zero." );
+        
         realPercent = 0;
       }
     }
@@ -476,10 +516,25 @@ function ProgressAnimation() {
     }
   };
   
+  this.setHalfTime = function( t ) {
+    if( !isNaN( t ) ) {
+      if( t > 0 ) {
+        timeConst = t/Math.LN2;
+      }        
+    }
+  };
+  
   this.restart = function() {
     // Reset.
     angle1 = 0;
+    initTime = performance.now();
     
-    timer1 = window.setInterval( animate, sPerFrame );
+    //timer1 = window.setInterval( animate, sPerFrame );
+    
+    // Stop the previous animation.
+    if( timer1 ) {
+      window.cancelAnimationFrame( timer1 );
+    }
+    timer1 = window.requestAnimationFrame( animate );
   };
 }
