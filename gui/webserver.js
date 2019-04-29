@@ -41,8 +41,11 @@ io.on('connection', function(socket){
 });
 */
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'js')));
+app.use(express.static(path.join(__dirname, 'css')));
 app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 
