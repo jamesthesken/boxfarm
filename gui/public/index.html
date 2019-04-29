@@ -16,7 +16,7 @@
   <!--Fonts-->
   <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Semi+Expanded" rel="stylesheet">
-  
+
   <!-- Box Farm stylesheets. Define last. -->
   <link rel="stylesheet" type="text/css" href="style.css">
 
@@ -80,17 +80,13 @@
               <div class="col text-left content">
                 <h5 class="content">pH</h5>
                 <h5 class="content">EC</h5>
-                <h5 class="content">Tank Temp.</h5>
-                <h5 class="content">Hab Temp.</h5>
-                <h5 class="content">Humidity</h5>
+                <h5 class="content">Temperature</h5>
                 <h5 class="content">COSMOS</h5>
               </div>
               <div class="col text-right content">
-                <h5 class="data">6.5</h5>
-                <h5 class="data">650 ppm</h5>
-                <h5 class="data">22 C</h5>
-                <h5 class="data">24 C</h5>
-                <h5 class="data">85%</h5>
+                <h5 class="data" id="ph"></h5>
+                <h5 class="data" id="EC"></h5>
+                <h5 class="data" id="temp"></h5>
                 <h5 class="data">OK</h5>
               </div>
             </div>
@@ -116,5 +112,27 @@
 	<script>
     var harvestProgress = new ProgressAnimation();
   </script>
+
+  <script>
+  $.ajax({
+    url: 'data.json',
+    dataType: 'json',
+    success: function( data )
+    {
+        var tank = data.tank;
+
+        $('#ph').text( tank.ph);
+        $('#temp').text( tank.temp);
+        $('#EC').text( tank.EC);
+
+        if(data.success == true){ // if true (1)
+        setTimeout(function(){// wait for 5 secs(2)
+             window.location.reload( true ); // then reload the page.(3)
+        }, 5000);
+      }
+    }
+  });  
+  </script>
+
 </body>
 </html>

@@ -7,7 +7,3 @@
 `node webserver.js`
 
 3. Navigate to `localhost:4000` in your browser.
-
-## TODO:
-1. Add settings adjustment page
-2. Harvest timer is only a placeholder and needs to be fixed

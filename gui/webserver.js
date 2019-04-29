@@ -26,15 +26,22 @@ const io = socketio( pyServer );
 
 io.on('connection', function(socket){
   console.log('Python client connected');
-  
+
   socket.on('Status', function(msg){
     console.log('Status: ' + msg);
   });
+
+  socket.on('Data', function(msg){
+    console.log('Data: ' + msg);
+  });
+
 });
+
+
 
 /*
 io.on('connection', function(socket){
-  
+
 });
 */
 
@@ -64,7 +71,7 @@ app.post(
         res.send( data );
       }
     );
-    
+
     console.log( Date.now() + ': Settings were sent to the client ' + req.ip + '.' );
   }
 );
@@ -74,7 +81,7 @@ app.post(
   '/save',
   ( req, res ) => {
     console.log( Date.now() + ': Settings were received from the client ' + req.ip + '.' );
-    
+
     // Write the JSON string that was sent over to the settings file.
     fs.writeFile(
       'settings.json',
@@ -86,8 +93,28 @@ app.post(
         }
       }
     );
-    
+
     res.end( "Settings were received by BoxBrain." );
+  }
+);
+
+// Send Bluelab data to the client.
+app.post(
+  '/load',
+  ( req, res ) => {
+    fs.readFile(
+      '../statics/data.json',
+      ( err, data ) => {
+        if( err ) {
+          // Warning: Stops the server.
+          throw err;
+        }
+
+        res.send( data );
+      }
+    );
+
+    console.log( Date.now() + ': Bluelab data was sent to client. ' + req.ip + '.' );
   }
 );
 
