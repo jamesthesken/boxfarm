@@ -269,8 +269,6 @@ function BoxAnalytics() {
     "pH",
     "EC",
     "Tank temperature",
-    "Habitat temperature",
-    "Humidity",
     "COSMOS"
   ];
 

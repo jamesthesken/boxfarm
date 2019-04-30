@@ -80,23 +80,15 @@
                 <tbody>
                   <tr>
                     <td class="content">pH</td>
-                    <td class="data text-right">6.5</td>
+                    <td class="data text-right">---</td>
                   </tr>
                   <tr>
                     <td class="content">EC</td>
-                    <td class="data text-right">650 ppm</td>
+                    <td class="data text-right">---</td>
                   </tr>
                   <tr>
                     <td class="content">Tank Temp.</td>
-                    <td class="data text-right">22 &deg;C</td>
-                  </tr>
-                  <tr>
-                    <td class="content">Hab Temp.</td>
-                    <td class="data text-right">24 &deg;C</td>
-                  </tr>
-                  <tr>
-                    <td class="content">Humidity</td>
-                    <td class="data text-right">85%</td>
+                    <td class="data text-right">---</td>
                   </tr>
                   <tr>
                     <td class="content">COSMOS</td>
@@ -131,24 +123,24 @@
     </script>
 
     <script>
-    $.ajax({
-      url: 'data.json',
-      dataType: 'json',
-      success: function( data )
-      {
+
+    function dataLoad(){
+      $.ajax({
+        url: 'data.json',
+        dataType: 'json',
+        success: function( data )
+        {
           var tank = data.tank;
-
-          $('#ph').text( tank.ph);
-          $('#temp').text( tank.temp);
-          $('#EC').text( tank.EC);
-
-          if(data.success == true){ // if true (1)
-          setTimeout(function(){// wait for 5 secs(2)
-               window.location.reload( true ); // then reload the page.(3)
-          }, 5000);
+          boxAnalytics.setStatus("pH", tank.ph)
+          boxAnalytics.setStatus("Tank temperature", tank.temp)
+          boxAnalytics.setStatus("EC", tank.EC)
+          console.log("Data sent to client");
         }
-      }
-    });
+      });
+    }
+
+    setInterval(dataLoad, 1000);
+
     </script>
 
   </body>

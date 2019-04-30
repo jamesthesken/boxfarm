@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #import serial
 import schedule
 from watchdog.observers import Observer
@@ -14,10 +16,6 @@ import socketio
 SETTINGS_PATH = '../gui/'
 SETTINGS_JSON_FILE = 'settings.json'
 settings = open(SETTINGS_PATH + SETTINGS_JSON_FILE) # read the configuration file
-
-# read latest csv file saved by bluelab connect
-list_of_files = glob.glob('../gui/*csv') 
-BLUELAB = max(list_of_files, key=os.path.getctime)
 
 # connect the backend client to the GUI
 sio = socketio.Client()
@@ -131,6 +129,10 @@ if __name__ == "__main__":
    try:
       while True:
 
+         # read latest csv file saved by bluelab connect
+         list_of_files = glob.glob('../gui/*csv') 
+         BLUELAB = max(list_of_files, key=os.path.getctime)
+
          # reading in bluelab nutrient tank data
          with open(BLUELAB, newline='') as csvfile:
              sysData = csv.reader(csvfile, delimiter=' ')
@@ -140,7 +142,7 @@ if __name__ == "__main__":
 
              print(row[4:7])
              # setting the JSON format
-             row = {"tank":{"EC": '{} ppm'.format(row[4]), "ph": '{}'.format(row[5]), "temp": '{} DegC'.format(row[6])}}
+             row = {"tank":{"EC": '{} ppm'.format(row[4]), "ph": '{}'.format(row[5]), "temp": '{} '.format(row[6])+'\u2103'}}
              row = json.dumps(row)
              print(row)
 
