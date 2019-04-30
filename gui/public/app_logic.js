@@ -520,6 +520,18 @@ function Settings() {
         // Another craig fix.
         throw new Error( "No pump cycles found. There needs to be one or more." );
       }
+      
+      // Error out if the settings values are not there.
+      if( settingsObj.lightCycles.length <= 0 ) {
+        // Another craig fix.
+        throw new Error( "No light cycles found. There needs to be one or more." );
+      }
+      
+      // Error out if the settings values are not there.
+      if( !settingsObj.robotImaging ) {
+        // Another craig fix.
+        throw new Error( "No robot task time found. There needs to be one." );
+      }
     } catch( ex ) {
       // Do this if the JSON parsing fails.
       console.error( "Load Error: Settings data does not exist." );
@@ -529,7 +541,8 @@ function Settings() {
       addLightCycle( settings, new Time( "0:00" ), new Time( "6:00" ) );
       setRobotImagingTime( settings, new Time( "14:00" ) );
       
-      self.save();
+      // Don't save anything since there's nothing to save.
+      // self.save();
 
       console.log( "Default values are set instead." );
 
@@ -595,23 +608,28 @@ function Settings() {
           console.log( "Received the settings from BoxBrain successfully." );
           
           // Temporarily load the sent-in settins JSON and check it.
-          load( temp, msg );
-          
-          if( check( temp ).pass ) {
-            // Save this.
-            localStorage.setItem( "settings", msg );
-            
-            // Load the imported settings for real.
-            load( main, msg );
-            
-            console.log( "Settings are loaded successfully." );
-            
-            // Clean up.
-            clearPumpCycles( temp );
-            clearLightCycles( temp );
-            clearRobotImagingTime( temp );
+          if( load( temp, msg ) ) {
+            if( check( temp ).pass ) {
+              // Save this.
+              localStorage.setItem( "settings", msg );
+              
+              // Load the imported settings for real.
+              load( main, msg );
+              
+              console.log( "Settings are loaded successfully." );
+              
+              // Clean up.
+              clearPumpCycles( temp );
+              clearLightCycles( temp );
+              clearRobotImagingTime( temp );
+            } else {
+              console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
+            }
           } else {
-            console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
+            // Do this if the settings are malformed or does not exist.
+            if( typeof errorAction === "function" ) {
+              errorAction();
+            }
           }
           
           if( typeof successAction === "function" ) {
