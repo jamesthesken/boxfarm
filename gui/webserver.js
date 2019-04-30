@@ -7,6 +7,9 @@
  * @copyright 2018-2019
  */
 
+const SETTINGS_PATH = __dirname + '/';
+const SETTINGS_FILE = 'settings.json';
+
 const url  = require('url'),
       sys  = require('util'), // From "sys".
       fs = require( 'fs' ),
@@ -25,7 +28,7 @@ const pyServer = http.createServer();
 const io = socketio( pyServer );
 
 io.on('connection', function(socket){
-  console.log('Python client connected');
+  console.log(Date.now() + ': Python client connected');
 
   socket.on('Status', function(msg){
     console.log('Status: ' + msg);
@@ -45,8 +48,11 @@ io.on('connection', function(socket){
 });
 */
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'js')));
+app.use(express.static(path.join(__dirname, 'css')));
 app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 
@@ -61,7 +67,7 @@ app.post(
   '/load',
   ( req, res ) => {
     fs.readFile(
-      'settings.json',
+      SETTINGS_PATH + SETTINGS_FILE,
       ( err, data ) => {
         if( err ) {
           // Warning: Stops the server.
@@ -84,7 +90,7 @@ app.post(
 
     // Write the JSON string that was sent over to the settings file.
     fs.writeFile(
-      'settings.json',
+      SETTINGS_PATH + SETTINGS_FILE,
       req.body.settingsJSON,
       err => {
         if( err ) {

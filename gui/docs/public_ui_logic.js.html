@@ -72,6 +72,7 @@ function InputTimeDropdown( container, type, timeObj ) {
   var STEP_SS = 5;
   
   // States.
+  var currentValue = 0;
   var hasChanged = false;
   
   // Check if the container is not for the dropdown. Make sure this is specified first.
@@ -111,8 +112,11 @@ function InputTimeDropdown( container, type, timeObj ) {
         entryList[ i ].textContent = timeObj.doubleDigit( STEP_HH*i );
       }
       
+      // Set the hour value.
+      currentValue = timeObj.getTime().hr;
+      
       // Show the hour value.
-      face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
+      face.textContent = timeObj.doubleDigit( currentValue );
       
       selectAction = function( event ) {
         var selectedValue = event.target.getAttribute( "data-number" );
@@ -125,14 +129,20 @@ function InputTimeDropdown( container, type, timeObj ) {
           // Modify the timeObj.
           timeObj.setHr( selectedValueNumber );
           
+          // Set current value;
+          currentValue = timeObj.getTime().hr;
+          
           // Show the hour value.
-          face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
+          face.textContent = timeObj.doubleDigit( currentValue );
         }
       };
       
       updateVisuals = function() {
+        // Set the hour value.
+        currentValue = timeObj.getTime().hr;
+        
         // Update the hour value.
-        face.textContent = timeObj.doubleDigit( timeObj.getTime().hr );
+        face.textContent = timeObj.doubleDigit( currentValue );
       };
       
       break;
@@ -145,8 +155,11 @@ function InputTimeDropdown( container, type, timeObj ) {
         entryList[ i ].textContent = timeObj.doubleDigit( STEP_MM*i );
       }
       
+      // Set the minute value.
+      currentValue = timeObj.getTime().min;
+      
       // Show the minute value.
-      face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
+      face.textContent = timeObj.doubleDigit( currentValue );
       
       selectAction = function( event ) {
         var selectedValue = event.target.getAttribute( "data-number" );
@@ -160,14 +173,20 @@ function InputTimeDropdown( container, type, timeObj ) {
           // Modify the timeObj.
           timeObj.setMin( selectedValueNumber );
           
+          // Set current value;
+          currentValue = timeObj.getTime().min;
+          
           // Show the minute value.
-          face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
+          face.textContent = timeObj.doubleDigit( currentValue );
         }
       };
       
       updateVisuals = function() {
+        // Set current value;
+        currentValue = timeObj.getTime().min;
+        
         // Update the minute value.
-        face.textContent = timeObj.doubleDigit( timeObj.getTime().min );
+        face.textContent = timeObj.doubleDigit( currentValue );
       };
       
       break;
@@ -180,8 +199,11 @@ function InputTimeDropdown( container, type, timeObj ) {
         entryList[ i ].textContent = timeObj.doubleDigit( STEP_SS*i );
       }
       
+      // Set the second value.
+      currentValue = timeObj.getTime().sec;
+      
       // Show the second value.
-      face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
+      face.textContent = timeObj.doubleDigit( currentValue );
       
       selectAction = function( event ) {
         var selectedValue = event.target.getAttribute( "data-number" );
@@ -191,17 +213,23 @@ function InputTimeDropdown( container, type, timeObj ) {
           
         // Only do something when it selects an entry from the menu.
         if( typeof selectedValue !== "object" ) {
-            // Modify the timeObj.
-            timeObj.setSec( selectedValueNumber );
-            
-            // Show the hour value.
-            face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
+          // Modify the timeObj.
+          timeObj.setSec( selectedValueNumber );
+          
+          // Set current value;
+          currentValue = timeObj.getTime().sec;
+          
+          // Show the hour value.
+          face.textContent = timeObj.doubleDigit( currentValue );
         }
       };
       
       updateVisuals = function() {
+        // Set the second value.
+        currentValue = timeObj.getTime().sec;
+        
         // Update the second value.
-        face.textContent = timeObj.doubleDigit( timeObj.getTime().sec );
+        face.textContent = timeObj.doubleDigit( currentValue );
       };
       
       break;
@@ -238,6 +266,73 @@ function InputTimeDropdown( container, type, timeObj ) {
    * @instance
    */
   this.updateVisuals = updateVisuals;
+  
+  this.onmouseup = function( event ) {
+    
+  };
+}
+
+/**
+ * Creates and controls the alert modal with the messages stored in a stack.
+ * There can only be a single instance of this per page.
+ * @constructor
+ */
+function AlertModals() {
+  var self = this;
+  
+  var msgStack = [];
+  
+  /**
+   * Show the remaining amount of messages.
+   * @method msgCount
+   * @memberof AlertModals
+   * @instance
+   */
+  this.msgCount = function() {
+    return msgStack.length;
+  };
+  
+  /**
+   * Store an alert message and associated action.
+   * @method add
+   * @memberof AlertModals
+   * @instance
+   * @param {string} msgData The message.
+   */
+  this.add = function( msgData ) {
+    msgStack.push( msgData );
+  };
+  
+  /**
+   * Open the alert modals one-by-one. When the modal is closed, 
+   * its record will be removed.
+   * @method open
+   * @memberof AlertModals
+   * @instance
+   * @return {object} Contains {msg: ..., okAction: fn, cancelAction: fn}.
+   */
+  this.open = function() {
+    // The confirmation message to show.
+    // Also removes it from stack when used.
+    var currentMsg = "";
+    
+    if( msgStack.length !== 0 ) {
+      currentMsg = msgStack.pop();
+      
+      // Show alert.
+      alert( currentMsg );
+      
+      self.open();
+    } else {
+      console.warn( "There are no alert messages to show." );
+    }
+    
+    /*
+    return {
+      msg: currentMsg
+    };
+    */
+  };
 }
 
 /**
@@ -301,15 +396,215 @@ function ConfirmModals() {
       } else {
         currentCancelAction();
       }
+      
+      // Open the next one.
+      self.open();
     } else {
       console.warn( "There are no confirmation messages to show." );
     }
     
+    /*
     return {
       msg: currentMsg,
       okAction: currentOkAction,
       cancelAction: currentCancelAction
     };
+    */
+  };
+}
+
+/**
+ * Converts an SVG circle and text into a circular progress bar. Starts upon creation.
+ * @constructor
+ */
+function CircularProgressAnimation() {
+  var self = this;
+  /*
+  var circle = document.getElementById('one');
+  var text = document.getElementById('percent-one');
+  var angle = 0;
+  var percent = 70*4.7
+
+  window.timer = window.setInterval(function () {
+    circle.setAttribute("stroke-dasharray", angle + ", 20000");
+    text.innerHTML = parseInt(angle/471*100);
+
+    if (angle >= percent) {
+      window.clearInterval(window.timer);
+    }
+    angle += 6;
+  }.bind(this), 30);
+  */
+
+  //---
+  // Defaults.
+  var initTime = performance.now();
+  
+  var radius = 90; // px. Same as the size of the SVG circle.
+  var realPercent = 0.5;
+  var targetValue = 120;
+
+  var circle1 = document.getElementById('two');
+  var text1 = document.getElementById('percent-two');
+  
+  var angle1 = 0; // Changes with time.
+  //var percent1 = realPercent*2*Math.PI*radius; // End limit.
+  
+  // How fast to slow down. AKA pseudo-coefficient-of-friction.
+  // Time it takes to reach half-way. 1/seconds.
+  var timeConst = 0.2/Math.LN2;
+  
+  var diffThresh = 0.001;
+  
+  /*
+  var sPerFrame = 1000/60;
+  
+  function animate() {
+    angle1 += 0.015*Math.PI;
+    
+    circle1.setAttribute("stroke-dasharray", angle1*radius + ", 20000");
+    text1.innerHTML = parseInt(0.5*angle1*targetValue/Math.PI);
+    
+    if (angle1 > 2*Math.PI*realPercent) {
+      window.clearInterval(timer1);
+    }
+  }
+  
+  // Run every 33 ms.
+  var timer1 = window.setInterval( function() {
+    requestAnimationFrame( animate );
+  }, sPerFrame );
+  */
+  
+  function animate() {
+    // Prepare next frame.
+    timer1 = window.requestAnimationFrame( animate );
+    
+    // Time since start in seconds.
+    var t = ( performance.now() - initTime )/1000;
+    
+    // Define upon page load.
+    var maxLimit = 2*Math.PI*realPercent;
+    
+    // Will stop at the specified value based on the realPercent.
+    // WARNING: Some values are too small to make maxLimit reachable.
+    angle1 = maxLimit*( 1 - Math.exp( -t/timeConst ) );
+    
+    circle1.setAttribute( "stroke-dasharray", angle1*radius + ", 20000" );
+    text1.innerHTML = Math.round( 0.5*angle1*targetValue/Math.PI );
+    
+    // Only takes positive case into account.
+    if ( maxLimit - angle1 &lt;= diffThresh ) {
+      window.cancelAnimationFrame( timer1 );
+    }
+  }
+  
+  // Start animation on load.
+  var timer1 = window.requestAnimationFrame( animate );
+
+  //---
+  /*
+  var circle2 = document.getElementById('three');
+  var text2 = document.getElementById('percent-three');
+  var angle2 = 0;
+  var percent2 = 40*4.7
+
+  window.timer2 = window.setInterval(function () {
+    circle2.setAttribute("stroke-dasharray", angle2 + ", 20000");
+    text2.innerHTML = parseInt(angle2/471*100);
+
+    if (angle2 >= percent2) {
+      window.clearInterval(window.timer2);
+    }
+    angle2 += 6;
+  }.bind(this), 30);
+  */
+  
+  /**
+   * Sets the progress percentage. Anything greater than 1 would set it 
+   * to 100%. Anything less than 0 would set it to 0%.
+   * @method setPercent
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} n The percentage between 0 and 1.
+   */
+  this.setPercent = function( n ) {
+    if( !isNaN( n ) ) {
+      if( n >= 0 &amp;&amp; n &lt;= 1 ) {
+        realPercent = n;
+      } else if( n > 1 ) {
+        console.warn( "Progress Warning: The value exceeds the maximum. Resetting to maximum." );
+        
+        realPercent = 1;
+      } else {
+        console.warn( "Progress Warning: The value is lower than zero. Resetting to zero." );
+        
+        realPercent = 0;
+      }
+    }
+  };
+  
+  /**
+   * Sets the target value.
+   * @method setTarget
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} n The value that would be considered 100%.
+   */
+  this.setTarget = function( n ) {
+    if( !isNaN( n ) ) {
+      targetValue = n;
+    }
+  };
+  
+  /**
+   * Sets the value out of the target value. Subjected to the same constraints as 
+   * setPercent() method.
+   * @method setCurrent
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} n Number value less than the target.
+   */
+  this.setCurrent = function( n ) {
+    if( !isNaN( n ) ) {
+      self.setPercent( n/targetValue );
+    }
+  };
+  
+  /**
+   * Changes the animation speed by specifying how long it would take to 
+   * reach half of the given percentage value (e.g. takes 0.2 sec to reach 40% if set at 80%).
+   * @method setHalfTime
+   * @memberof CircularProgressAnimation
+   * @instance
+   * @param {number} t The time in seconds.
+   */
+  this.setHalfTime = function( t ) {
+    if( !isNaN( t ) ) {
+      if( t > 0 ) {
+        timeConst = t/Math.LN2;
+      }        
+    }
+  };
+  
+  /**
+   * Stops the previous progress animation and starts it again.
+   * @method restart
+   * @memberof CircularProgressAnimation
+   * @instance
+   */
+  this.restart = function() {
+    // Reset.
+    angle1 = 0;
+    initTime = performance.now();
+    
+    //timer1 = window.setInterval( animate, sPerFrame );
+    
+    // Stop the previous animation.
+    if( timer1 ) {
+      window.cancelAnimationFrame( timer1 );
+    }
+    timer1 = window.requestAnimationFrame( animate );
   };
 }</code></pre>
         </article>
@@ -321,13 +616,13 @@ function ConfirmModals() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Button.html">Button</a></li><li><a href="ConfirmModals.html">ConfirmModals</a></li><li><a href="InputTimeDropdown.html">InputTimeDropdown</a></li><li><a href="Settings.html">Settings</a></li><li><a href="Time.html">Time</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AlertModals.html">AlertModals</a></li><li><a href="Button.html">Button</a></li><li><a href="CircularProgressAnimation.html">CircularProgressAnimation</a></li><li><a href="ConfirmModals.html">ConfirmModals</a></li><li><a href="InputTimeDropdown.html">InputTimeDropdown</a></li><li><a href="Settings.html">Settings</a></li><li><a href="Time.html">Time</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Apr 23 2019 10:22:33 GMT-1000 (Hawaii-Aleutian Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Apr 28 2019 21:57:25 GMT-1000 (Hawaii-Aleutian Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
