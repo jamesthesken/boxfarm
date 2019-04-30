@@ -245,6 +245,69 @@ function InputTimeDropdown( container, type, timeObj ) {
 }
 
 /**
+ * Updates the Tasks section of the main page. Looks for a table with 
+ * the id "box-tasks."
+ * @constructor
+ */
+function BoxTasks() {
+  
+}
+
+/**
+ * Updates the Analytics section of the main page with
+ * current data about Box Farm. Looks for a table with 
+ * the id "box-analytics."
+ * @constructor
+ */
+function BoxAnalytics() {
+  // Root table element.
+  var table = document.getElementById( "box-analytics" );
+  var tableRows = table.rows;
+  
+  // Names in the exact order in the main page.
+  var entryNamesList = [
+    "pH",
+    "EC",
+    "Tank temperature",
+    "Habitat temperature",
+    "Humidity",
+    "COSMOS"
+  ];
+  
+  var entryList = {};
+  
+  // Reference the names to the corresponding rows and reference the values.
+  entryNamesList.forEach(
+    ( name, i ) => {
+      entryList[ name ] = {
+        valueCol: tableRows.item( i ).children.item( 1 )
+      };
+    }
+  );
+  
+  /**
+   * Set the status values.
+   * @method setStatus
+   * @memberof BoxAnalytics
+   * @instance
+   * @param {string} name
+   * @param {string} value
+   * @return {boolean} True if the status changes was applied.
+   */
+  this.setStatus = function( name, value ) {
+    var entry = entryList[ name ];
+    
+    if( entry ) {
+      entry.valueCol.textContent = value;
+      
+      return true;
+    } else {
+      return false;
+    }
+  };
+}
+
+/**
  * Creates and controls the alert modal with the messages stored in a stack.
  * There can only be a single instance of this per page.
  * @constructor
