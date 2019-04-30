@@ -96,7 +96,14 @@
                   </tr>
                 </tbody>
               </table>
-
+              
+              <div class="d-flex flex-column content text-center">
+                <span>Updates every minute.</span>
+                <a id="box-analytics-refresh" class="links" href="javascript:void 0;">Refresh Now</a>
+              </div>
+              
+              <div class="horizontal-bar"></div>
+              
               <div class="d-flex flex-column">
                 <a href="settings.html"  class="btn button-text" role="button">
                   Settings
@@ -111,37 +118,47 @@
     </div>
 
     <script>
+      // Load settings.
+      settings = new Settings();
+      
       // Also begins the animation.
       var harvestProgress = new CircularProgressAnimation();
-
-      // Set the remaining harvest day to 30.
-      // Will be applied way before the animation shows its first frame.
-      harvestProgress.setTarget( 120 );
-      harvestProgress.setCurrent( 85 );
-
+      
+      // Update Analytics section.
       var boxAnalytics = new BoxAnalytics();
-    </script>
-
-    <script>
-
-    function dataLoad(){
-      $.ajax({
-        url: 'data.json',
-        dataType: 'json',
-        success: function( data )
-        {
-          var tank = data.tank;
-          boxAnalytics.setStatus("pH", tank.ph)
-          boxAnalytics.setStatus("Tank temperature", tank.temp)
-          boxAnalytics.setStatus("EC", tank.EC)
-          console.log("Data sent to client");
+      
+      function dataLoad(){
+        $.ajax({
+          type: "POST",
+          url: '/analytics',
+          dataType: 'json',
+          success: function( data )
+          {
+            var tank = data.tank;
+            boxAnalytics.setStatus("pH", tank.ph);
+            boxAnalytics.setStatus("Tank temperature", tank.temp);
+            boxAnalytics.setStatus("EC", tank.EC);
+          }
+        });
+      }      
+      
+      // Begin app.
+      settings.receive(
+        function() {
+          // Set the remaining harvest day to 30.
+          // Will be applied way before the animation shows its first frame.
+          harvestProgress.setTarget( 120 );
+          harvestProgress.setCurrent( 85 );
+          
+          // Analytics data. Update every 60 seconds.
+          dataLoad();
+          setInterval(dataLoad, 60000);
+          document.getElementById( "box-analytics-refresh" ).addEventListener( "mouseup", dataLoad );
+        },
+        function() {
+          // Show error message.
         }
-      });
-    }
-
-    setInterval(dataLoad, 1000);
-
+      );
     </script>
-
   </body>
 </html>

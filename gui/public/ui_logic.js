@@ -510,9 +510,6 @@ function CircularProgressAnimation() {
   */
 
   function animate() {
-    // Prepare next frame.
-    timer1 = window.requestAnimationFrame( animate );
-
     // Time since start in seconds.
     var t = ( performance.now() - initTime )/1000;
 
@@ -529,7 +526,12 @@ function CircularProgressAnimation() {
     // Only takes positive case into account.
     if ( maxLimit - angle1 <= diffThresh ) {
       window.cancelAnimationFrame( timer1 );
+      
+      return;
     }
+    
+    // Prepare the next frame.
+    timer1 = window.requestAnimationFrame( animate );
   }
 
   // Start animation on load.

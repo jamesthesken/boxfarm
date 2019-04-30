@@ -7,12 +7,15 @@
 }
 
 .btn-primary:hover {
-  background-color: #319131;
+  background-color: #228222;
   border-color: #fff;
 }
-
 .btn-primary:focus {
   background-color: #2F8F2F;
+  border-color: #fff;
+}
+.btn-primary:active {
+  background-color: #2F8F2F !important;
   border-color: #fff;
 }
 
@@ -26,6 +29,15 @@ p.a{
 body{
   background: #fff;
   font-size: 16pt;
+}
+
+.links {
+  color: #339933;
+  text-decoration: underline;
+}
+.links:hover {
+  color: #228222;
+  text-decoration: underline;
 }
 
 .box{
@@ -171,7 +183,8 @@ body{
 
 .button-text {
   font-family: 'Encode Sans Semi Expanded', sans-serif;
-  font-size: 20px;
+  /* font-size: 20px; */
+  font-size: 16pt;
   text-align: center;
   padding: 5px;
   color: #888;

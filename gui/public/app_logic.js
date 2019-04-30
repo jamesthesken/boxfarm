@@ -19,20 +19,23 @@ function Settings() {
   // Working storage. Contains Box Farm data.
   var main = {
     pumpCycles: [],
-    lightCycles: []
+    lightCycles: [],
+    robotImaging: {}
   };
   
   // Temporary storage. Contains Box Farm data.
   var temp = {
     pumpCycles: [],
-    lightCycles: []
+    lightCycles: [],
+    robotImaging: {}
   };
   
   // Will be imported from or exported to JSON. Acts like a draft for the settings file.
   // Should only contain primitive data that is compatible with BoxBrain.
   var settingsObj = {
     pumpCycles: [],
-    lightCycles: []
+    lightCycles: [],
+    robotImaging: {}
   };
 
   var settingsJSON = "";
@@ -180,21 +183,90 @@ function Settings() {
   this.clearLightCycles = function() {
     clearLightCycles( main );
   };
-
+  
+  // Robot start times.
+  function setRobotImagingTime( settings, time ) {
+    if( time.constructor === Time ) {
+      settings.robotImaging = {
+        startTime: time
+      };
+    } else {
+      // Handle error.
+    }
+  }
+  
   /**
-   * Check if the settings are in the correct format before saving it.
-   * Ex. Find conflicting pump and light cycle times.
-   * @method check
+   * Set the time the robot would start its tasks.
+   * @method setRobotImagingTime
    * @memberof Settings
    * @instance
-   * @return {object} Indices that point to the problem.
+   * @param {Time} startTime
    */
+  this.setRobotImagingTime = function( time ) {
+    setRobotImagingTime( main, time );
+  };
+  
+  function getRobotImagingTime( settings ) {
+    if( settings.robotImaging ) {
+      return settings.robotImaging;
+    } else {
+      console.warn( "Warning: No robot imaging task start time specified." );
+      
+      return { empty: true };
+    }
+  }
+  
+  /**
+   * Get the robot task start time.
+   * @method getRobotImagingTime
+   * @memberof Settings
+   * @instance
+   * @return {object} The task time consisting of a start time (Time instance) or 
+   * an object that indicates if its empty.
+   */
+  this.getRobotImagingTime = function() {
+    return getRobotImagingTime( main );
+  };
+
+  function clearRobotImagingTime( settings ) {
+    settings.robotImaging = {};
+  }
+  
+  /**
+   * Warning: Deletes the specified robot imaging start time. Used for refreshing the settings.
+   * @method clearRobotImagingTime
+   * @memberof Settings
+   * @instance
+   */
+  this.clearRobotImagingTime = function() {
+    clearRobotImagingTime( main );
+  };
+  
   function check( settings, successAction, errorAction ) {
     //
     var problemPointer = {
       pass: true,
       pumpCycleProbIndex: [ -1, 0 ],
       lightCycleProbIndex: [ -1, 0 ]
+    };
+    
+    // Check if there are any settings data to begin with.
+    if( settings.pumpCycles.length <= 0 ) {
+      problemPointer.pass = false;
+      
+      return problemPointer;
+    };
+    
+    if( settings.lightCycles.length <= 0 ) {
+      problemPointer.pass = false;
+      
+      return problemPointer;
+    };
+    
+    if( !settings.robotImaging ) {
+      problemPointer.pass = false;
+      
+      return problemPointer;
     };
 
     // Check if the pump cycle times are in order, which
@@ -210,8 +282,7 @@ function Settings() {
         cyclesData.timeArrays.push( cyclesArray[ iPC ].endTime.getSeconds() );
       }
       
-      // Where is iT defined?
-      for( iT = 0; iT < cyclesData.timeArrays.length - 1; iT++ ) {
+      for( var iT = 0; iT < cyclesData.timeArrays.length - 1; iT++ ) {
         // Is the selected time later than the previous time?
         if( cyclesData.timeArrays[ iT + 1 ] > cyclesData.timeArrays[ iT ] ) {
           // OK
@@ -383,6 +454,11 @@ function Settings() {
       }
       return false;
     }
+    
+    // Write robot imaging time.
+    settingsObj.robotImaging = {
+      startTime: main.robotImaging.startTime.getTimeStr()
+    };
 
     // If you make it here, it's going great!
 
@@ -444,6 +520,18 @@ function Settings() {
         // Another craig fix.
         throw new Error( "No pump cycles found. There needs to be one or more." );
       }
+      
+      // Error out if the settings values are not there.
+      if( settingsObj.lightCycles.length <= 0 ) {
+        // Another craig fix.
+        throw new Error( "No light cycles found. There needs to be one or more." );
+      }
+      
+      // Error out if the settings values are not there.
+      if( !settingsObj.robotImaging ) {
+        // Another craig fix.
+        throw new Error( "No robot task time found. There needs to be one." );
+      }
     } catch( ex ) {
       // Do this if the JSON parsing fails.
       console.error( "Load Error: Settings data does not exist." );
@@ -451,8 +539,10 @@ function Settings() {
       // Load default times instead;
       addPumpCycle( settings, new Time( "6:00" ), new Time( "12:00" ) );
       addLightCycle( settings, new Time( "0:00" ), new Time( "6:00" ) );
+      setRobotImagingTime( settings, new Time( "14:00" ) );
       
-      self.save();
+      // Don't save anything since there's nothing to save.
+      // self.save();
 
       console.log( "Default values are set instead." );
 
@@ -462,6 +552,7 @@ function Settings() {
     // Start fresh.
     clearPumpCycles( settings );
     clearLightCycles( settings );
+    clearRobotImagingTime( settings );
     
     // Load the pump cycles.
     for( var i = 0; i < settingsObj.pumpCycles.length; i++ ) {
@@ -480,6 +571,9 @@ function Settings() {
         new Time( settingsObj.lightCycles[ i ].endTime )
       );
     }
+    
+    // Load the robot imaging task time.
+    setRobotImagingTime( settings, new Time( settingsObj.robotImaging.startTime ) );
     
     return true;
   }
@@ -514,22 +608,28 @@ function Settings() {
           console.log( "Received the settings from BoxBrain successfully." );
           
           // Temporarily load the sent-in settins JSON and check it.
-          load( temp, msg );
-          
-          if( check( temp ).pass ) {
-            // Save this.
-            localStorage.setItem( "settings", msg );
-            
-            // Load the imported settings for real.
-            load( main, msg );
-            
-            console.log( "Settings are loaded successfully." );
-            
-            // Clean up.
-            clearPumpCycles( temp );
-            clearLightCycles( temp );
+          if( load( temp, msg ) ) {
+            if( check( temp ).pass ) {
+              // Save this.
+              localStorage.setItem( "settings", msg );
+              
+              // Load the imported settings for real.
+              load( main, msg );
+              
+              console.log( "Settings are loaded successfully." );
+              
+              // Clean up.
+              clearPumpCycles( temp );
+              clearLightCycles( temp );
+              clearRobotImagingTime( temp );
+            } else {
+              console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
+            }
           } else {
-            console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
+            // Do this if the settings are malformed or does not exist.
+            if( typeof errorAction === "function" ) {
+              errorAction();
+            }
           }
           
           if( typeof successAction === "function" ) {
