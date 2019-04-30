@@ -111,37 +111,46 @@
     </div>
 
     <script>
+      // Load settings.
+      settings = new Settings();
+      
       // Also begins the animation.
       var harvestProgress = new CircularProgressAnimation();
-
-      // Set the remaining harvest day to 30.
-      // Will be applied way before the animation shows its first frame.
-      harvestProgress.setTarget( 120 );
-      harvestProgress.setCurrent( 85 );
-
+      
+      // Update Analytics section.
       var boxAnalytics = new BoxAnalytics();
-    </script>
-
-    <script>
-
-    function dataLoad(){
-      $.ajax({
-        url: 'data.json',
-        dataType: 'json',
-        success: function( data )
-        {
-          var tank = data.tank;
-          boxAnalytics.setStatus("pH", tank.ph)
-          boxAnalytics.setStatus("Tank temperature", tank.temp)
-          boxAnalytics.setStatus("EC", tank.EC)
-          console.log("Data sent to client");
+      
+      function dataLoad(){
+        $.ajax({
+          type: "POST",
+          url: '/analytics',
+          dataType: 'json',
+          success: function( data )
+          {
+            var tank = data.tank;
+            boxAnalytics.setStatus("pH", tank.ph);
+            boxAnalytics.setStatus("Tank temperature", tank.temp);
+            boxAnalytics.setStatus("EC", tank.EC);
+          }
+        });
+      }      
+      
+      // Begin app.
+      settings.receive(
+        function() {
+          // Set the remaining harvest day to 30.
+          // Will be applied way before the animation shows its first frame.
+          harvestProgress.setTarget( 120 );
+          harvestProgress.setCurrent( 85 );
+          
+          // Analytics data.
+          dataLoad();
+          setInterval(dataLoad, 60000);
+        },
+        function() {
+          // Show error message.
         }
-      });
-    }
-
-    setInterval(dataLoad, 1000);
-
+      );
     </script>
-
   </body>
 </html>

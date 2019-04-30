@@ -7,8 +7,13 @@
  * @copyright 2018-2019
  */
 
+// Box Farm settings.
 const SETTINGS_PATH = __dirname + '/';
 const SETTINGS_FILE = 'settings.json';
+
+// Garden data.
+const DATA_PATH = __dirname + '/public/'; // Change to non-public directory.
+const DATA_FILE = 'data.json';
 
 const url  = require('url'),
       sys  = require('util'), // From "sys".
@@ -105,10 +110,10 @@ app.post(
 
 // Send Bluelab data to the client.
 app.post(
-  '/load',
+  '/analytics',
   ( req, res ) => {
     fs.readFile(
-      '../statics/data.json',
+      DATA_PATH + DATA_FILE,
       ( err, data ) => {
         if( err ) {
           // Warning: Stops the server.

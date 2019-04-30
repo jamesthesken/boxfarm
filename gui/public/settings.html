@@ -150,6 +150,42 @@
           
           <div class="horizontal-bar"></div>
           
+          <div class="row">
+            <div class="col-3 text-left content">
+              <h5>ROBOT TASK</h5>
+            </div>
+            <div id="robot-task-time-input" class="col-9 text-right content">
+              <div class="row">
+                <div class="col-6">
+                  <!-- Empty column. -->
+                </div>
+                <div class="col-3">
+                  <h5>HR</h5>
+                </div>
+                <div class="col-3">
+                  <h5>MIN</h5>
+                </div>
+              </div>
+              <div id="robot-task-time-start" class="row dropdown-vertical">
+                <div class="col-6">
+                  START
+                </div>
+                <div class="col-3">
+                  <div class="dropdown dropdown-horizontal">
+                    <!-- Dropdown created by ui_logic. -->
+                  </div>
+                </div>
+                <div class="col-3">
+                  <div class="dropdown dropdown-horizontal">
+                    <!-- Dropdown created by ui_logic. -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="horizontal-bar"></div>
+          
           <!-- Footer -->
           <div class="row">
             <div class="col-12 text-right">
@@ -212,7 +248,7 @@
             hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", this.endTime ),
             min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", this.endTime )
           }
-        }
+        };
         
         // Show everything at the very end.
         this.applyAndShow = function() {
@@ -265,7 +301,7 @@
             hr: new InputTimeDropdown( dropdnContsEnd[ 0 ], "hr", this.endTime ),
             min: new InputTimeDropdown( dropdnContsEnd[ 1 ], "min", this.endTime )
           }
-        }
+        };
         
         // Show everything at the very end.
         this.applyAndShow = function() {
@@ -281,6 +317,43 @@
           dropdns.startTime.min.updateVisuals();
           dropdns.endTime.hr.updateVisuals();
           dropdns.endTime.min.updateVisuals();
+        };
+      }
+      
+      function RobotImagingTaskControls() {
+        // The column that contains the controls.
+        var timeInputContainer = document.getElementById( "robot-task-time-input" );
+      
+        // The dropdown containers.
+        var dropdnContsStart = document.querySelectorAll( "#robot-task-time-start .dropdown" );
+        var dropdnContsEnd = document.querySelectorAll( "#robot-task-time-end .dropdown" );
+        
+        // Cycle times from the settings.
+        var startTime = settings.getRobotImagingTime().startTime;
+        
+        // Public.
+        // WARNING: This would remove the time reference to the dropdowns, 
+        // Making it impossible to update.
+        this.startTime = startTime;
+        
+        // Create and display the dropdowns.
+        var dropdns = {
+          startTime: {
+            hr: new InputTimeDropdown( dropdnContsStart[ 0 ], "hr", this.startTime ),
+            min: new InputTimeDropdown( dropdnContsStart[ 1 ], "min", this.startTime )
+          }
+        };
+        
+        // Show everything at the very end.
+        this.applyAndShow = function() {
+          dropdns.startTime.hr.applyAndShow();
+          dropdns.startTime.min.applyAndShow();
+        };
+        
+        this.updateVisuals = function() {
+          // Show the changes.
+          dropdns.startTime.hr.updateVisuals();
+          dropdns.startTime.min.updateVisuals();
         };
       }
       
@@ -349,34 +422,13 @@
       // Create the controls.
       var pumpControls = new PumpControls();
       var lightControls = new LightControls();
+      var robotImagingTaskControls = new RobotImagingTaskControls();
       var footerButtons = new FooterButtons();
       
       // Show everything.
       pumpControls.applyAndShow();
       lightControls.applyAndShow();
-      
-      // Load the settings stored in the BoxBrain.
-      /*
-      settings.receive(
-        function() {
-          // Apply the changes. WARNING: This would remove the time reference to the dropdowns, 
-          // Making it impossible to update.
-          pumpControls.startTime = settings.getPumpCycle( 0 ).startTime;
-          pumpControls.endTime = settings.getPumpCycle( 0 ).endTime;
-          lightControls.startTime = settings.getLightCycle( 0 ).startTime;
-          lightControls.endTime = settings.getLightCycle( 0 ).endTime;
-          
-          
-          // Show the changs.
-          pumpControls.updateVisuals();
-          lightControls.updateVisuals();
-        },
-        function() {
-          alertModals.add( "Communication Error:\nCannot connect to the BoxBrain." );
-          alertModals.open();
-        }
-      );
-      */
+      robotImagingTaskControls.applyAndShow();
     </script>
   </body>
 </html>
