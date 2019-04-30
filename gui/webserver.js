@@ -25,19 +25,18 @@ const guiServer = http.createServer(app);
 const pyServer = http.createServer();
 
 // Set up socket.io server.
-const io = socketio( pyServer );
+const pyIo = socketio( pyServer );
 
-io.on('connection', function(socket){
-  console.log(Date.now() + ': Python client connected');
+pyIo.on('connection', function(socket){
+  console.log(Date.now() + ': Python client connected.');
 
   socket.on('Status', function(msg){
     console.log('Status: ' + msg);
   });
 
-  socket.on('Data', function(msg){
-    console.log('Data: ' + msg);
+  socket.on('disconnect', function(){
+    console.log(Date.now() + ': Python client disconnected.');
   });
-
 });
 
 
