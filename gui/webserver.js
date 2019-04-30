@@ -7,6 +7,9 @@
  * @copyright 2018-2019
  */
 
+const SETTINGS_PATH = __dirname + '/';
+const SETTINGS_FILE = 'settings.json';
+
 const url  = require('url'),
       sys  = require('util'), // From "sys".
       fs = require( 'fs' ),
@@ -22,24 +25,33 @@ const guiServer = http.createServer(app);
 const pyServer = http.createServer();
 
 // Set up socket.io server.
-const io = socketio( pyServer );
+const pyIo = socketio( pyServer );
 
-io.on('connection', function(socket){
-  console.log('Python client connected');
-  
+pyIo.on('connection', function(socket){
+  console.log(Date.now() + ': Python client connected.');
+
   socket.on('Status', function(msg){
     console.log('Status: ' + msg);
   });
+
+  socket.on('disconnect', function(){
+    console.log(Date.now() + ': Python client disconnected.');
+  });
 });
+
+
 
 /*
 io.on('connection', function(socket){
-  
+
 });
 */
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'js')));
+app.use(express.static(path.join(__dirname, 'css')));
 app.use(express.static(path.join(__dirname, 'assets')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 
@@ -54,7 +66,7 @@ app.post(
   '/load',
   ( req, res ) => {
     fs.readFile(
-      'settings.json',
+      SETTINGS_PATH + SETTINGS_FILE,
       ( err, data ) => {
         if( err ) {
           // Warning: Stops the server.
@@ -64,7 +76,7 @@ app.post(
         res.send( data );
       }
     );
-    
+
     console.log( Date.now() + ': Settings were sent to the client ' + req.ip + '.' );
   }
 );
@@ -74,10 +86,10 @@ app.post(
   '/save',
   ( req, res ) => {
     console.log( Date.now() + ': Settings were received from the client ' + req.ip + '.' );
-    
+
     // Write the JSON string that was sent over to the settings file.
     fs.writeFile(
-      'settings.json',
+      SETTINGS_PATH + SETTINGS_FILE,
       req.body.settingsJSON,
       err => {
         if( err ) {
@@ -86,8 +98,28 @@ app.post(
         }
       }
     );
-    
+
     res.end( "Settings were received by BoxBrain." );
+  }
+);
+
+// Send Bluelab data to the client.
+app.post(
+  '/load',
+  ( req, res ) => {
+    fs.readFile(
+      '../statics/data.json',
+      ( err, data ) => {
+        if( err ) {
+          // Warning: Stops the server.
+          throw err;
+        }
+
+        res.send( data );
+      }
+    );
+
+    console.log( Date.now() + ': Bluelab data was sent to client. ' + req.ip + '.' );
   }
 );
 

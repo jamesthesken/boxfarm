@@ -8,6 +8,8 @@
 
 3. Navigate to `localhost:4000` in your browser.
 
-## TODO:
-1. Add settings adjustment page
-2. Harvest timer is only a placeholder and needs to be fixed
+4. Connect Bluelab connect and configure the csv files to be saved to the gui folder in the Connect software:
+https://www.bluelab.com/products/type/connect-suite/connect-software
+
+5. Start the Python back-end:
+`python ../statics/statics.py`

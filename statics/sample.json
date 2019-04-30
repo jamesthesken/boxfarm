@@ -1,9 +1,0 @@
-{
- "pumpcycle": [{
-     "cycle1": {
-         "startTime": 400,
-         "endTime": 1200
-         }
-       }
-     ]
-}

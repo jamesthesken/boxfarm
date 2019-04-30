@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 #import serial
 import schedule
 from watchdog.observers import Observer
@@ -6,17 +8,18 @@ import time
 import json
 from datetime import datetime
 import requests
-
+import csv
+import glob
+import os
 import socketio
 
 SETTINGS_PATH = '../gui/'
 SETTINGS_JSON_FILE = 'settings.json'
+settings = open(SETTINGS_PATH + SETTINGS_JSON_FILE) # read the configuration file
 
-# standard Python
+# connect the backend client to the GUI
 sio = socketio.Client()
 sio.connect('http://localhost:4004')
-
-settings = open(SETTINGS_PATH + SETTINGS_JSON_FILE) # read the configuration file
 
 # Watchdog to monitor changes made to configuration JSON file
 class MyHandler(FileSystemEventHandler):
@@ -46,7 +49,7 @@ def loadSettings(data):
    # get amount of given by the user
    lightCycles  = len(data['lightCycles'])
    pumpCycles  = len(data['pumpCycles'])
-   
+
    if lightCycles  == 1:
       schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
       schedule.every().day.at("{}".format(data['lightCycles'][0]['endTime'])).do(lightsOff)
@@ -67,8 +70,8 @@ def loadSettings(data):
 
       schedule.every().day.at("{}".format(data['lightCycles'][2]['startTime'])).do(lightsOn)
       schedule.every().day.at("{}".format(data['lightCycles'][2]['endTime'])).do(lightsOff)
-   
-   
+
+
    if pumpCycles  == 1:
       schedule.every().day.at("{}".format(data['pumpCycles'][0]['startTime'])).do(pumpsOn)
       schedule.every().day.at("{}".format(data['pumpCycles'][0]['endTime'])).do(pumpsOff)
@@ -89,7 +92,7 @@ def loadSettings(data):
 
       schedule.every().day.at("{}".format(data['pumpCycles'][2]['startTime'])).do(pumpsOn)
       schedule.every().day.at("{}".format(data['pumpCycles'][2]['endTime'])).do(pumpsOff)
-      
+
 def pumpsOn():
    print('Pumps on at %s' % datetime.now())
    time.sleep(1)
@@ -122,11 +125,34 @@ if __name__ == "__main__":
    observer.start()
 
    print('Statics control subsystem scheduler has started.')
-   
+
    try:
       while True:
+
+         # read latest csv file saved by bluelab connect
+         list_of_files = glob.glob('../gui/*csv') 
+         BLUELAB = max(list_of_files, key=os.path.getctime)
+
+         # reading in bluelab nutrient tank data
+         with open(BLUELAB, newline='') as csvfile:
+             sysData = csv.reader(csvfile, delimiter=' ')
+             for row in sysData:
+                 row = ','.join(row)
+                 row = row.split(',')
+
+             print(row[4:7])
+             # setting the JSON format
+             row = {"tank":{"EC": '{} ppm'.format(row[4]), "ph": '{}'.format(row[5]), "temp": '{} '.format(row[6])+'\u2103'}}
+             row = json.dumps(row)
+             print(row)
+
+             # saving the JSON file to be read by the server
+             js = open('../gui/public/data.json', 'w')
+             js.write(row)
+             js.close()
+
          schedule.run_pending()
-         time.sleep(2)
+         time.sleep(60)
 
    except KeyboardInterrupt:
       observer.stop()
