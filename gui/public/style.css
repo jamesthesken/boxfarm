@@ -25,12 +25,19 @@ p.a{
 
 body{
   background: #fff;
+  font-size: 16pt;
 }
 
 .box{
   background-color: #fff;
   /* height: 35rem; */ /* Handled by card layout. */
   border-radius: 20px; /* Moved from documents. */
+  /* padding-top: 16px; */
+}
+
+/* Has logo in it. */
+.box-main {
+  border-radius: 56px 20px 20px 20px;
 }
 
 /* For disabling parts of the page when needed. */
@@ -75,6 +82,11 @@ body{
 }
 
 .content{
+  font-family: 'Encode Sans Semi Expanded', sans-serif;
+  color: #999;
+}
+
+.task{
   font-family: 'Encode Sans Semi Expanded', sans-serif;
   color: #999;
 }
@@ -152,9 +164,9 @@ body{
   
 }
 
-.settings-button{
-  height: 20%;
-  width: 20%;
+/* Could be used for any arrow icons, in general. */
+.arrow-button{
+  height: 48px;
 }
 
 .button-text {

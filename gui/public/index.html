@@ -1,138 +1,155 @@
 <!DOCTYPE html>
+
+<!-- Version 0.5.4 -->
+<!-- Author: Control Subsystem -->
+
 <html lang="en">
-<head>
-  <title>Box Farm</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <head>
+    <title>Box Farm</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
+    <script src="jquery-3.3.1.min.js"></script>
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="bootstrap-4.2.1/bootstrap.min.css">
+    <script src="popper-1.14.17/popper.min.js"></script>
+    <script src="bootstrap-4.2.1/bootstrap.min.js"></script>
 
-  <!--Fonts-->
-  <link href="https://fonts.googleapis.com/css?family=Space+Mono" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Encode+Sans+Semi+Expanded" rel="stylesheet">
+    <!--Fonts-->
+    <link href="Space_Mono.css" rel="stylesheet">
+    <link href="Encode_Sans_Semi_Expanded.css" rel="stylesheet">
 
-  <!-- Box Farm stylesheets. Define last. -->
-  <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Box Farm stylesheets. -->
+    <link rel="stylesheet" href="style.css">
 
-  <!-- Box Farm scripts. -->
-  <script src="data_types.js"></script>
-  <script src="app_logic.js"></script>
-  <script src="ui_logic.js"></script>
-</head>
+    <!-- Box Farm scripts. -->
+    <script src="data_types.js"></script>
+    <script src="app_logic.js"></script>
+    <script src="ui_logic.js"></script>
+  </head>
 
-<body>
+  <body>
 
-<!-- Just adding a bit of space-->
-<div class="header"> </div>
+    <!-- Just adding a bit of space-->
+    <div class="header"> </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col">
-      <div class="card box shadow-lg" style="border-radius: 40px 20px 20px 20px;">
-        <img src="box-farm-logo.png" class="card-img-top" alt="...">
-        <h1 class="left-card text-center" style="padding: 15px;"> Tasks </h1>
-        <div class="card-body text-center">
-          <div class="row">
-            <div class="col text-left content">
-              <h5 class="task">Clean filters:</h5>
-              <h5 class="task">Finish COSMOS</h5>
-            </div>
-            <div class="col text-right content">
-              <h5 class="data">6.5 days</h5>
-              <h5 class="data">650 yrs</h5>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-7 col-xl-4">
+          <div class="card box box-main shadow-lg mb-3">
+            <img src="box-farm-logo.png" class="card-img-top" alt="Box Farm" style="position: relative; left: -1px; top: -1px;">
+            <h1 class="left-card text-center" style="padding: 15px;"> Tasks </h1>
+            <div class="card-body">
+              <table id="box-tasks" class="table table-borderless table-sm">
+                <tbody>
+                  <tr>
+                    <td class="task">Clean filters:</td>
+                    <td class="data text-right">6.5 days</td>
+                  </tr>
+                  <tr>
+                    <td class="task">Finish COSMOS:</td>
+                    <td class="data text-right">650 yrs</td> <!-- lol -->
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-
-        </div>
-      </div>
-    </div> <!-- left panel -->
-    <div class="col-sm-5">
-      <div class="card mb-3 shadow-lg" style="border-radius:20px;">
-        <h1 class="card-title card-titles"> SOL: 69 </h1> <!-- CHANGE THIS WHEN FUNCTIONAL -->
-      </div>
-      <div class="card mb-3 shadow-lg" style="border-radius:20px;">
-        <div class="card box"  style="border-radius:20px;">
-          <div class="card-body"  style="border-radius:20px;">
-            <h3 class="content text-left"> Next harvest:</h3>
-            <svg  class="content progress-container" viewBox="0 0 200 200">
+        </div> <!-- left panel -->
+        <div class="col-md-5 col-xl-4">
+          <div class="card mb-3 box shadow-lg">
+            <h1 class="card-title card-titles"> SOL: 69 </h1> <!-- CHANGE THIS WHEN FUNCTIONAL -->
+          </div>
+          <div class="card mb-3 box shadow-lg">
+            <div class="card-body">
+              <h3 class="content text-left"> Next harvest:</h3>
+              <svg  class="content progress-container" viewBox="0 0 200 200">
                 <g id="">
-                  <circle class="progress" id="two" cx="100" cy="100" r="90px" />
+                  <circle class="progress" id="two" cx="100" cy="100" r="90" stroke-dasharray="0,20000" />
                   <text class="countdown" id="percent-two" text-anchor="middle" x="100" y="112" style="font-size: 60px;"> 0 </text>
-                  <text text-anchor="top" x="100" y="140" class="countdown" > days </text>
+                  <text text-anchor="top" x="100" y="140" class="countdown" style="font-size: 25px;"> days </text>
                 </g>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </div> <!-- center  panel -->
-    <div class="col">
-      <div class="card shadow-lg"  style="border-radius:20px;">
-        <div class="card box"  style="border-radius:20px;">
-          <h1 class="card-titles"> Analytics </h1>
-          <div class="card-body container-fluid">
-            <div class="row">
-              <div class="col text-left content">
-                <h5 class="content">pH</h5>
-                <h5 class="content">EC</h5>
-                <h5 class="content">Temperature</h5>
-                <h5 class="content">COSMOS</h5>
-              </div>
-              <div class="col text-right content">
-                <h5 class="data" id="ph"></h5>
-                <h5 class="data" id="EC"></h5>
-                <h5 class="data" id="temp"></h5>
-                <h5 class="data">OK</h5>
-              </div>
+              </svg>
             </div>
-
-            <div class="card-body d-flex flex-column">
-              <a href="settings.html"  class="btn button-text" role="button">
-                Settings
-                <img src="arrow-icon.png" class="settings-button">
-              </a>
-            </div>
-
           </div>
-        </div>
+        </div> <!-- center  panel -->
+        <div class="col-xl-4">
+          <div class="card box shadow-lg mb-3">
+            <h1 class="card-titles"> Analytics </h1>
+            <div class="card-body">
+              <table id="box-analytics" class="table table-borderless table-sm">
+                <tbody>
+                  <tr>
+                    <td class="content">pH</td>
+                    <td class="data text-right">6.5</td>
+                  </tr>
+                  <tr>
+                    <td class="content">EC</td>
+                    <td class="data text-right">650 ppm</td>
+                  </tr>
+                  <tr>
+                    <td class="content">Tank Temp.</td>
+                    <td class="data text-right">22 &deg;C</td>
+                  </tr>
+                  <tr>
+                    <td class="content">Hab Temp.</td>
+                    <td class="data text-right">24 &deg;C</td>
+                  </tr>
+                  <tr>
+                    <td class="content">Humidity</td>
+                    <td class="data text-right">85%</td>
+                  </tr>
+                  <tr>
+                    <td class="content">COSMOS</td>
+                    <td class="data text-right">OK</td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <div class="d-flex flex-column">
+                <a href="settings.html"  class="btn button-text" role="button">
+                  Settings
+                  <img src="arrow-icon.png" class="arrow-button">
+                </a>
+              </div>
+
+            </div>
+          </div>
+        </div> <!-- right panel -->
       </div>
-    </div> <!-- right panel -->
-  </div>
+    </div>
 
-</div>
+    <script>
+      // Also begins the animation.
+      var harvestProgress = new CircularProgressAnimation();
 
-</head>
+      // Set the remaining harvest day to 30.
+      // Will be applied way before the animation shows its first frame.
+      harvestProgress.setTarget( 120 );
+      harvestProgress.setCurrent( 85 );
 
-<body>
-	<script>
-    var harvestProgress = new ProgressAnimation();
-  </script>
+      var boxAnalytics = new BoxAnalytics();
+    </script>
+    
+    <script>
+    $.ajax({
+      url: 'data.json',
+      dataType: 'json',
+      success: function( data )
+      {
+          var tank = data.tank;
 
-  <script>
-  $.ajax({
-    url: 'data.json',
-    dataType: 'json',
-    success: function( data )
-    {
-        var tank = data.tank;
+          $('#ph').text( tank.ph);
+          $('#temp').text( tank.temp);
+          $('#EC').text( tank.EC);
 
-        $('#ph').text( tank.ph);
-        $('#temp').text( tank.temp);
-        $('#EC').text( tank.EC);
-
-        if(data.success == true){ // if true (1)
-        setTimeout(function(){// wait for 5 secs(2)
-             window.location.reload( true ); // then reload the page.(3)
-        }, 5000);
+          if(data.success == true){ // if true (1)
+          setTimeout(function(){// wait for 5 secs(2)
+               window.location.reload( true ); // then reload the page.(3)
+          }, 5000);
+        }
       }
-    }
-  });  
-  </script>
+    });
+    </script>
 
-</body>
+  </body>
 </html>

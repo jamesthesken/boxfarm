@@ -209,7 +209,8 @@ function Settings() {
         cyclesData.timeArrays.push( cyclesArray[ iPC ].startTime.getSeconds() );
         cyclesData.timeArrays.push( cyclesArray[ iPC ].endTime.getSeconds() );
       }
-
+      
+      // Where is iT defined?
       for( iT = 0; iT < cyclesData.timeArrays.length - 1; iT++ ) {
         // Is the selected time later than the previous time?
         if( cyclesData.timeArrays[ iT + 1 ] > cyclesData.timeArrays[ iT ] ) {
