@@ -13,6 +13,16 @@ import glob
 import os
 import socketio
 
+
+# lights to make everything look excellent
+from pretty import *
+pixels = neopixel.NeoPixel(board.D18, 65, brightness=0.2, auto_write=False,
+                           pixel_order=neopixel.GRB)
+rainbow_cycle(0.001)
+
+pixels.fill((0,255,0))
+
+
 SETTINGS_PATH = '../gui/'
 SETTINGS_JSON_FILE = 'settings.json'
 settings = open(SETTINGS_PATH + SETTINGS_JSON_FILE) # read the configuration file
@@ -159,6 +169,7 @@ if __name__ == "__main__":
          time.sleep(60)
 
    except KeyboardInterrupt:
+      pixels.fill((255,0,0))
       observer.stop()
 
    observer.join()
