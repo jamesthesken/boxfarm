@@ -18,34 +18,6 @@ from helper import *
 # static system timing and demo
 statics = serial.Serial('/dev/ttyACM0', 115200)
 time.sleep(2)
-'''
-print('opened')
-
-statics.write(b'3') # turn on the first outlet
-time.sleep(60) # for a minute
-statics.write(b'30') # then off
-print('off')
-time.sleep(30)
-statics.write(b'3') # it's dark..
-time.sleep(2)
-
-print('Pumps')
-statics.write(b'2') # turn on the main pumps
-time.sleep(300) # for 5 minutes
-print('off')
-statics.write(b'20') # then off
-
-print('Draining...')
-time.sleep(300)
-
-print('Nursery')
-statics.write(b'4') # turn on the nursery pumps
-time.sleep(300) # for 5 minutes
-statics.write(b'40') # then off
-
-print('Statics demo complete. Moving to Robotics')
-time.sleep(5)
-'''
 
 statics.write(b'3') # turn on the first outlet
 time.sleep(3)
@@ -88,7 +60,7 @@ for i in range(len(front_plants)):
     s = socket.socket()         # Create a socket object
     host = '10.42.0.219' # Get local machine name
     port = 12345                 # Reserve a port for your service.
-    
+
     print('Moving to plant...')
     rb.write('G00 X{}\n'.format(front_plants[i]))
     time.sleep(5)
@@ -102,7 +74,7 @@ for i in range(len(front_plants)):
     while (l):
         f.write(l) # write data
         l = s.recv(1024)
-            
+
     f.close()
     print('Done receiving')
 
@@ -125,7 +97,7 @@ for i in range(len(back_plants)):
     host = '10.42.0.219' # Get local machine name
     port = 12345                 # Reserve a port for your service.
 
-    
+
     print('Moving to plant...')
     rb.write('G00 X{}\n'.format(back_plants[i]))
     time.sleep(5)
@@ -139,7 +111,7 @@ for i in range(len(back_plants)):
     while (l):
         f.write(l) # write data
         l = s.recv(1024)
-            
+
     f.close()
     print('Done receiving')
 
@@ -294,4 +266,3 @@ time.sleep(10)
 rb.close()
 ra.close()
 statics.close()
-
