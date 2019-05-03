@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+#TODO: rename this file to accurately represent its function, which is the main system scheduler
+
 import serial
 import schedule
 from watchdog.observers import Observer
@@ -12,7 +14,8 @@ import csv
 import glob
 import os
 import socketio
-
+import socket # comes with Python, this is for the image transfering between RPi's
+from pictures import imageSequence
 
 # lights to make everything look excellent
 from pretty import *
@@ -59,6 +62,9 @@ def loadSettings(data):
    # get amount of given by the user
    lightCycles  = len(data['lightCycles'])
    pumpCycles  = len(data['pumpCycles'])
+
+   #scheduling the robotic imaging
+   schedule.every().day.at("{}".format(data['robotImaging']['startTime'])).do(imageSequence)
 
    if lightCycles  == 1:
       schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
