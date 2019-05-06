@@ -29,7 +29,7 @@
             <pre class="prettyprint source linenums"><code>/**
  * @file Box Farm frontend application.
  * @projectname Box Farm GUI
- * @version 0.5.4
+ * @version 0.5.6
  * @author Control Subsystem
  * @copyright 2018-2019
  */
@@ -47,20 +47,23 @@ function Settings() {
   // Working storage. Contains Box Farm data.
   var main = {
     pumpCycles: [],
-    lightCycles: []
+    lightCycles: [],
+    robotImaging: {}
   };
   
   // Temporary storage. Contains Box Farm data.
   var temp = {
     pumpCycles: [],
-    lightCycles: []
+    lightCycles: [],
+    robotImaging: {}
   };
   
   // Will be imported from or exported to JSON. Acts like a draft for the settings file.
   // Should only contain primitive data that is compatible with BoxBrain.
   var settingsObj = {
     pumpCycles: [],
-    lightCycles: []
+    lightCycles: [],
+    robotImaging: {}
   };
 
   var settingsJSON = "";
@@ -208,21 +211,90 @@ function Settings() {
   this.clearLightCycles = function() {
     clearLightCycles( main );
   };
-
+  
+  // Robot start times.
+  function setRobotImagingTime( settings, time ) {
+    if( time.constructor === Time ) {
+      settings.robotImaging = {
+        startTime: time
+      };
+    } else {
+      // Handle error.
+    }
+  }
+  
   /**
-   * Check if the settings are in the correct format before saving it.
-   * Ex. Find conflicting pump and light cycle times.
-   * @method check
+   * Set the time the robot would start its tasks.
+   * @method setRobotImagingTime
    * @memberof Settings
    * @instance
-   * @return {object} Indices that point to the problem.
+   * @param {Time} startTime
    */
+  this.setRobotImagingTime = function( time ) {
+    setRobotImagingTime( main, time );
+  };
+  
+  function getRobotImagingTime( settings ) {
+    if( settings.robotImaging ) {
+      return settings.robotImaging;
+    } else {
+      console.warn( "Warning: No robot imaging task start time specified." );
+      
+      return { empty: true };
+    }
+  }
+  
+  /**
+   * Get the robot task start time.
+   * @method getRobotImagingTime
+   * @memberof Settings
+   * @instance
+   * @return {object} The task time consisting of a start time (Time instance) or 
+   * an object that indicates if its empty.
+   */
+  this.getRobotImagingTime = function() {
+    return getRobotImagingTime( main );
+  };
+
+  function clearRobotImagingTime( settings ) {
+    settings.robotImaging = {};
+  }
+  
+  /**
+   * Warning: Deletes the specified robot imaging start time. Used for refreshing the settings.
+   * @method clearRobotImagingTime
+   * @memberof Settings
+   * @instance
+   */
+  this.clearRobotImagingTime = function() {
+    clearRobotImagingTime( main );
+  };
+  
   function check( settings, successAction, errorAction ) {
     //
     var problemPointer = {
       pass: true,
       pumpCycleProbIndex: [ -1, 0 ],
       lightCycleProbIndex: [ -1, 0 ]
+    };
+    
+    // Check if there are any settings data to begin with.
+    if( settings.pumpCycles.length &lt;= 0 ) {
+      problemPointer.pass = false;
+      
+      return problemPointer;
+    };
+    
+    if( settings.lightCycles.length &lt;= 0 ) {
+      problemPointer.pass = false;
+      
+      return problemPointer;
+    };
+    
+    if( !settings.robotImaging ) {
+      problemPointer.pass = false;
+      
+      return problemPointer;
     };
 
     // Check if the pump cycle times are in order, which
@@ -237,8 +309,8 @@ function Settings() {
         cyclesData.timeArrays.push( cyclesArray[ iPC ].startTime.getSeconds() );
         cyclesData.timeArrays.push( cyclesArray[ iPC ].endTime.getSeconds() );
       }
-
-      for( iT = 0; iT &lt; cyclesData.timeArrays.length - 1; iT++ ) {
+      
+      for( var iT = 0; iT &lt; cyclesData.timeArrays.length - 1; iT++ ) {
         // Is the selected time later than the previous time?
         if( cyclesData.timeArrays[ iT + 1 ] > cyclesData.timeArrays[ iT ] ) {
           // OK
@@ -283,8 +355,8 @@ function Settings() {
    * @method check
    * @memberof Settings
    * @instance
-   * @param {function} successAction Call if the check was successful with the status passed to it.
-   * @param {function} errorAction Call if the check fails with the status passed to it.
+   * @param {function} successAction Call if the check was successful with the status passed to it. Optional.
+   * @param {function} errorAction Call if the check fails with the status passed to it. Optional.
    * @return {object} The status of the check. It also include indices that point to the problem.
    */
   this.check = function( successAction, errorAction ) {
@@ -293,7 +365,8 @@ function Settings() {
   
   /**
    * Show where the input error is in the settings form.
-   * It will interpret the error information passed from the check() method.
+   * It will interpret the error information passed from the check() method,
+   * and then prints the error in English.
    * @method showInputError
    * @memberof Settings
    * @instance
@@ -359,8 +432,10 @@ function Settings() {
    * @method save
    * @memberof Settings
    * @instance
-   * @param {function} successAction Call if the settings save was successful with the status passed to it.
-   * @param {function} errorAction Call if there is a problem during settings save with the status passed to it.
+   * @param {function} successAction Call if the settings save was successful with the status passed to it. Optional.
+   * @param {function} errorAction Call if there is a problem during settings save with the status passed to it. Optional.
+   * @return {boolean} If false, there was an error in the saving process, such as failed settings checks.
+   * Otherwise, it is true.
    */
   this.save = function( successAction, errorAction ) {
     var errorCheck = self.check();
@@ -410,6 +485,11 @@ function Settings() {
       }
       return false;
     }
+    
+    // Write robot imaging time.
+    settingsObj.robotImaging = {
+      startTime: main.robotImaging.startTime.getTimeStr()
+    };
 
     // If you make it here, it's going great!
 
@@ -431,6 +511,10 @@ function Settings() {
    * @method send
    * @memberof Settings
    * @instance
+   * @param {function} successAction Call if the settings was successfully 
+   * sent to the BoxBrain. Optional.
+   * @param {function} errorAction Call if there is a problem sending 
+   * the data to the BoxBrain. Optional.
    */
   this.send = function( successAction, errorAction ) {
     $.ajax(
@@ -471,6 +555,18 @@ function Settings() {
         // Another craig fix.
         throw new Error( "No pump cycles found. There needs to be one or more." );
       }
+      
+      // Error out if the settings values are not there.
+      if( settingsObj.lightCycles.length &lt;= 0 ) {
+        // Another craig fix.
+        throw new Error( "No light cycles found. There needs to be one or more." );
+      }
+      
+      // Error out if the settings values are not there.
+      if( !settingsObj.robotImaging ) {
+        // Another craig fix.
+        throw new Error( "No robot task time found. There needs to be one." );
+      }
     } catch( ex ) {
       // Do this if the JSON parsing fails.
       console.error( "Load Error: Settings data does not exist." );
@@ -478,8 +574,10 @@ function Settings() {
       // Load default times instead;
       addPumpCycle( settings, new Time( "6:00" ), new Time( "12:00" ) );
       addLightCycle( settings, new Time( "0:00" ), new Time( "6:00" ) );
+      setRobotImagingTime( settings, new Time( "14:00" ) );
       
-      self.save();
+      // Don't save anything since there's nothing to save.
+      // self.save();
 
       console.log( "Default values are set instead." );
 
@@ -489,6 +587,7 @@ function Settings() {
     // Start fresh.
     clearPumpCycles( settings );
     clearLightCycles( settings );
+    clearRobotImagingTime( settings );
     
     // Load the pump cycles.
     for( var i = 0; i &lt; settingsObj.pumpCycles.length; i++ ) {
@@ -507,6 +606,9 @@ function Settings() {
         new Time( settingsObj.lightCycles[ i ].endTime )
       );
     }
+    
+    // Load the robot imaging task time.
+    setRobotImagingTime( settings, new Time( settingsObj.robotImaging.startTime ) );
     
     return true;
   }
@@ -529,6 +631,10 @@ function Settings() {
    * @method receive
    * @memberof Settings
    * @instance
+   * @param {function} successAction Call if the settings was successfully 
+   * received from the BoxBrain. Optional.
+   * @param {function} errorAction Call if there is a problem receiving 
+   * the data from the BoxBrain. Optional.
    */
   this.receive = function( successAction, errorAction ) {
     $.ajax(
@@ -541,22 +647,28 @@ function Settings() {
           console.log( "Received the settings from BoxBrain successfully." );
           
           // Temporarily load the sent-in settins JSON and check it.
-          load( temp, msg );
-          
-          if( check( temp ).pass ) {
-            // Save this.
-            localStorage.setItem( "settings", msg );
-            
-            // Load the imported settings for real.
-            load( main, msg );
-            
-            console.log( "Settings are loaded successfully." );
-            
-            // Clean up.
-            clearPumpCycles( temp );
-            clearLightCycles( temp );
+          if( load( temp, msg ) ) {
+            if( check( temp ).pass ) {
+              // Save this.
+              localStorage.setItem( "settings", msg );
+              
+              // Load the imported settings for real.
+              load( main, msg );
+              
+              console.log( "Settings are loaded successfully." );
+              
+              // Clean up.
+              clearPumpCycles( temp );
+              clearLightCycles( temp );
+              clearRobotImagingTime( temp );
+            } else {
+              console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
+            }
           } else {
-            console.warn( "Import warning: Bad imported settings configuration (ex. conflicting pump times). No changes were made." );
+            // Do this if the settings are malformed or does not exist.
+            if( typeof errorAction === "function" ) {
+              errorAction();
+            }
           }
           
           if( typeof successAction === "function" ) {
@@ -590,13 +702,13 @@ function Settings() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AlertModals.html">AlertModals</a></li><li><a href="Button.html">Button</a></li><li><a href="CircularProgressAnimation.html">CircularProgressAnimation</a></li><li><a href="ConfirmModals.html">ConfirmModals</a></li><li><a href="InputTimeDropdown.html">InputTimeDropdown</a></li><li><a href="Settings.html">Settings</a></li><li><a href="Time.html">Time</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="AlertModals.html">AlertModals</a></li><li><a href="BoxAnalytics.html">BoxAnalytics</a></li><li><a href="BoxTasks.html">BoxTasks</a></li><li><a href="Button.html">Button</a></li><li><a href="CircularProgressAnimation.html">CircularProgressAnimation</a></li><li><a href="ConfirmModals.html">ConfirmModals</a></li><li><a href="InputTimeDropdown.html">InputTimeDropdown</a></li><li><a href="Settings.html">Settings</a></li><li><a href="Time.html">Time</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Apr 28 2019 21:57:25 GMT-1000 (Hawaii-Aleutian Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.1</a> on Sun May 05 2019 16:34:14 GMT-1000 (Hawaii-Aleutian Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

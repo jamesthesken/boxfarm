@@ -1,7 +1,7 @@
 /**
  * @file Box Farm frontend application.
  * @projectname Box Farm GUI
- * @version 0.5.4
+ * @version 0.5.6
  * @author Control Subsystem
  * @copyright 2018-2019
  */
@@ -327,8 +327,8 @@ function Settings() {
    * @method check
    * @memberof Settings
    * @instance
-   * @param {function} successAction Call if the check was successful with the status passed to it.
-   * @param {function} errorAction Call if the check fails with the status passed to it.
+   * @param {function} successAction Call if the check was successful with the status passed to it. Optional.
+   * @param {function} errorAction Call if the check fails with the status passed to it. Optional.
    * @return {object} The status of the check. It also include indices that point to the problem.
    */
   this.check = function( successAction, errorAction ) {
@@ -337,7 +337,8 @@ function Settings() {
   
   /**
    * Show where the input error is in the settings form.
-   * It will interpret the error information passed from the check() method.
+   * It will interpret the error information passed from the check() method,
+   * and then prints the error in English.
    * @method showInputError
    * @memberof Settings
    * @instance
@@ -403,8 +404,10 @@ function Settings() {
    * @method save
    * @memberof Settings
    * @instance
-   * @param {function} successAction Call if the settings save was successful with the status passed to it.
-   * @param {function} errorAction Call if there is a problem during settings save with the status passed to it.
+   * @param {function} successAction Call if the settings save was successful with the status passed to it. Optional.
+   * @param {function} errorAction Call if there is a problem during settings save with the status passed to it. Optional.
+   * @return {boolean} If false, there was an error in the saving process, such as failed settings checks.
+   * Otherwise, it is true.
    */
   this.save = function( successAction, errorAction ) {
     var errorCheck = self.check();
@@ -480,6 +483,10 @@ function Settings() {
    * @method send
    * @memberof Settings
    * @instance
+   * @param {function} successAction Call if the settings was successfully 
+   * sent to the BoxBrain. Optional.
+   * @param {function} errorAction Call if there is a problem sending 
+   * the data to the BoxBrain. Optional.
    */
   this.send = function( successAction, errorAction ) {
     $.ajax(
@@ -596,6 +603,10 @@ function Settings() {
    * @method receive
    * @memberof Settings
    * @instance
+   * @param {function} successAction Call if the settings was successfully 
+   * received from the BoxBrain. Optional.
+   * @param {function} errorAction Call if there is a problem receiving 
+   * the data from the BoxBrain. Optional.
    */
   this.receive = function( successAction, errorAction ) {
     $.ajax(

@@ -2,7 +2,7 @@
  * @file Serves the Box Farm GUI webpage and
  * interacts with the BoxBrain system.
  * @projectname Box Farm GUI
- * @version 0.5.4
+ * @version 0.5.6
  * @author Control Subsystem
  * @copyright 2018-2019
  */
@@ -26,7 +26,10 @@ const url  = require('url'),
 
 const app = express();
 
+// For GUI.
 const guiServer = http.createServer(app);
+
+// For backend Python scripts.
 const pyServer = http.createServer();
 
 // Set up socket.io server.
@@ -128,6 +131,7 @@ app.post(
   }
 );
 
+// Communicates to remote clients and serves the webpages.
 guiServer.listen(
   4000,
   () => {
@@ -135,6 +139,7 @@ guiServer.listen(
   }
 );
 
+// Communicates to the local backend Python scripts.
 pyServer.listen(
   4004,
   () => {
