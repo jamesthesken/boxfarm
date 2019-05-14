@@ -103,6 +103,10 @@ body{
   color: #999;
 }
 
+.card-top {
+  margin-top: 20px;
+}
+
 /* Default. */
 .content-spacing {
   margin-left: 0px;

@@ -55,19 +55,26 @@ io.on('connection', function(socket){
 });
 */
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+
 app.use(express.static(path.join(__dirname, 'js')));
 app.use(express.static(path.join(__dirname, 'css')));
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.set('views', __dirname + '/views');
-app.set('view engine', 'html');
 
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
 app.get('/', function(req, res){
     res.render('home');
 });
+
+app.get(
+  '/imaging.html', 
+  (req, res) => {
+    res.render('templates/imaging');
+  }
+);
 
 // Send the settings data to the client.
 app.post(
@@ -127,7 +134,7 @@ app.post(
       }
     );
 
-    console.log( Date.now() + ': Bluelab data was sent to client. ' + req.ip + '.' );
+    console.log( Date.now() + ': Bluelab data was sent to client ' + req.ip + '.' );
   }
 );
 
