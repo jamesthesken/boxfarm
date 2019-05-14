@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
-#import serial
+#TODO: rename this file to accurately represent its function, which is the main system scheduler
+
+import serial
 import schedule
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -12,6 +14,17 @@ import csv
 import glob
 import os
 import socketio
+import socket # comes with Python, this is for the image transfering between RPi's
+from pictures import imageSequence
+
+# lights to make everything look excellent
+from pretty import *
+pixels = neopixel.NeoPixel(board.D18, 65, brightness=0.2, auto_write=False,
+                           pixel_order=neopixel.GRB)
+rainbow_cycle(0.001)
+
+pixels.fill((0,255,0))
+
 
 SETTINGS_PATH = '../gui/'
 SETTINGS_JSON_FILE = 'settings.json'
@@ -49,6 +62,9 @@ def loadSettings(data):
    # get amount of given by the user
    lightCycles  = len(data['lightCycles'])
    pumpCycles  = len(data['pumpCycles'])
+
+   #scheduling the robotic imaging
+   schedule.every().day.at("{}".format(data['robotImaging']['startTime'])).do(imageSequence)
 
    if lightCycles  == 1:
       schedule.every().day.at("{}".format(data['lightCycles'][0]['startTime'])).do(lightsOn)
@@ -94,18 +110,22 @@ def loadSettings(data):
       schedule.every().day.at("{}".format(data['pumpCycles'][2]['endTime'])).do(pumpsOff)
 
 def pumpsOn():
+   ser.write(b'2')
    print('Pumps on at %s' % datetime.now())
    time.sleep(1)
 
 def pumpsOff():
+   ser.write(b'20')
    print('Pumps off at %s' % datetime.now())
    time.sleep(1)
 
 def lightsOn():
+   ser.write(b'1')
    print('Lights on at %s' % datetime.now())
    time.sleep(1) # wait for command to upload
 
 def lightsOff():
+   ser.write(b'10')
    print('Lights off at %s' % datetime.now())
    time.sleep(1) # wait for command to upload
 
@@ -115,7 +135,7 @@ data = json.load(settings)
 
 loadSettings(data)
 
-#ser = serial.Serial('/dev/ttyUSB1', 112500)
+ser = serial.Serial('/dev/ttyACM0', 112500)
 #ser.write('10') # turn off pumps on start of script
 
 if __name__ == "__main__":
@@ -130,7 +150,7 @@ if __name__ == "__main__":
       while True:
 
          # read latest csv file saved by bluelab connect
-         list_of_files = glob.glob('../gui/*csv') 
+         list_of_files = glob.glob('../gui/*csv')
          BLUELAB = max(list_of_files, key=os.path.getctime)
 
          # reading in bluelab nutrient tank data
@@ -155,6 +175,7 @@ if __name__ == "__main__":
          time.sleep(60)
 
    except KeyboardInterrupt:
+      pixels.fill((255,0,0))
       observer.stop()
 
    observer.join()
