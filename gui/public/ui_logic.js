@@ -2,7 +2,7 @@
  * @file Place for interface controls and logic.
  * Can directly manipulate webpages.
  * @projectname Box Farm GUI
- * @version 0.5.4
+ * @version 0.5.6
  * @author Control Subsystem
  * @copyright 2018-2019
  */
@@ -247,6 +247,8 @@ function InputTimeDropdown( container, type, timeObj ) {
 /**
  * Updates the Tasks section of the main page. Looks for a table with
  * the id "box-tasks."
+ * Only for updating webpage.
+ * Move logic to app_logic.js (class does not exist yet).
  * @constructor
  */
 function BoxTasks() {
@@ -257,6 +259,8 @@ function BoxTasks() {
  * Updates the Analytics section of the main page with
  * current data about Box Farm. Looks for a table with
  * the id "box-analytics."
+ * Related class for retrieving the data should be found in 
+ * app_logic.js (does not exist yet).
  * @constructor
  */
 function BoxAnalytics() {
@@ -278,7 +282,7 @@ function BoxAnalytics() {
   entryNamesList.forEach(
     ( name, i ) => {
       entryList[ name ] = {
-        valueCol: tableRows.item( i ).children.item( 1 )
+        valueCol: tableRows.item( i ).children.item( 1 ) // 0 - name col, 1 - value col.
       };
     }
   );
@@ -290,7 +294,8 @@ function BoxAnalytics() {
    * @instance
    * @param {string} name
    * @param {string} value
-   * @return {boolean} True if the status changes was applied.
+   * @return {boolean} True if the name exists and status changes was applied.
+   * Otherwise, it is false.
    */
   this.setStatus = function( name, value ) {
     var entry = entryList[ name ];
@@ -476,7 +481,8 @@ function CircularProgressAnimation() {
   var radius = 90; // px. Same as the size of the SVG circle.
   var realPercent = 0.5;
   var targetValue = 120;
-
+  
+  // SVG elements must have the matching IDs below.
   var circle1 = document.getElementById('two');
   var text1 = document.getElementById('percent-two');
 
@@ -486,7 +492,8 @@ function CircularProgressAnimation() {
   // How fast to slow down. AKA pseudo-coefficient-of-friction.
   // Time it takes to reach half-way in seconds.
   var timeConst = 0.2/Math.LN2;
-
+  
+  // Fixes issue where the current value does not reach the target value.
   var diffThresh = 1/targetValue;
 
   /*

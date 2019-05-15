@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<!-- Version 0.5.7 -->
+<!-- Author: Control Subsystem -->
+
+<html lang="en">
+  <head>
+    <title>Plant Imaging - Box Farm</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="jquery-3.3.1.min.js"></script>
+
+    <link rel="stylesheet" href="bootstrap-4.2.1/bootstrap.min.css">
+    <script src="popper-1.14.17/popper.min.js"></script>
+    <script src="bootstrap-4.2.1/bootstrap.min.js"></script>
+
+    <!--Fonts-->
+    <link href="Space_Mono.css" rel="stylesheet">
+    <link href="Encode_Sans_Semi_Expanded.css" rel="stylesheet">
+
+    <!-- Box Farm stylesheets. -->
+    <link rel="stylesheet" href="style.css">
+  </head>
+  
+  <body>
+    <div class="container">
+      <div class="card card-top box box-main shadow-lg">
+        <!-- Card heading. -->
+        <div class="row">
+          <div class="col">
+            <!-- Moved border style definition to style.css and referenced to its top-level div. -->
+            <!-- Need to move logo slightly to the left. -->  
+            <a href="index.html"><img src="box-farm-logo.png" class="card-img-top" alt="Box Farm Home"></a>
+            <h1 class="left-card text-center">Plant Imaging</h1>
+          </div>
+        </div>
+        
+        <div class="card-body gallery-spacing">
+          <% const rgbImgLen = filesLs.rgb.length; %>
+          <% if( rgbImgLen > 0 ) { %>
+            <% filesLs.rgb.forEach( ( imgUrl, i ) => { %>
+              <%# Odd-index: First image set of one row. Even-index: Last image set of one row. %>
+              <%# Begin the row at first image set. %>
+              <% if( i%2 === 0 ) { %>
+                <div class="row align-items-end">
+              <% } %>
+                  <div class="col-6 col-md-3 mb-3">
+                    <div class="img-thumbnail">
+                      <a href="<%= filesLs.rgb[ i ] %>">
+                        <img class="img-fluid" src="<%= filesLs.rgb[ i ] %>">
+                      </a>
+                      <div class="content">
+                        Pot <%= filesLs.pot[ i ] %> (RGB).
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3 mb-3">
+                     <div class="img-thumbnail">
+                      <a href="<%= filesLs.nir[ i ] %>">
+                        <img class="img-fluid" src="<%= filesLs.nir[ i ] %>">
+                      </a>
+                      <div class="content">
+                        Pot <%= filesLs.pot[ i ] %> (NIR).
+                      </div>
+                    </div>
+                  </div>
+              <%# End the row at the last image set or end at the very last row of images. %>
+              <% if( i%2 === 1 || i === rgbImgLen - 1 ) { %>
+                </div>
+              <% } %>
+            <% } ); %>
+          <% } else { %>
+            <p class="content text-center">There are no images at this time.</p>
+          <% } %>
+          <div class="horizontal-bar"></div>
+          
+          <!-- Footer -->
+          <div class="row">
+            <div class="col-12 text-right">
+              <button type="button" id="imaging-btn-back" class="btn btn-primary">Back</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <script>
+      var backBtn = document.getElementById( "imaging-btn-back" );
+      
+      backBtn.addEventListener(
+        "mouseup",
+        function() {
+          window.location.href = ".";
+        }
+      );
+    </script>
+  </body>
+</html>

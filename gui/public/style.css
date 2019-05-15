@@ -1,3 +1,6 @@
+/* Box Farm GUI 0.5.7 */
+/* Author: Control Subsystem */
+
 /* Bootstrap overrides. */
 .btn-primary {
   font-family: 'Encode Sans Semi Expanded', sans-serif;
@@ -103,6 +106,10 @@ body{
   color: #999;
 }
 
+.card-top {
+  margin-top: 20px;
+}
+
 /* Default. */
 .content-spacing {
   margin-left: 0px;
@@ -132,6 +139,39 @@ body{
     
     margin-left: 256px;
     margin-right: 256px;
+    
+  }
+}
+
+/* Default. */
+.gallery-spacing {
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+@media screen and ( min-width: 768px ) {
+  .gallery-spacing {
+    
+    margin-left: 0px;
+    margin-right: 0px;
+    
+  }
+}
+
+@media screen and ( min-width: 992px ) {
+  .gallery-spacing {
+    
+    margin-left: 96px;
+    margin-right: 96px;
+    
+  }
+}
+
+@media screen and ( min-width: 1200px ) {
+  .gallery-spacing {
+    
+    margin-left: 160px;
+    margin-right: 160px;
     
   }
 }
