@@ -95,16 +95,18 @@ app.get(
         
         // filePaths are in alphanumeric order. Therefore,
         // the order is preserved when sorted by RGB and NIR images.
-        // Filenames has to be in the format ID_NUMBER.EXT.
+        // Filenames has to be in the format ID_POT_NUMBER.EXT.
         
-        // Change according to file name criteria.
+        // Change according to file name criteria above.
         const RGB = 'rgb';
         const NIR = 'nir';
+        const POT = 'pot';
         
         const imgPaths = {
-          num: [],
+          num: [], // This is usually the date the image was taken.
           rgb: [],
-          nir: []
+          nir: [],
+          pot: []
         };
         
         // Arrange image types by file name.
@@ -116,12 +118,21 @@ app.get(
             // Split by ID and NUMBER.
             const splitName = name.split( '_' );
             
-            const id = splitName[ 0 ];
-            const num = splitName[ 1 ];
+            if( splitName.length !== 3 ) {
+              // Ignore this file name.
+              
+              return;
+            }
             
+            const id = splitName[ 0 ];
+            const pot = splitName[ 1 ];
+            const num = splitName[ 2 ];
+            
+            // Warning: Pot and num would not line up with their corresponding images of one of the image pairs is missing/unmatched names.
             switch( id ) {
               case RGB:
                 imgPaths.rgb.push( PLANT_IMG_URL + path );
+                imgPaths.pot.push( pot ); // Only appended once per num and images are expected to come in pairs.
                 imgPaths.num.push( num ); // Only appended once per num and images are expected to come in pairs.
                 break;
               case NIR:

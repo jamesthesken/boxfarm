@@ -36,40 +36,43 @@
           </div>
         </div>
         
-        <div class="card-body content-spacing">
+        <div class="card-body gallery-spacing">
           <% const rgbImgLen = filesLs.rgb.length; %>
-          <% filesLs.rgb.forEach( ( imgUrl, i ) => { %>
-            <%# Odd-index: First image set of one row. Even-index: Last image set of one row. %>
-            <%# Begin the row at first image set. %>
-            <% if( i%2 === 0 ) { %>
-              <div class="row align-items-end">
-            <% } %>
-                <div class="col-6 col-md-3 mb-3">
-                  <div class="img-thumbnail">
-                    <a href="<%= filesLs.rgb[ i ] %>">
-                      <img class="img-fluid" src="<%= filesLs.rgb[ i ] %>">
-                    </a>
-                    <div class="content">
-                      Pot <%= i + 1 %> (RGB).
+          <% if( rgbImgLen > 0 ) { %>
+            <% filesLs.rgb.forEach( ( imgUrl, i ) => { %>
+              <%# Odd-index: First image set of one row. Even-index: Last image set of one row. %>
+              <%# Begin the row at first image set. %>
+              <% if( i%2 === 0 ) { %>
+                <div class="row align-items-end">
+              <% } %>
+                  <div class="col-6 col-md-3 mb-3">
+                    <div class="img-thumbnail">
+                      <a href="<%= filesLs.rgb[ i ] %>">
+                        <img class="img-fluid" src="<%= filesLs.rgb[ i ] %>">
+                      </a>
+                      <div class="content">
+                        Pot <%= filesLs.pot[ i ] %> (RGB).
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="col-6 col-md-3 mb-3">
-                   <div class="img-thumbnail">
-                    <a href="<%= filesLs.nir[ i ] %>">
-                      <img class="img-fluid" src="<%= filesLs.nir[ i ] %>">
-                    </a>
-                    <div class="content">
-                      Pot <%= i + 1 %> (NIR).
+                  <div class="col-6 col-md-3 mb-3">
+                     <div class="img-thumbnail">
+                      <a href="<%= filesLs.nir[ i ] %>">
+                        <img class="img-fluid" src="<%= filesLs.nir[ i ] %>">
+                      </a>
+                      <div class="content">
+                        Pot <%= filesLs.pot[ i ] %> (NIR).
+                      </div>
                     </div>
                   </div>
+              <%# End the row at the last image set or end at the very last row of images. %>
+              <% if( i%2 === 1 || i === rgbImgLen - 1 ) { %>
                 </div>
-            <%# End the row at the last image set or the very last row of images. %>
-            <% if( i%2 === 1 || i === rgbImgLen - 1 ) { %>
-              </div>
-            <% } %>
-          <% } ); %>
-          
+              <% } %>
+            <% } ); %>
+          <% } else { %>
+            <p class="content text-center">There are no images at this time.</p>
+          <% } %>
           <div class="horizontal-bar"></div>
           
           <!-- Footer -->
