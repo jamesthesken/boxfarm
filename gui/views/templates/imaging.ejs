@@ -37,29 +37,37 @@
         </div>
         
         <div class="card-body content-spacing">
+          <% const rgbImgLen = filesLs.rgb.length; %>
           <% filesLs.rgb.forEach( ( imgUrl, i ) => { %>
-            <div class="row">
-              <div class="col-6">
-                <div class="thumbnail">
-                  <a href="<%= filesLs.rgb[ i ] %>">
-                    <img class="img-fluid img-thumbnail" src="<%= filesLs.rgb[ i ] %>">
-                  </a>
-                  <div class="caption">
-                    Pot <%= i + 1 %> (RGB).
+            <%# Odd-index: First image set of one row. Even-index: Last image set of one row. %>
+            <%# Begin the row at first image set. %>
+            <% if( i%2 === 0 ) { %>
+              <div class="row align-items-end">
+            <% } %>
+                <div class="col-6 col-md-3 mb-3">
+                  <div class="img-thumbnail">
+                    <a href="<%= filesLs.rgb[ i ] %>">
+                      <img class="img-fluid" src="<%= filesLs.rgb[ i ] %>">
+                    </a>
+                    <div class="content">
+                      Pot <%= i + 1 %> (RGB).
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-6">
-                 <div class="thumbnail">
-                  <a href="<%= filesLs.nir[ i ] %>">
-                    <img class="img-fluid img-thumbnail" src="<%= filesLs.nir[ i ] %>">
-                  </a>
-                  <div class="caption">
-                    Pot <%= i + 1 %> (NIR).
+                <div class="col-6 col-md-3 mb-3">
+                   <div class="img-thumbnail">
+                    <a href="<%= filesLs.nir[ i ] %>">
+                      <img class="img-fluid" src="<%= filesLs.nir[ i ] %>">
+                    </a>
+                    <div class="content">
+                      Pot <%= i + 1 %> (NIR).
+                    </div>
                   </div>
                 </div>
+            <%# End the row at the last image set or the very last row of images. %>
+            <% if( i%2 === 1 || i === rgbImgLen - 1 ) { %>
               </div>
-            </div>
+            <% } %>
           <% } ); %>
           
           <div class="horizontal-bar"></div>

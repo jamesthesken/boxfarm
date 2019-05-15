@@ -17,7 +17,7 @@ const DATA_FILE = 'data.json';
 
 // Plant imaging files location.
 const PLANT_IMG_DIR = __dirname + '/public/plant_imaging';
-const PLANT_IMG_URL = './plant_imaging/';
+const PLANT_IMG_URL = './plant_imaging/'; // Not a local directory.
 
 const url  = require('url'),
       sys  = require('util'), // From "sys".
@@ -122,6 +122,7 @@ app.get(
             switch( id ) {
               case RGB:
                 imgPaths.rgb.push( PLANT_IMG_URL + path );
+                imgPaths.num.push( num ); // Only appended once per num and images are expected to come in pairs.
                 break;
               case NIR:
                 imgPaths.nir.push( PLANT_IMG_URL + path );
@@ -133,7 +134,7 @@ app.get(
         );
         
         // Create the HTML page with the thumbnails.
-        // imgPaths looks like { NUM: { RGB: "", NIR: "" }, ... }.
+        // imgPaths looks like { num: [], rgb: [], nir: [] }.
         res.render(
           'templates/imaging', 
           {
