@@ -13,3 +13,7 @@ https://www.bluelab.com/products/type/connect-suite/connect-software
 
 5. Start the Python back-end:
 `python ../statics/statics.py`
+
+# More Details
+Open the Box Farm Frontend API documentation in your machine's web browser:
+`docs/index.html`
