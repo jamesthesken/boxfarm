@@ -2,7 +2,7 @@
  * @file Serves the Box Farm GUI webpage and
  * interacts with the BoxBrain system.
  * @projectname Box Farm GUI
- * @version 0.5.6
+ * @version 0.5.7
  * @author Control Subsystem
  * @copyright 2018-2019
  */
@@ -14,6 +14,10 @@ const SETTINGS_FILE = 'settings.json';
 // Garden data.
 const DATA_PATH = __dirname + '/public/'; // Change to non-public directory.
 const DATA_FILE = 'data.json';
+
+// Plant imaging files location.
+const PLANT_IMG_DIR = __dirname + '/public/plant_imaging';
+const PLANT_IMG_URL = './plant_imaging/';
 
 const url  = require('url'),
       sys  = require('util'), // From "sys".
@@ -55,9 +59,13 @@ io.on('connection', function(socket){
 });
 */
 
+// Look for the template files here.
 app.set('views', __dirname + '/views');
+
+// Render template file as EJS.
 app.set('view engine', 'ejs');
 
+// Make selected files accessible remotely.
 app.use(express.static(path.join(__dirname, 'js')));
 app.use(express.static(path.join(__dirname, 'css')));
 app.use(express.static(path.join(__dirname, 'assets')));
@@ -65,14 +73,77 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use( bodyParser.urlencoded( { extended: true } ) );
 
+// ?
 app.get('/', function(req, res){
     res.render('home');
 });
 
+// Load plant imaging thumbnails and links.
 app.get(
   '/imaging.html', 
-  (req, res) => {
-    res.render('templates/imaging');
+  ( req, res ) => {
+    // List the files in plant imaging directory.
+    fs.readdir(
+      PLANT_IMG_DIR,
+      ( err, filePaths ) => {
+        if( err ) {
+          res.status( 404 ).send( 'Error: Directory not found.' );
+          
+          // End it here.
+          throw err;
+        }
+        
+        // filePaths are in alphanumeric order. Therefore,
+        // the order is preserved when sorted by RGB and NIR images.
+        // Filenames has to be in the format ID_NUMBER.EXT.
+        
+        // Change according to file name criteria.
+        const RGB = 'rgb';
+        const NIR = 'nir';
+        
+        const imgPaths = {
+          num: [],
+          rgb: [],
+          nir: []
+        };
+        
+        // Arrange image types by file name.
+        filePaths.forEach(
+          path => {
+            // Take the filename.
+            const name = path.split( '.' )[ 0 ];
+            
+            // Split by ID and NUMBER.
+            const splitName = name.split( '_' );
+            
+            const id = splitName[ 0 ];
+            const num = splitName[ 1 ];
+            
+            switch( id ) {
+              case RGB:
+                imgPaths.rgb.push( PLANT_IMG_URL + path );
+                break;
+              case NIR:
+                imgPaths.nir.push( PLANT_IMG_URL + path );
+                break;
+              default:
+                // Exclude the file with an invalid ID.
+            }
+          }
+        );
+        
+        // Create the HTML page with the thumbnails.
+        // imgPaths looks like { NUM: { RGB: "", NIR: "" }, ... }.
+        res.render(
+          'templates/imaging', 
+          {
+            filesLs: imgPaths
+          } 
+        );
+      }
+    );
+    
+    console.log( Date.now() + ': Navigated to imaging.html by the client ' + req.ip + '.' );
   }
 );
 
@@ -84,6 +155,8 @@ app.post(
       SETTINGS_PATH + SETTINGS_FILE,
       ( err, data ) => {
         if( err ) {
+          res.status( 500 );
+          
           // Warning: Stops the server.
           throw err;
         }
@@ -108,6 +181,8 @@ app.post(
       req.body.settingsJSON,
       err => {
         if( err ) {
+          res.status( 500 );
+          
           // Warning: Stops the server.
           throw err;
         }
@@ -126,6 +201,8 @@ app.post(
       DATA_PATH + DATA_FILE,
       ( err, data ) => {
         if( err ) {
+          res.status( 500 );
+          
           // Warning: Stops the server.
           throw err;
         }

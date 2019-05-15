@@ -37,11 +37,30 @@
         </div>
         
         <div class="card-body content-spacing">
-          <div class="row">
-            <div class="col-12">
-              <%= "1 + 1 = " + ( 1 + 1 ) %>
+          <% filesLs.rgb.forEach( ( imgUrl, i ) => { %>
+            <div class="row">
+              <div class="col-6">
+                <div class="thumbnail">
+                  <a href="<%= filesLs.rgb[ i ] %>">
+                    <img class="img-fluid img-thumbnail" src="<%= filesLs.rgb[ i ] %>">
+                  </a>
+                  <div class="caption">
+                    Pot <%= i + 1 %> (RGB).
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                 <div class="thumbnail">
+                  <a href="<%= filesLs.nir[ i ] %>">
+                    <img class="img-fluid img-thumbnail" src="<%= filesLs.nir[ i ] %>">
+                  </a>
+                  <div class="caption">
+                    Pot <%= i + 1 %> (NIR).
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          <% } ); %>
           
           <div class="horizontal-bar"></div>
           
